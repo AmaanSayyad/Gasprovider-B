@@ -12,7 +12,7 @@ import {
 } from "../contracts/gasFountain";
 import { ERC20_ABI } from "../contracts/erc20";
 import { getNumericChainId } from "../data/chains";
-import { getTokenAddress } from "../data/tokens";
+import { getEscrowTokenAddress } from "../data/tokens";
 import { ChainData } from "../types";
 import { useAccount } from "wagmi";
 
@@ -56,10 +56,10 @@ export function useDeposit({
   // no contract there would send the deposit into a dead address.
   const contractAddress = sourceChain ? getContractAddress(sourceChain.id) : undefined;
 
-  // Get USDC address on source chain
-  const usdcAddress = sourceChain
-    ? (getTokenAddress(sourceChain.id, "USDC") as `0x${string}` | null)
-    : (getTokenAddress("base", "USDC") as `0x${string}` | null);
+  // The stablecoin this chain's escrow accepts (USDT on BOT Chain).
+  const usdcAddress = (
+    sourceChain ? getEscrowTokenAddress(sourceChain.id) : getEscrowTokenAddress("base")
+  ) as `0x${string}` | null;
 
   // Prepare chain IDs and amounts
   const chainIds = selectedChains

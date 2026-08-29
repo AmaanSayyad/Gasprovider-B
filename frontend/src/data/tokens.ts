@@ -332,6 +332,18 @@ export const getTokenAddress = (
   return address && address !== "0x..." ? address : null;
 };
 
+/**
+ * The stablecoin the escrow contract pulls on a given chain.
+ *
+ * GasStation names its token `usdc`, but it is whatever stablecoin the
+ * constructor was given - USDC on the testnets, USDT on BOT Chain. Both are
+ * 6 decimals.
+ */
+export const getEscrowTokenAddress = (
+  chainId: string | number
+): string | null =>
+  getTokenAddress(chainId, "USDC") || getTokenAddress(chainId, "USDT");
+
 // Logo mapping for tokens
 const TOKEN_LOGO_MAP: Record<string, string> = {
   ETH: "/web3icons/tokens/eth.svg",
