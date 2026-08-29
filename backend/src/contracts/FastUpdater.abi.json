@@ -1,0 +1,31 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "bytes21[]",
+        "name": "_feedIds",
+        "type": "bytes21[]"
+      }
+    ],
+    "name": "fetchCurrentFeeds",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "_feedValues",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "int8[]",
+        "name": "_decimals",
+        "type": "int8[]"
+      },
+      {
+        "internalType": "uint64",
+        "name": "_timestamp",
+        "type": "uint64"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

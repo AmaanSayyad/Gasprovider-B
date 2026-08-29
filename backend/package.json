@@ -1,0 +1,42 @@
+{
+    "name": "gas-provider-backend",
+    "version": "1.0.0",
+    "description": "Backend API for Gas Provider - disperse native gas to multiple chains",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "prisma generate && tsc || true",
+        "dev": "prisma generate && tsx watch src/index.ts",
+        "start": "node dist/index.js",
+        "type-check": "tsc --noEmit",
+        "test": "vitest --run",
+        "test:watch": "vitest",
+        "test:ui": "vitest --ui",
+        "prisma:generate": "prisma generate",
+        "prisma:migrate": "prisma migrate dev",
+        "prisma:migrate:deploy": "prisma migrate deploy",
+        "prisma:studio": "prisma studio",
+        "insert-dummy-intents": "tsx scripts/insert-dummy-intents.ts"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "@fastify/cors": "^8.5.0",
+        "@fastify/rate-limit": "^9.1.0",
+        "@prisma/client": "5.22.0",
+        "ethers": "^6.16.0",
+        "fastify": "^4.24.3",
+        "pg": "^8.11.3",
+        "prisma": "5.22.0",
+        "zod": "^3.22.4"
+    },
+    "devDependencies": {
+        "@types/node": "^20.10.0",
+        "@types/pg": "^8.10.9",
+        "@vitest/ui": "^1.0.4",
+        "fast-check": "^3.15.0",
+        "tsx": "^4.7.0",
+        "typescript": "^5.3.3",
+        "vitest": "^1.0.4"
+    }
+}

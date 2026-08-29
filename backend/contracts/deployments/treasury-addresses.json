@@ -1,0 +1,97 @@
+{
+  "coston2": {
+    "chainId": 114,
+    "address": "0xc031c437d6b915dbdc946dbd8613a1ac9dd75d63",
+    "deployedAt": "2024-12-06T00:00:00.000Z"
+  },
+  "sepolia": {
+    "chainId": 11155111,
+    "address": "0x5b402676535a3ba75c851c14e1e249a4257d2265",
+    "deployedAt": "2024-12-06T00:00:00.000Z"
+  },
+  "polygonAmoy": {
+    "chainId": 80002,
+    "address": "0x5b402676535a3ba75c851c14e1e249a4257d2265",
+    "deployedAt": "2024-12-06T00:00:00.000Z"
+  },
+  "arbitrumSepolia": {
+    "chainId": 421614,
+    "address": "0x5b402676535a3ba75c851c14e1e249a4257d2265",
+    "deployedAt": "2024-12-06T00:00:00.000Z"
+  },
+  "optimismSepolia": {
+    "chainId": 11155420,
+    "address": "0x5b402676535a3ba75c851c14e1e249a4257d2265",
+    "deployedAt": "2024-12-06T00:00:00.000Z"
+  },
+  "baseSepolia": {
+    "chainId": 84532,
+    "address": "0x5b402676535a3ba75c851c14e1e249a4257d2265",
+    "deployedAt": "2024-12-06T00:00:00.000Z"
+  },
+  "worldSepolia": {
+    "chainId": 4801,
+    "address": "0x5b402676535a3ba75c851c14e1e249a4257d2265",
+    "deployedAt": "2024-12-06T00:00:00.000Z"
+  },
+  "zoraSepolia": {
+    "chainId": 999999999,
+    "address": "0x5b402676535a3ba75c851c14e1e249a4257d2265",
+    "deployedAt": "2024-12-06T00:00:00.000Z"
+  },
+  "scrollSepolia": {
+    "chainId": 534351,
+    "address": "0x5b402676535a3ba75c851c14e1e249a4257d2265",
+    "deployedAt": "2024-12-06T00:00:00.000Z"
+  },
+  "avalancheFuji": {
+    "chainId": 43113,
+    "address": "0x5b402676535a3ba75c851c14e1e249a4257d2265",
+    "deployedAt": "2024-12-06T00:00:00.000Z"
+  },
+  "bscTestnet": {
+    "chainId": 97,
+    "address": "0x5b402676535a3ba75c851c14e1e249a4257d2265",
+    "deployedAt": "2024-12-06T00:00:00.000Z"
+  },
+  "monadTestnet": {
+    "chainId": 10143,
+    "address": "0x5b402676535a3ba75c851c14e1e249a4257d2265",
+    "deployedAt": "2024-12-06T00:00:00.000Z"
+  },
+  "zkSyncSepolia": {
+    "chainId": 300,
+    "address": "0x5b402676535a3ba75c851c14e1e249a4257d2265",
+    "deployedAt": "2026-08-14T00:00:00.000Z"
+  },
+  "filecoinCalibration": {
+    "chainId": 314159,
+    "address": "0x5b402676535a3ba75c851c14e1e249a4257d2265",
+    "deployedAt": "2026-08-14T00:00:00.000Z"
+  },
+  "unichainSepolia": {
+    "chainId": 1301,
+    "address": "0x5b402676535a3ba75c851c14e1e249a4257d2265",
+    "deployedAt": "2026-08-14T00:00:00.000Z"
+  },
+  "zircuitGarfield": {
+    "chainId": 48898,
+    "address": "0x5b402676535a3ba75c851c14e1e249a4257d2265",
+    "deployedAt": "2026-08-14T00:00:00.000Z"
+  },
+  "citreaTestnet": {
+    "chainId": 5115,
+    "address": "0x5b402676535a3ba75c851c14e1e249a4257d2265",
+    "deployedAt": "2026-08-14T00:00:00.000Z"
+  },
+  "flowEvmTestnet": {
+    "chainId": 545,
+    "address": "0x5b402676535a3ba75c851c14e1e249a4257d2265",
+    "deployedAt": "2026-08-14T00:00:00.000Z"
+  },
+  "celoAlfajores": {
+    "chainId": 44787,
+    "address": "0x5b402676535a3ba75c851c14e1e249a4257d2265",
+    "deployedAt": "2026-08-14T00:00:00.000Z"
+  }
+}

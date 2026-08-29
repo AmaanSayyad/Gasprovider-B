@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build
+dist/
+build/
+.turbo/
+*.log
+
+# Env / secrets
+.env
+.env.local
+.env.*.local
+.env.vercel*
+**/.env
+**/.env.local
+**/.env.*.local
+**/env.flare.local
+**/.env.flare.local
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Keys
+*.key
+*.pem
+*.secret
+
+# DB / coverage
+*.db
+*.sqlite
+coverage/
+.nyc_output/
+tmp/
+temp/
+*.tmp
+
+# Vercel
+.vercel
+**/.vercel
+
+# Local checkouts
+GasProvider-Monad-main/
+GasProvider-main 2/

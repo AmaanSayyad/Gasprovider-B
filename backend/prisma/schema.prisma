@@ -1,0 +1,649 @@
+// Prisma schema for Gas Provider backend
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Intent {
+  id                String    @id // txHash (0x + 64 hex chars)
+  userAddress       String    @map("user_address")
+  sourceChainId     Int       @map("source_chain_id")
+  sourceTxHash      String    @map("source_tx_hash")
+  sourceBlockNumber Int?      @map("source_block_number")
+  tokenAddress      String    @map("token_address")
+  tokenSymbol       String?   @map("token_symbol")
+  amountInTokenRaw  String    @map("amount_in_token_raw") // bigint string
+  amountInUsd       String    @map("amount_in_usd") // decimal string
+  status            String // IntentStatus enum
+  globalPhase       String    @map("global_phase") // GlobalPhase enum
+  allocations       Json // DestinationAllocation[]
+  chainStatuses     Json      @map("chain_statuses") // ChainDispersal[]
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+  completedAt       DateTime? @map("completed_at")
+
+  // Flare-specific fields
+  fdcAttestationRound  Int?    @map("fdc_attestation_round")
+  fdcAttestationStatus String? @map("fdc_attestation_status") // 'pending' | 'verified' | 'failed'
+  fdcProofHash         String? @map("fdc_proof_hash")
+  isFAsset             Boolean @default(false) @map("is_fasset")
+  underlyingAsset      String? @map("underlying_asset") // 'BTC', 'DOGE', 'XRP', etc.
+  ftsoFeedIds          Json?   @map("ftso_feed_ids") // string[]
+  ftsoPrices           Json?   @map("ftso_prices") // FTSOPriceSnapshot[]
+  smartAccountUsed     Boolean @default(false) @map("smart_account_used")
+  relayerTxHash        String? @map("relayer_tx_hash")
+
+  // Relations
+  fdcAttestations FDCAttestation[]
+
+  @@index([userAddress])
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+  @@index([sourceChainId])
+  @@index([fdcAttestationStatus])
+  @@index([isFAsset])
+  @@map("intents")
+}
+
+model FDCAttestation {
+  id              String    @id @default(uuid())
+  intentId        String    @map("intent_id")
+  roundId         Int       @map("round_id")
+  requestBytes    String    @map("request_bytes") @db.Text
+  attestationType String    @map("attestation_type") // 'EVMTransaction' | 'Payment'
+  sourceChain     String    @map("source_chain")
+  transactionHash String    @map("transaction_hash")
+  status          String // 'requested' | 'finalized' | 'verified' | 'failed'
+  proof           String?   @db.Text // JSON stringified proof
+  responseBody    String?   @map("response_body") @db.Text // JSON stringified response
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  finalizedAt     DateTime? @map("finalized_at")
+
+  // Relations
+  intent Intent @relation(fields: [intentId], references: [id], onDelete: Cascade)
+
+  @@index([intentId])
+  @@index([roundId])
+  @@index([status])
+  @@index([transactionHash])
+  @@map("fdc_attestations")
+}
+
+model FAssetMinting {
+  id               String    @id @default(uuid())
+  userAddress      String    @map("user_address")
+  assetType        String    @map("asset_type") // 'BTC' | 'DOGE' | 'XRP'
+  fAssetAddress    String    @map("fasset_address")
+  agentAddress     String    @map("agent_address")
+  reservationId    String    @map("reservation_id")
+  underlyingAmount String    @map("underlying_amount") // bigint string
+  fAssetAmount     String    @map("fasset_amount") // bigint string
+  underlyingTxHash String?   @map("underlying_tx_hash")
+  mintingTxHash    String?   @map("minting_tx_hash")
+  status           String // 'reserved' | 'payment_pending' | 'minting' | 'completed' | 'expired' | 'failed'
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+  completedAt      DateTime? @map("completed_at")
+
+  @@index([userAddress])
+  @@index([status])
+  @@index([reservationId])
+  @@index([createdAt(sort: Desc)])
+  @@map("fasset_mintings")
+}
+
+model SmartAccount {
+  id                  String   @id @default(uuid())
+  eoaAddress          String   @map("eoa_address")
+  smartAccountAddress String   @map("smart_account_address")
+  chainId             Int      @map("chain_id")
+  deploymentTxHash    String   @map("deployment_tx_hash")
+  createdAt           DateTime @default(now()) @map("created_at")
+  lastUsedAt          DateTime @default(now()) @map("last_used_at")
+
+  @@unique([eoaAddress, chainId])
+  @@index([eoaAddress])
+  @@index([smartAccountAddress])
+  @@map("smart_accounts")
+}
+
+model FTSOFeedConfig {
+  id              String   @id @default(uuid())
+  symbol          String   @unique // e.g., 'FLR/USD', 'BTC/USD'
+  feedId          String   @map("feed_id") // FTSOv2 feed ID
+  decimals        Int
+  updateFrequency Int      @map("update_frequency") // seconds
+  fallbackSource  String?  @map("fallback_source") // e.g., 'chainlink', 'coingecko'
+  fallbackFeedId  String?  @map("fallback_feed_id")
+  isActive        Boolean  @default(true) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([symbol])
+  @@index([isActive])
+  @@map("ftso_feed_configs")
+}
+
+model ScheduledDispersal {
+  id            String  @id @default(uuid())
+  userAddress   String  @map("user_address")
+  name          String? // User-friendly name for the schedule
+  sourceChainId Int     @map("source_chain_id")
+  tokenAddress  String  @map("token_address")
+  tokenSymbol   String? @map("token_symbol")
+  amountInUsd   String  @map("amount_in_usd") // decimal string
+  allocations   Json // DestinationAllocation[] - same as Intent
+
+  // Schedule configuration
+  scheduleType      String    @map("schedule_type") // 'one_time' | 'recurring' | 'auto_balance'
+  scheduledAt       DateTime? @map("scheduled_at") // For one-time schedules
+  recurrencePattern String?   @map("recurrence_pattern") // 'daily' | 'weekly' | 'monthly' | cron expression
+  timezone          String    @default("UTC")
+
+  // Auto-disperse configuration (for balance-based triggers)
+  autoDisperseEnabled Boolean @default(false) @map("auto_disperse_enabled")
+  monitorChainId      Int?    @map("monitor_chain_id") // Chain to monitor balance on
+  balanceThreshold    String? @map("balance_threshold") // Trigger when balance drops below this (in native token)
+  checkInterval       Int?    @map("check_interval") // Check interval in minutes (default: 60)
+
+  // Status and execution tracking
+  status          String    @default("active") // 'active' | 'paused' | 'completed' | 'cancelled'
+  lastExecutedAt  DateTime? @map("last_executed_at")
+  nextExecutionAt DateTime? @map("next_execution_at")
+  executionCount  Int       @default(0) @map("execution_count")
+  lastIntentId    String?   @map("last_intent_id") // Last created intent ID
+
+  // Metadata
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  pausedAt    DateTime? @map("paused_at")
+  cancelledAt DateTime? @map("cancelled_at")
+
+  @@index([userAddress])
+  @@index([status])
+  @@index([scheduleType])
+  @@index([nextExecutionAt])
+  @@index([autoDisperseEnabled])
+  @@index([createdAt(sort: Desc)])
+  @@map("scheduled_dispersals")
+}
+
+// Referral Program Models
+model Referral {
+  id              String   @id @default(uuid())
+  referrerAddress String   @map("referrer_address") // User who created the referral
+  referralCode    String   @unique @map("referral_code") // Unique referral code
+  referralLink    String   @map("referral_link") // Full referral URL
+  totalReferrals  Int      @default(0) @map("total_referrals")
+  totalRewards    String   @default("0") @map("total_rewards") // Total rewards earned in USD
+  isActive        Boolean  @default(true) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  referrals ReferralUsage[]
+
+  @@index([referrerAddress])
+  @@index([referralCode])
+  @@index([isActive])
+  @@map("referrals")
+}
+
+model ReferralUsage {
+  id              String    @id @default(uuid())
+  referralId      String    @map("referral_id")
+  referredAddress String    @map("referred_address") // User who used the referral
+  rewardAmount    String    @map("reward_amount") // Reward amount in USD
+  rewardStatus    String    @default("pending") @map("reward_status") // 'pending' | 'paid' | 'failed'
+  rewardTxHash    String?   @map("reward_tx_hash")
+  intentId        String?   @map("intent_id") // Related deposit intent
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  rewardedAt      DateTime? @map("rewarded_at")
+
+  // Relations
+  referral Referral @relation(fields: [referralId], references: [id], onDelete: Cascade)
+
+  @@index([referralId])
+  @@index([referredAddress])
+  @@index([rewardStatus])
+  @@index([createdAt(sort: Desc)])
+  @@map("referral_usage")
+}
+
+// Gamification Models
+model Achievement {
+  id               String   @id @default(uuid())
+  name             String   @unique
+  description      String   @db.Text
+  category         String // 'dispersal' | 'streak' | 'milestone' | 'social' | 'volume'
+  icon             String? // Icon URL or emoji
+  points           Int      @default(0) // Points awarded
+  badgeId          String?  @unique @map("badge_id") // Associated badge
+  requirementType  String   @map("requirement_type") // 'count' | 'amount' | 'streak' | 'custom'
+  requirementValue Json?    @map("requirement_value") // Requirements as JSON
+  isActive         Boolean  @default(true) @map("is_active")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  userAchievements UserAchievement[]
+
+  @@index([category])
+  @@index([isActive])
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id            String    @id @default(uuid())
+  userAddress   String    @map("user_address")
+  achievementId String    @map("achievement_id")
+  progress      Json // Current progress towards achievement
+  isCompleted   Boolean   @default(false) @map("is_completed")
+  completedAt   DateTime? @map("completed_at")
+  pointsEarned  Int       @default(0) @map("points_earned")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userAddress, achievementId])
+  @@index([userAddress])
+  @@index([achievementId])
+  @@index([isCompleted])
+  @@index([createdAt(sort: Desc)])
+  @@map("user_achievements")
+}
+
+model Badge {
+  id            String   @id @default(uuid())
+  name          String   @unique
+  description   String   @db.Text
+  icon          String // Icon URL or emoji
+  rarity        String   @default("common") // 'common' | 'rare' | 'epic' | 'legendary'
+  category      String // 'dispersal' | 'streak' | 'milestone' | 'social'
+  achievementId String?  @unique @map("achievement_id") // Linked achievement
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@index([category])
+  @@index([rarity])
+  @@index([isActive])
+  @@map("badges")
+}
+
+model UserBadge {
+  id          String   @id @default(uuid())
+  userAddress String   @map("user_address")
+  badgeId     String   @map("badge_id")
+  earnedAt    DateTime @default(now()) @map("earned_at")
+  displayed   Boolean  @default(true) // Whether to display in profile
+
+  @@unique([userAddress, badgeId])
+  @@index([userAddress])
+  @@index([badgeId])
+  @@index([earnedAt(sort: Desc)])
+  @@map("user_badges")
+}
+
+model UserStreak {
+  id               String    @id @default(uuid())
+  userAddress      String    @unique @map("user_address")
+  currentStreak    Int       @default(0) @map("current_streak") // Days
+  longestStreak    Int       @default(0) @map("longest_streak") // Days
+  lastActivityDate DateTime? @map("last_activity_date")
+  streakType       String    @default("dispersal") @map("streak_type") // 'dispersal' | 'daily_login'
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  @@index([userAddress])
+  @@index([currentStreak])
+  @@map("user_streaks")
+}
+
+model Milestone {
+  id             String   @id @default(uuid())
+  userAddress    String   @map("user_address")
+  milestoneType  String   @map("milestone_type") // 'total_dispersals' | 'total_volume' | 'chains_used' | 'days_active'
+  milestoneValue String   @map("milestone_value") // Value reached
+  rewardAmount   String?  @map("reward_amount") // Reward in USD
+  rewardStatus   String   @default("pending") @map("reward_status")
+  rewardTxHash   String?  @map("reward_tx_hash")
+  achievedAt     DateTime @default(now()) @map("achieved_at")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@index([userAddress])
+  @@index([milestoneType])
+  @@index([achievedAt(sort: Desc)])
+  @@map("milestones")
+}
+
+model Leaderboard {
+  id          String    @id @default(uuid())
+  userAddress String    @map("user_address")
+  category    String // 'total_volume' | 'total_dispersals' | 'referrals' | 'points' | 'streak'
+  score       String    @map("score") // Score value (can be volume, count, etc.)
+  rank        Int? // Current rank
+  period      String    @default("all_time") // 'daily' | 'weekly' | 'monthly' | 'all_time'
+  periodStart DateTime? @map("period_start")
+  periodEnd   DateTime? @map("period_end")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@unique([userAddress, category, period, periodStart])
+  @@index([userAddress])
+  @@index([category, period, score(sort: Desc)])
+  @@index([rank])
+  @@map("leaderboards")
+}
+
+model VoiceCommand {
+  id           String   @id @default(uuid())
+  userAddress  String   @map("user_address")
+  command      String   @db.Text // Voice command text
+  commandType  String   @map("command_type") // 'dispersal' | 'query' | 'navigation'
+  language     String   @default("en") // Language code
+  intentId     String?  @map("intent_id") // If command resulted in a transaction
+  status       String   @default("processed") @map("status") // 'processed' | 'failed' | 'pending'
+  errorMessage String?  @map("error_message") @db.Text
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([userAddress])
+  @@index([commandType])
+  @@index([createdAt(sort: Desc)])
+  @@map("voice_commands")
+}
+
+model GasPool {
+  id             String  @id @default(uuid())
+  name           String
+  description    String? @db.Text
+  creatorAddress String  @map("creator_address")
+  poolCode       String  @unique @map("pool_code") // Unique code for joining
+
+  // Pool settings
+  minContribution String  @map("min_contribution") // Minimum contribution in USD
+  maxMembers      Int?    @map("max_members") // Optional member limit
+  isPublic        Boolean @default(true) @map("is_public") // Public pools can be discovered
+  autoDistribute  Boolean @default(true) @map("auto_distribute") // Auto-distribute when member needs gas
+
+  // Pool state
+  status           String @default("active") // 'active' | 'paused' | 'closed'
+  totalContributed String @default("0") @map("total_contributed") // Total USD contributed
+  totalDistributed String @default("0") @map("total_distributed") // Total USD distributed
+  currentBalance   String @default("0") @map("current_balance") // Current pool balance
+
+  // Metadata
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  closedAt  DateTime? @map("closed_at")
+
+  members       GasPoolMember[]
+  contributions GasPoolContribution[]
+  distributions GasPoolDistribution[]
+  activities    GasPoolActivity[]
+
+  @@index([creatorAddress])
+  @@index([poolCode])
+  @@index([status])
+  @@index([isPublic])
+  @@index([createdAt(sort: Desc)])
+  @@map("gas_pools")
+}
+
+model GasPoolMember {
+  id           String   @id @default(uuid())
+  poolId       String   @map("pool_id")
+  userAddress  String   @map("user_address")
+  contribution String   @default("0") // Total contributed in USD
+  received     String   @default("0") // Total received in USD
+  balance      String   @default("0") // Current balance in pool (contributed - received)
+  joinedAt     DateTime @default(now()) @map("joined_at")
+  isActive     Boolean  @default(true) @map("is_active")
+
+  pool GasPool @relation(fields: [poolId], references: [id], onDelete: Cascade)
+
+  @@unique([poolId, userAddress])
+  @@index([userAddress])
+  @@index([poolId])
+  @@map("gas_pool_members")
+}
+
+model GasPoolContribution {
+  id          String   @id @default(uuid())
+  poolId      String   @map("pool_id")
+  userAddress String   @map("user_address")
+  amount      String // Amount in USD
+  intentId    String?  @map("intent_id") // Link to deposit intent if applicable
+  txHash      String?  @map("tx_hash")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  pool GasPool @relation(fields: [poolId], references: [id], onDelete: Cascade)
+
+  @@index([poolId])
+  @@index([userAddress])
+  @@index([createdAt(sort: Desc)])
+  @@map("gas_pool_contributions")
+}
+
+model GasPoolDistribution {
+  id               String   @id @default(uuid())
+  poolId           String   @map("pool_id")
+  recipientAddress String   @map("recipient_address")
+  amount           String // Amount in USD
+  intentId         String?  @map("intent_id") // Link to dispersal intent
+  reason           String?  @db.Text // Why distribution was made
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  pool GasPool @relation(fields: [poolId], references: [id], onDelete: Cascade)
+
+  @@index([poolId])
+  @@index([recipientAddress])
+  @@index([createdAt(sort: Desc)])
+  @@map("gas_pool_distributions")
+}
+
+model GasPoolActivity {
+  id           String   @id @default(uuid())
+  poolId       String   @map("pool_id")
+  activityType String   @map("activity_type") // 'contribution' | 'distribution' | 'member_joined' | 'member_left' | 'pool_created'
+  userAddress  String?  @map("user_address")
+  amount       String? // For contribution/distribution
+  description  String?  @db.Text
+  metadata     Json? // Additional data
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  pool GasPool @relation(fields: [poolId], references: [id], onDelete: Cascade)
+
+  @@index([poolId])
+  @@index([userAddress])
+  @@index([activityType])
+  @@index([createdAt(sort: Desc)])
+  @@map("gas_pool_activities")
+}
+
+model LiquidityDeposit {
+  id           String  @id @default(uuid())
+  userAddress  String  @map("user_address")
+  chainId      Int     @map("chain_id")
+  tokenAddress String  @map("token_address")
+  tokenSymbol  String  @map("token_symbol")
+  amount       String // Amount deposited (in token units)
+  amountUsd    String  @map("amount_usd") // USD value at deposit time
+  txHash       String? @map("tx_hash")
+
+  // Earnings tracking
+  totalEarned       String @default("0") @map("total_earned") // Total fees earned in USD
+  totalEarnedTokens String @default("0") @map("total_earned_tokens") // Total fees earned in tokens
+  platformFeeEarned String @default("0") @map("platform_fee_earned") // Platform's share
+
+  // Usage tracking
+  totalUsed    String @default("0") @map("total_used") // Total amount used from this deposit
+  totalUsedUsd String @default("0") @map("total_used_usd") // Total USD value used
+
+  // Status
+  status   String  @default("active") // 'active' | 'withdrawn' | 'depleted'
+  isActive Boolean @default(true) @map("is_active")
+
+  // Metadata
+  depositedAt DateTime  @default(now()) @map("deposited_at")
+  withdrawnAt DateTime? @map("withdrawn_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  usages   LiquidityUsage[]
+  earnings LiquidityEarning[]
+
+  @@index([userAddress])
+  @@index([chainId])
+  @@index([tokenAddress])
+  @@index([status])
+  @@index([isActive])
+  @@index([depositedAt(sort: Desc)])
+  @@map("liquidity_deposits")
+}
+
+model LiquidityUsage {
+  id               String   @id @default(uuid())
+  depositId        String   @map("deposit_id")
+  intentId         String?  @map("intent_id") // Link to dispersal intent
+  recipientAddress String   @map("recipient_address")
+  amount           String // Amount used (in token units)
+  amountUsd        String   @map("amount_usd") // USD value
+  platformFee      String   @map("platform_fee") // Platform fee in USD
+  providerFee      String   @map("provider_fee") // Provider fee in USD
+  feePercentage    String   @map("fee_percentage") // Fee percentage applied
+  usedAt           DateTime @default(now()) @map("used_at")
+
+  deposit LiquidityDeposit @relation(fields: [depositId], references: [id], onDelete: Cascade)
+
+  @@index([depositId])
+  @@index([intentId])
+  @@index([recipientAddress])
+  @@index([usedAt(sort: Desc)])
+  @@map("liquidity_usages")
+}
+
+model LiquidityEarning {
+  id           String   @id @default(uuid())
+  depositId    String   @map("deposit_id")
+  usageId      String?  @map("usage_id")
+  amount       String // Earnings amount in USD
+  amountTokens String   @map("amount_tokens") // Earnings in token units
+  feeType      String   @map("fee_type") // 'provider_fee' | 'platform_fee'
+  earnedAt     DateTime @default(now()) @map("earned_at")
+
+  deposit LiquidityDeposit @relation(fields: [depositId], references: [id], onDelete: Cascade)
+
+  @@index([depositId])
+  @@index([earnedAt(sort: Desc)])
+  @@map("liquidity_earnings")
+}
+
+model LiquidityPool {
+  id             String   @id @default(uuid())
+  chainId        Int      @unique @map("chain_id")
+  tokenAddress   String   @map("token_address")
+  tokenSymbol    String   @map("token_symbol")
+  totalDeposited String   @default("0") @map("total_deposited") // Total deposited
+  totalAvailable String   @default("0") @map("total_available") // Available for use
+  totalUsed      String   @default("0") @map("total_used") // Total used
+  totalEarnings  String   @default("0") @map("total_earnings") // Total earnings distributed
+  providerCount  Int      @default(0) @map("provider_count")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@index([chainId, tokenAddress])
+  @@map("liquidity_pools")
+}
+
+// Treasury Demo System Models
+
+model TreasuryIntent {
+  id                String    @id @default(uuid())
+  userAddress       String    @map("user_address")
+  sourceChain       Int       @map("source_chain")
+  sourceToken       String    @map("source_token")
+  sourceAmount      String    @map("source_amount") // BigInt as string
+  usdValue          String    @map("usd_value") // Decimal as string
+  status            String // 'created' | 'validating' | 'distributing' | 'completed' | 'failed'
+  globalPhase       String    @map("global_phase") // 'created' | 'validating' | 'distributing' | 'completed' | 'failed'
+  distributions     Json // IntentDistribution[]
+  exchangeRatesUsed Json      @map("exchange_rates_used") // ExchangeRates
+  createdAt         DateTime  @default(now()) @map("created_at")
+  updatedAt         DateTime  @updatedAt @map("updated_at")
+  completedAt       DateTime? @map("completed_at")
+  error             String?   @db.Text
+  retryCount        Int       @default(0) @map("retry_count")
+
+  // Relations
+  operations TreasuryOperation[]
+
+  @@index([userAddress])
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+  @@map("treasury_intents")
+}
+
+model TreasuryBalance {
+  id            String   @id @default(uuid())
+  chainId       Int      @map("chain_id")
+  chainName     String   @map("chain_name")
+  nativeBalance String   @map("native_balance") // BigInt as string
+  nativeSymbol  String   @map("native_symbol")
+  tokenBalances Json // TokenBalance[]
+  lastUpdated   DateTime @default(now()) @map("last_updated")
+  blockNumber   Int      @map("block_number")
+
+  @@unique([chainId])
+  @@index([chainId])
+  @@index([lastUpdated(sort: Desc)])
+  @@map("treasury_balances")
+}
+
+model TreasuryOperation {
+  id            String   @id @default(uuid())
+  chainId       Int      @map("chain_id")
+  operationType String   @map("operation_type") // 'deposit' | 'distribute' | 'withdraw'
+  txHash        String   @map("tx_hash")
+  blockNumber   Int      @map("block_number")
+  timestamp     DateTime @default(now())
+  token         String? // undefined for native
+  amount        String // BigInt as string
+  recipient     String? // for distribute/withdraw
+  intentId      String?  @map("intent_id")
+  status        String // 'pending' | 'confirmed' | 'failed'
+  confirmations Int      @default(0)
+  gasUsed       String?  @map("gas_used") // BigInt as string
+  gasCost       String?  @map("gas_cost") // BigInt as string
+
+  // Relations
+  intent TreasuryIntent? @relation(fields: [intentId], references: [id], onDelete: SetNull)
+
+  @@index([chainId])
+  @@index([intentId])
+  @@index([txHash])
+  @@index([operationType])
+  @@index([timestamp(sort: Desc)])
+  @@map("treasury_operations")
+}
+
+model ExchangeRateConfig {
+  id         String   @id @default(uuid())
+  tokenRates Json     @map("token_rates") // { [symbol: string]: number }
+  chainRates Json     @map("chain_rates") // { [chainId: number]: number }
+  version    Int
+  isActive   Boolean  @default(true) @map("is_active")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@index([isActive])
+  @@index([version])
+  @@index([createdAt(sort: Desc)])
+  @@map("exchange_rate_configs")
+}

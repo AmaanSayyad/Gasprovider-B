@@ -1,0 +1,20 @@
+node_modules/
+dist/
+*.log
+.env
+.env.local
+.DS_Store
+
+# Flare configuration with secrets
+.env.flare.local
+env.flare.local
+.env.*.local
+*.flare.local
+
+# Private keys
+*.key
+*.pem
+
+# Prisma
+# prisma/migrations/  # keep migrations in repo for Railway/prod deploys
+

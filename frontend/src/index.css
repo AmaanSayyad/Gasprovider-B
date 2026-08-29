@@ -1,0 +1,720 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Flare Brandfetch palette — https://brandfetch.com/flare.network */
+  --flare-amaranth: #e62058;
+  --flare-blush: #e46389;
+  --flare-shark: #24292e;
+  --flare-white: #ffffff;
+  --flare-mist: #f7f5f6;
+  --flare-amaranth-soft: rgba(230, 32, 88, 0.12);
+  --flare-blush-soft: rgba(228, 99, 137, 0.16);
+
+  --gp-ember: var(--flare-amaranth);
+  --gp-ember-soft: var(--flare-amaranth-soft);
+  --gp-amber: var(--flare-blush);
+  --gp-teal: var(--flare-amaranth);
+  --gp-teal-soft: var(--flare-amaranth-soft);
+  --gp-ink: var(--flare-shark);
+
+  --font-display: "Sora", "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Manrope", ui-sans-serif, system-ui, sans-serif;
+
+  --background: #12151a;
+  --foreground: #ffffff;
+  --primary: #e62058;
+  --secondary: #9aa3ab;
+  --accent: #e46389;
+  --muted: #1c2127;
+  --border: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-bg: rgba(36, 41, 46, 0.78);
+  --bg-gradient:
+    radial-gradient(900px 500px at 10% -5%, rgba(230, 32, 88, 0.22), transparent 55%),
+    radial-gradient(800px 480px at 90% 0%, rgba(228, 99, 137, 0.16), transparent 50%),
+    linear-gradient(180deg, #12151a 0%, #24292e 55%, #12151a 100%);
+}
+
+.light {
+  --background: #ffffff;
+  --foreground: #24292e;
+  --primary: #e62058;
+  --secondary: #5c656d;
+  --accent: #e46389;
+  --muted: #f7f5f6;
+  --border: rgba(36, 41, 46, 0.1);
+  --glass-border: rgba(36, 41, 46, 0.08);
+  --glass-bg: rgba(255, 255, 255, 0.88);
+  --bg-gradient:
+    radial-gradient(1000px 520px at 8% -10%, rgba(230, 32, 88, 0.14), transparent 55%),
+    radial-gradient(900px 480px at 95% 5%, rgba(228, 99, 137, 0.12), transparent 50%),
+    linear-gradient(180deg, #ffffff 0%, #f7f5f6 45%, #ffffff 100%);
+}
+
+.dark {
+  --background: #12151a;
+  --foreground: #ffffff;
+  --primary: #e62058;
+  --secondary: #9aa3ab;
+  --accent: #e46389;
+  --muted: #1c2127;
+  --border: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-bg: rgba(36, 41, 46, 0.78);
+  --bg-gradient:
+    radial-gradient(900px 500px at 10% -5%, rgba(230, 32, 88, 0.22), transparent 55%),
+    radial-gradient(800px 480px at 90% 0%, rgba(228, 99, 137, 0.16), transparent 50%),
+    linear-gradient(180deg, #12151a 0%, #24292e 55%, #12151a 100%);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--foreground);
+  font-family: var(--font-body);
+  background-image: var(--bg-gradient);
+  background-color: var(--background);
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  transition: background-color 0.3s ease, color 0.3s ease, background-image 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Flare-style hero */
+.gp-hero {
+  background: #ffffff;
+}
+
+.dark .gp-hero {
+  background: #24292e;
+}
+
+.gp-hero-veil {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.72) 48%, #ffffff 100%),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.55) 0%, transparent 50%);
+}
+
+.dark .gp-hero-veil {
+  background:
+    linear-gradient(180deg, rgba(36, 41, 46, 0.2) 0%, rgba(36, 41, 46, 0.75) 50%, #24292e 100%),
+    linear-gradient(90deg, rgba(36, 41, 46, 0.65) 0%, transparent 55%);
+}
+
+.gp-hero-grain {
+  opacity: 0.08;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+.gp-hero-kenburns {
+  animation: gpKenBurns 24s ease-in-out infinite alternate;
+  transform-origin: 70% 40%;
+}
+
+@keyframes gpKenBurns {
+  from { transform: scale(1.02) translate3d(0, 0, 0); }
+  to { transform: scale(1.08) translate3d(-1%, 1.5%, 0); }
+}
+
+.gp-btn-primary {
+  border-radius: 999px;
+  background: #e62058;
+  color: #fff;
+  border: 1px solid #e62058;
+  box-shadow: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.gp-btn-primary:hover {
+  background: #c91a4b;
+  transform: translateY(-1px);
+  filter: none;
+}
+
+.gp-btn-ghost {
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid rgba(36, 41, 46, 0.18);
+  color: #24292e;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.gp-btn-ghost:hover {
+  background: rgba(230, 32, 88, 0.06);
+  border-color: #e62058;
+  transform: none;
+}
+
+.dark .gp-btn-ghost {
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+.gp-judge-panel {
+  background: #ffffff;
+  border-color: rgba(36, 41, 46, 0.1) !important;
+  box-shadow: 0 18px 50px rgba(36, 41, 46, 0.06);
+}
+
+.dark .gp-judge-panel {
+  background: rgba(36, 41, 46, 0.9);
+}
+
+.gp-product-tile {
+  border: 1px solid rgba(36, 41, 46, 0.1);
+  background: #ffffff;
+  border-radius: 1.25rem;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.gp-product-tile:hover {
+  border-color: #e62058;
+  transform: translateY(-2px);
+}
+
+.dark .gp-product-tile {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.gp-step::after {
+  content: "";
+  position: absolute;
+  top: 1.35rem;
+  right: -1rem;
+  width: 2rem;
+  height: 1px;
+  background: linear-gradient(90deg, #e62058, transparent);
+  opacity: 0.45;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .gp-step:not(:last-child)::after {
+    display: block;
+  }
+}
+
+/* Floating Flare particles */
+.gp-orb {
+  position: absolute;
+  border-radius: 999px;
+  background: radial-gradient(circle at 30% 30%, #e46389, #e62058 70%);
+  filter: blur(0.2px);
+  animation: gpFloat 8s ease-in-out infinite;
+}
+
+@keyframes gpFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  background-color: transparent;
+  color: var(--foreground);
+}
+
+/* Smooth theme transitions for all elements */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+@layer components {
+  .glass-card {
+    @apply backdrop-blur-xl shadow-2xl transition-colors duration-300;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+  }
+
+  .light .glass-card {
+    @apply bg-white/80 backdrop-blur-xl;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .dark .glass-card {
+    @apply bg-white/5 backdrop-blur-xl;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-input {
+    @apply backdrop-blur-sm transition-all;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+  }
+
+  .glass-input:focus {
+    @apply focus:border-primary/50 focus:ring-2 focus:ring-primary/20;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: 20px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: var(--secondary);
+  }
+}
+
+/* Animations */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+
+
+@layer base {
+  :root,
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 20 14.3% 4.1%;
+    --card: 0 0% 100%;
+    --card-foreground: 20 14.3% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 14.3% 4.1%;
+    --primary: 343 80% 51%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 8% 40%;
+    --secondary-foreground: 210 12% 16%;
+    --muted: 340 20% 97%;
+    --muted-foreground: 210 8% 40%;
+    --accent: 342 70% 64%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 60 9.1% 97.8%;
+    --border: 210 10% 90%;
+    --input: 210 10% 90%;
+    --ring: 343 80% 51%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 343 80% 51%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 8% 55%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 210 12% 11%;
+    --muted-foreground: 210 8% 64%;
+    --accent: 342 70% 64%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 60 9.1% 97.8%;
+    --border: 210 10% 20%;
+    --input: 210 10% 20%;
+    --ring: 343 80% 51%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Theme-aware text utilities */
+@layer utilities {
+  .text-theme {
+    color: var(--foreground);
+  }
+  
+  .text-theme-muted {
+    color: var(--secondary);
+  }
+  
+  .bg-theme {
+    background-color: var(--background);
+  }
+  
+  .bg-theme-muted {
+    background-color: var(--muted);
+  }
+  
+  .border-theme {
+    border-color: var(--border);
+  }
+}
+
+/* Reown AppKit Modal Theme Overrides */
+w3m-modal,
+appkit-modal,
+w3m-modal *,
+appkit-modal * {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+}
+
+/* Light mode overrides for AppKit modal */
+.light w3m-modal,
+.light appkit-modal {
+  --w3m-accent: #E62058 !important;
+  --w3m-background-color: #ffffff !important;
+  --w3m-color-bg-1: #ffffff !important;
+  --w3m-color-bg-2: #f5f5f7 !important;
+  --w3m-color-fg-1: #1d1d1f !important;
+  --w3m-color-fg-2: #6e6e73 !important;
+  --w3m-color-overlay: rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Dark mode overrides for AppKit modal */
+.dark w3m-modal,
+.dark appkit-modal {
+  --w3m-accent: #E62058 !important;
+  --w3m-background-color: #000000 !important;
+  --w3m-color-bg-1: #1c1c1e !important;
+  --w3m-color-bg-2: #2c2c2e !important;
+  --w3m-color-fg-1: #ffffff !important;
+  --w3m-color-fg-2: #86868b !important;
+  --w3m-color-overlay: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Force AppKit modal text to be visible in light mode */
+.light w3m-modal *,
+.light appkit-modal * {
+  color: var(--w3m-color-fg-1) !important;
+}
+
+/* Ensure all text elements are visible */
+.light w3m-modal p,
+.light appkit-modal p,
+.light w3m-modal span,
+.light appkit-modal span,
+.light w3m-modal div,
+.light appkit-modal div,
+.light w3m-modal a,
+.light appkit-modal a {
+  color: var(--w3m-color-fg-1) !important;
+}
+
+.light w3m-modal [class*="w3m-color-fg-2"] *,
+.light appkit-modal [class*="w3m-color-fg-2"] *,
+.light w3m-modal [class*="secondary"] *,
+.light appkit-modal [class*="secondary"] * {
+  color: var(--w3m-color-fg-2) !important;
+}
+
+/* Ensure network list items are visible */
+.light w3m-modal button,
+.light appkit-modal button,
+.light w3m-modal [role="button"],
+.light appkit-modal [role="button"] {
+  color: var(--w3m-color-fg-1) !important;
+  background-color: var(--w3m-color-bg-1) !important;
+}
+
+.light w3m-modal input,
+.light appkit-modal input {
+  color: var(--w3m-color-fg-1) !important;
+  background-color: var(--w3m-color-bg-1) !important;
+  border-color: var(--border) !important;
+}
+
+/* Provider list visibility - ensure all wallet providers are visible */
+.light w3m-modal [class*="w3m-wallet-button"],
+.light appkit-modal [class*="w3m-wallet-button"],
+.light w3m-modal [class*="wallet-button"],
+.light appkit-modal [class*="wallet-button"],
+.light w3m-modal [data-testid*="wallet"],
+.light appkit-modal [data-testid*="wallet"] {
+  color: var(--w3m-color-fg-1) !important;
+  background-color: var(--w3m-color-bg-1) !important;
+  border-color: var(--border) !important;
+}
+
+/* Swap and Send options visibility */
+.light w3m-modal [class*="swap"],
+.light appkit-modal [class*="swap"],
+.light w3m-modal [class*="send"],
+.light appkit-modal [class*="send"],
+.light w3m-modal [class*="action"],
+.light appkit-modal [class*="action"] {
+  color: var(--w3m-color-fg-1) !important;
+  background-color: var(--w3m-color-bg-1) !important;
+}
+
+/* List items and cards in modal */
+.light w3m-modal li,
+.light appkit-modal li,
+.light w3m-modal [class*="list-item"],
+.light appkit-modal [class*="list-item"],
+.light w3m-modal [class*="card"],
+.light appkit-modal [class*="card"] {
+  color: var(--w3m-color-fg-1) !important;
+  background-color: var(--w3m-color-bg-1) !important;
+  border-color: var(--border) !important;
+}
+
+/* Ensure hover states are visible */
+.light w3m-modal button:hover,
+.light appkit-modal button:hover,
+.light w3m-modal [role="button"]:hover,
+.light appkit-modal [role="button"]:hover {
+  background-color: var(--w3m-color-bg-2) !important;
+  color: var(--w3m-color-fg-1) !important;
+}
+
+/* Dark mode provider visibility */
+.dark w3m-modal [class*="w3m-wallet-button"],
+.dark appkit-modal [class*="w3m-wallet-button"],
+.dark w3m-modal [class*="wallet-button"],
+.dark appkit-modal [class*="wallet-button"] {
+  color: var(--w3m-color-fg-1) !important;
+  background-color: var(--w3m-color-bg-1) !important;
+  border-color: var(--border) !important;
+}
+
+/* Global theme overrides - must be outside @layer to have proper specificity */
+/* Override all text-white instances */
+.light .text-white,
+.dark .text-white {
+  color: var(--foreground) !important;
+}
+
+/* Override text-white with opacity variants */
+[class*="text-white/"] {
+  color: var(--secondary) !important;
+}
+
+/* Specific opacity overrides for better control */
+.light [class*="text-white/60"],
+.light [class*="text-white/70"],
+.light [class*="text-white/80"],
+.dark [class*="text-white/60"],
+.dark [class*="text-white/70"],
+.dark [class*="text-white/80"] {
+  color: var(--secondary) !important;
+}
+
+.light [class*="text-white/40"],
+.dark [class*="text-white/40"] {
+  color: var(--secondary) !important;
+  opacity: 0.6;
+}
+
+/* Border overrides */
+[class*="border-white/"] {
+  border-color: var(--border) !important;
+}
+
+/* Background overrides */
+[class*="bg-white/"] {
+  background-color: var(--muted) !important;
+}
+
+/* Specific background opacity handling */
+.light [class*="bg-white/5"] {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+}
+
+.light [class*="bg-white/10"] {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.light [class*="bg-white/20"] {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Comprehensive AppKit modal visibility fixes */
+/* Target all possible provider/wallet list containers */
+.light appkit-modal [class*="w3m-grid"],
+.light appkit-modal [class*="w3m-list"],
+.light appkit-modal [class*="w3m-container"],
+.light appkit-modal [class*="w3m-content"],
+.light appkit-modal [class*="w3m-view"],
+.light appkit-modal [class*="w3m-page"],
+.dark appkit-modal [class*="w3m-grid"],
+.dark appkit-modal [class*="w3m-list"],
+.dark appkit-modal [class*="w3m-container"],
+.dark appkit-modal [class*="w3m-content"],
+.dark appkit-modal [class*="w3m-view"],
+.dark appkit-modal [class*="w3m-page"] {
+  background-color: var(--w3m-color-bg-1) !important;
+  color: var(--w3m-color-fg-1) !important;
+}
+
+/* Ensure all clickable items in provider list are visible */
+.light appkit-modal [class*="w3m-wallet-button"] *,
+.light appkit-modal [class*="wallet-button"] *,
+.light appkit-modal [class*="w3m-wallet"] *,
+.light appkit-modal [data-testid*="wallet"] * {
+  color: var(--w3m-color-fg-1) !important;
+}
+
+/* Fix for swap and send action buttons */
+.light appkit-modal [class*="w3m-action"],
+.light appkit-modal [class*="action-button"],
+.light appkit-modal [class*="swap-button"],
+.light appkit-modal [class*="send-button"] {
+  color: var(--w3m-color-fg-1) !important;
+  background-color: var(--w3m-color-bg-1) !important;
+  border-color: var(--border) !important;
+}
+
+/* Fix for any grid or flex containers showing providers */
+.light appkit-modal [class*="grid"],
+.light appkit-modal [class*="flex"],
+.light appkit-modal [style*="display: grid"],
+.light appkit-modal [style*="display: flex"] {
+  background-color: var(--w3m-color-bg-1) !important;
+}
+
+/* Ensure images/logos in wallet buttons are visible */
+.light appkit-modal img,
+.light appkit-modal svg {
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* Fix for any overlay or backdrop that might be hiding content */
+.light appkit-modal [class*="overlay"],
+.light appkit-modal [class*="backdrop"] {
+  background-color: var(--w3m-color-overlay) !important;
+}
+
+/* Ensure all interactive elements have proper contrast */
+.light appkit-modal [tabindex],
+.light appkit-modal [role="menuitem"],
+.light appkit-modal [role="option"] {
+  color: var(--w3m-color-fg-1) !important;
+  background-color: var(--w3m-color-bg-1) !important;
+}
+
+/* Fix for search input in provider list */
+.light appkit-modal [type="search"],
+.light appkit-modal [type="text"],
+.light appkit-modal input[placeholder] {
+  color: var(--w3m-color-fg-1) !important;
+  background-color: var(--w3m-color-bg-1) !important;
+  border-color: var(--border) !important;
+}
+
+.light appkit-modal input::placeholder {
+  color: var(--w3m-color-fg-2) !important;
+  opacity: 0.7 !important;
+}
+
+/* Ensure modal content is visible and properly layered */
+appkit-modal,
+w3m-modal {
+  z-index: 9999 !important;
+}
+
+appkit-modal > *,
+w3m-modal > * {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Fix visibility for collapsed/hidden content that should be visible */
+.light appkit-modal [class*="w3m-wallet-button"][style*="display: none"],
+.light appkit-modal [class*="wallet-button"][style*="display: none"] {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Ensure provider list items are not hidden */
+.light appkit-modal [class*="w3m-wallet-button"],
+.light appkit-modal [class*="wallet-button"],
+.light appkit-modal [data-testid*="wallet"],
+.light appkit-modal [class*="provider"] {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  color: var(--w3m-color-fg-1) !important;
+  background-color: var(--w3m-color-bg-1) !important;
+}
+
+/* Fix for swap and send sections */
+.light appkit-modal [class*="swap"],
+.light appkit-modal [class*="send"],
+.light appkit-modal [class*="transfer"],
+.light appkit-modal [class*="w3m-swap"],
+.light appkit-modal [class*="w3m-send"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  color: var(--w3m-color-fg-1) !important;
+  background-color: var(--w3m-color-bg-1) !important;
+}
+
+/* Ensure all modal content containers have proper backgrounds */
+appkit-modal [class*="w3m-container"],
+appkit-modal [class*="w3m-content"],
+appkit-modal [class*="w3m-view"],
+appkit-modal [class*="w3m-page"],
+appkit-modal [class*="w3m-grid"],
+appkit-modal [class*="w3m-list"] {
+  background-color: var(--w3m-color-bg-1) !important;
+}
+
+/* Fix for provider selection view */
+appkit-modal [class*="w3m-provider"],
+appkit-modal [class*="w3m-wallet-list"],
+appkit-modal [class*="w3m-wallet-grid"] {
+  background-color: var(--w3m-color-bg-1) !important;
+  color: var(--w3m-color-fg-1) !important;
+}
+
+/* Ensure all child elements inherit visibility */
+appkit-modal [class*="w3m-container"] *,
+appkit-modal [class*="w3m-content"] *,
+appkit-modal [class*="w3m-view"] * {
+  color: inherit !important;
+}

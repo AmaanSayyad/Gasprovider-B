@@ -1,0 +1,135 @@
+{
+  "$schema": "./exchangeRatesSchema.json",
+  "version": 1,
+  "lastUpdated": "2024-12-06T00:00:00Z",
+  "tokens": {
+    "USDC": 1.0,
+    "USDT": 1.0,
+    "FLR": 0.02,
+    "C2FLR": 0.02,
+    "WFLR": 0.02,
+    "FXRP": 0.55,
+    "XRP": 0.55,
+    "FBTC": 65000,
+    "FDOGE": 0.1,
+    "FLTC": 80,
+    "MON": 0.05,
+    "ETH": 2000
+  },
+  "chains": {
+    "114": {
+      "chainId": 114,
+      "name": "Coston2",
+      "nativeSymbol": "C2FLR",
+      "usdPrice": 0.02
+    },
+    "11155111": {
+      "chainId": 11155111,
+      "name": "Ethereum Sepolia",
+      "nativeSymbol": "ETH",
+      "usdPrice": 2000
+    },
+    "80002": {
+      "chainId": 80002,
+      "name": "Polygon Amoy",
+      "nativeSymbol": "MATIC",
+      "usdPrice": 0.8
+    },
+    "421614": {
+      "chainId": 421614,
+      "name": "Arbitrum Sepolia",
+      "nativeSymbol": "ETH",
+      "usdPrice": 2000
+    },
+    "11155420": {
+      "chainId": 11155420,
+      "name": "Optimism Sepolia",
+      "nativeSymbol": "ETH",
+      "usdPrice": 2000
+    },
+    "84532": {
+      "chainId": 84532,
+      "name": "Base Sepolia",
+      "nativeSymbol": "ETH",
+      "usdPrice": 2000
+    },
+    "4801": {
+      "chainId": 4801,
+      "name": "World Sepolia",
+      "nativeSymbol": "ETH",
+      "usdPrice": 2000
+    },
+    "999999999": {
+      "chainId": 999999999,
+      "name": "Zora Sepolia",
+      "nativeSymbol": "ETH",
+      "usdPrice": 2000
+    },
+    "534351": {
+      "chainId": 534351,
+      "name": "Scroll Sepolia",
+      "nativeSymbol": "ETH",
+      "usdPrice": 2000
+    },
+    "43113": {
+      "chainId": 43113,
+      "name": "Avalanche Fuji",
+      "nativeSymbol": "AVAX",
+      "usdPrice": 25
+    },
+    "97": {
+      "chainId": 97,
+      "name": "BSC Testnet",
+      "nativeSymbol": "tBNB",
+      "usdPrice": 300
+    },
+    "10143": {
+      "chainId": 10143,
+      "name": "Monad Testnet",
+      "nativeSymbol": "MON",
+      "usdPrice": 0.05
+    },
+    "300": {
+      "chainId": 300,
+      "name": "zkSync Sepolia",
+      "nativeSymbol": "ETH",
+      "usdPrice": 2000
+    },
+    "314159": {
+      "chainId": 314159,
+      "name": "Filecoin Calibration",
+      "nativeSymbol": "tFIL",
+      "usdPrice": 4
+    },
+    "1301": {
+      "chainId": 1301,
+      "name": "Unichain Sepolia",
+      "nativeSymbol": "ETH",
+      "usdPrice": 2000
+    },
+    "48898": {
+      "chainId": 48898,
+      "name": "Zircuit Garfield",
+      "nativeSymbol": "ETH",
+      "usdPrice": 2000
+    },
+    "5115": {
+      "chainId": 5115,
+      "name": "Citrea Testnet",
+      "nativeSymbol": "cBTC",
+      "usdPrice": 64000
+    },
+    "545": {
+      "chainId": 545,
+      "name": "Flow EVM Testnet",
+      "nativeSymbol": "FLOW",
+      "usdPrice": 0.4
+    },
+    "44787": {
+      "chainId": 44787,
+      "name": "Celo Alfajores",
+      "nativeSymbol": "CELO",
+      "usdPrice": 0.35
+    }
+  }
+}
