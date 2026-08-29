@@ -29,7 +29,12 @@ describe('IntentManager', () => {
     resetIntentManager();
 
     // Initialize price calculator with test config
-    const configPath = path.join(__dirname, '../config/exchangeRates.json');
+    // Pinned fixture, not the production config — these tests assert against
+    // chains 1/137, which production (testnet-only) no longer enables.
+    const configPath = path.join(
+      __dirname,
+      '../config/__fixtures__/exchangeRates.test.json'
+    );
     priceCalculator = new PriceCalculator(configPath);
 
     // Initialize intent manager
@@ -46,7 +51,7 @@ describe('IntentManager', () => {
         userAddress: '0x1234567890123456789012345678901234567890',
         sourceChain: 14, // Flare
         sourceToken: 'USDC',
-        sourceAmount: BigInt('100000000000000000000'), // 100 USDC
+        sourceAmount: BigInt('100000000'), // 100 USDC (6 decimals)
         destinationChains: [1, 137], // Ethereum, Polygon
         allocationPercentages: [60, 40],
       };

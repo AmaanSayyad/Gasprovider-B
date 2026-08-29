@@ -10,15 +10,18 @@ describe('PriceCalculator', () => {
   let calculator: PriceCalculator;
 
   beforeEach(() => {
-    // Use the test configuration
-    const configPath = path.join(__dirname, '../config/exchangeRates.json');
+    // Pinned fixture, not the production config — see the fixture's _comment.
+    const configPath = path.join(
+      __dirname,
+      '../config/__fixtures__/exchangeRates.test.json'
+    );
     calculator = new PriceCalculator(configPath);
   });
 
   describe('getUsdValue', () => {
     it('should calculate USD value for USDC correctly', () => {
-      // 100 USDC (with 18 decimals)
-      const amount = BigInt('100000000000000000000');
+      // 100 USDC (6 decimals)
+      const amount = BigInt('100000000');
       const usdValue = calculator.getUsdValue('USDC', amount);
       
       expect(usdValue).toBe(100);
@@ -81,8 +84,8 @@ describe('PriceCalculator', () => {
 
   describe('calculateDistributions', () => {
     it('should calculate distributions for multiple chains correctly', () => {
-      // 100 USDC to be distributed
-      const sourceAmount = BigInt('100000000000000000000');
+      // 100 USDC to be distributed (6 decimals)
+      const sourceAmount = BigInt('100000000');
       const destinationChains = [1, 137, 14]; // Ethereum, Polygon, Flare
       const allocationPercentages = [50, 30, 20]; // 50%, 30%, 20%
 

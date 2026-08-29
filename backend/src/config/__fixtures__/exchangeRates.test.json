@@ -1,0 +1,25 @@
+{
+  "version": "test",
+  "lastUpdated": "2026-08-29T00:00:00.000Z",
+  "_comment": "Fixture for priceCalculator unit tests. Pinned so the arithmetic assertions do not break every time production exchangeRates.json is re-priced or a chain is enabled/disabled.",
+  "tokens": {
+    "USDC": 1,
+    "USDT": 1,
+    "FLR": 0.02,
+    "C2FLR": 0.02,
+    "WFLR": 0.02,
+    "FXRP": 0.55,
+    "XRP": 0.55,
+    "ETH": 2000
+  },
+  "chains": {
+    "1": { "chainId": 1, "name": "Ethereum", "nativeSymbol": "ETH", "usdPrice": 2000 },
+    "10": { "chainId": 10, "name": "Optimism", "nativeSymbol": "ETH", "usdPrice": 2000 },
+    "14": { "chainId": 14, "name": "Flare", "nativeSymbol": "FLR", "usdPrice": 0.02 },
+    "56": { "chainId": 56, "name": "BNB Chain", "nativeSymbol": "BNB", "usdPrice": 300 },
+    "137": { "chainId": 137, "name": "Polygon", "nativeSymbol": "MATIC", "usdPrice": 0.8 },
+    "114": { "chainId": 114, "name": "Coston2", "nativeSymbol": "C2FLR", "usdPrice": 0.02 },
+    "42161": { "chainId": 42161, "name": "Arbitrum", "nativeSymbol": "ETH", "usdPrice": 2000 },
+    "43114": { "chainId": 43114, "name": "Avalanche", "nativeSymbol": "AVAX", "usdPrice": 25 }
+  }
+}

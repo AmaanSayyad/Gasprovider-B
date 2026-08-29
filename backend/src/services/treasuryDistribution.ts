@@ -13,6 +13,7 @@ import { PriceCalculator } from "./priceCalculator";
 import * as fs from "fs";
 import * as path from "path";
 import { isActiveChain } from "../config/activeChains";
+import { CHAIN_CONFIGS } from "../config/chains";
 import {
   getErrorHandler,
   ErrorCategory,
@@ -174,7 +175,6 @@ export class TreasuryDistributionService {
 
     // Also load from CHAIN_CONFIGS (environment variables)
     try {
-      const { CHAIN_CONFIGS } = require("../config/chains");
       for (const [chainIdStr, config] of Object.entries(CHAIN_CONFIGS)) {
         const chainId = Number(chainIdStr);
         let contractAddress = (config as any).contractAddress;

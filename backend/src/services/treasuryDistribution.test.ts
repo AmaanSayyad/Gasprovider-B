@@ -145,7 +145,7 @@ describe("TreasuryDistributionService", () => {
           amount: ethers.parseEther("1.0"),
         },
         {
-          chainId: 11155111,
+          chainId: 11155420,
           recipient: "0x742D35CC6634c0532925A3b844BC9E7595F0BEb0",
           amount: ethers.parseEther("0.5"),
         },
@@ -210,6 +210,7 @@ describe("TreasuryDistributionService", () => {
     it("should handle balance query errors", async () => {
       const mockProvider = {
         call: vi.fn().mockRejectedValue(new Error("RPC error")),
+        getBalance: vi.fn().mockRejectedValue(new Error("RPC error")),
       };
 
       vi.mocked(mockExecutor as any).getProvider = vi.fn().mockResolvedValue(mockProvider);
