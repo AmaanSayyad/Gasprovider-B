@@ -568,6 +568,9 @@ const DISABLED_DESTINATION_IDS = new Set([
 const DISABLED_DESTINATION_NUMERIC_IDS = new Set([
   11155111, // Ethereum Sepolia
   421614, // Arbitrum Sepolia
+  114, // Coston2 — reaches the catalog from the public chain list; not served
+  14, // Flare mainnet — likewise
+  10143, // Monad Testnet — likewise
 ]);
 
 /** Pre-select these so a demo doesn't auto-include unfunded chains. */
