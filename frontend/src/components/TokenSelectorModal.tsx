@@ -25,9 +25,7 @@ const TokenSelectorModal: React.FC<TokenSelectorModalProps> = ({
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
 
-  // Separate FAssets from regular tokens
-  const regularTokens = tokens.filter((token) => !token.isFAsset);
-  const fAssetTokens = tokens.filter((token) => token.isFAsset);
+  const regularTokens = tokens;
 
   // Popular tokens - prioritize native token for the selected chain, then first 4 tokens
   const popularTokens = useMemo(() => {
@@ -36,16 +34,8 @@ const TokenSelectorModal: React.FC<TokenSelectorModalProps> = ({
     }
 
     // Determine native token symbol for the chain
-    let nativeTokenSymbol: string | null = null;
-    if (sourceChain.id === "monadTestnet") {
-      nativeTokenSymbol = "MON";
-    } else if (sourceChain.id === "coston2") {
-      nativeTokenSymbol = "C2FLR";
-    } else if (sourceChain.id === "flare") {
-      nativeTokenSymbol = "FLR";
-    } else {
-      nativeTokenSymbol = "ETH"; // Default for EVM chains
-    }
+    const nativeTokenSymbol: string =
+      sourceChain.id === "botchain" ? "BOT" : "ETH";
 
     // Find native token
     const nativeToken = regularTokens.find(
@@ -74,12 +64,6 @@ const TokenSelectorModal: React.FC<TokenSelectorModalProps> = ({
       token.symbol.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const filteredFAssetTokens = fAssetTokens.filter(
-    (token) =>
-      token.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      token.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      token.underlyingAsset?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   if (!isOpen) return null;
 
@@ -305,124 +289,7 @@ const TokenSelectorModal: React.FC<TokenSelectorModalProps> = ({
               </div>
             )}
 
-            {/* FAssets Token List */}
-            {filteredFAssetTokens.length > 0 && (
-              <div className="p-4">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-primary/10 border border-primary/30">
-                    <span className="text-xs font-bold text-primary">FAssets</span>
-                  </div>
-                  <h3 className="text-sm font-semibold text-secondary uppercase tracking-wider">
-                    Cross-Chain Assets
-                  </h3>
-                </div>
-
-                <div className="space-y-1">
-                  {filteredFAssetTokens.map((token) => {
-                    const isSelected = selectedTokenSymbol === token.symbol;
-                    return (
-                      <button
-                        key={token.symbol}
-                        onClick={() => {
-                          onSelect(token);
-                          onClose();
-                        }}
-                        className={clsx(
-                          "w-full flex items-center justify-between p-4 rounded-2xl border transition-all duration-200 group",
-                          isSelected
-                            ? "bg-primary/10 border-primary shadow-[0_0_15px_rgba(41,151,255,0.2)]"
-                            : "bg-theme-muted border-theme hover:bg-muted hover:border-primary/30"
-                        )}
-                      >
-                        <div className="flex items-center gap-3 flex-1 min-w-0">
-                          <div className="relative shrink-0">
-                            {/* Underlying asset icon */}
-                            {token.underlyingLogo && !imageErrors.has(token.symbol) ? (
-                              <div className="relative">
-                                <img
-                                  src={token.underlyingLogo}
-                                  alt={token.underlyingAsset}
-                                  className="w-10 h-10 rounded-full bg-theme-muted p-0.5 shadow-md"
-                                  onError={() => {
-                                    setImageErrors(
-                                      (prev) => new Set([...prev, token.symbol])
-                                    );
-                                  }}
-                                />
-                                {/* FAsset badge */}
-                                <div className="absolute -bottom-1 -right-1 bg-theme-muted rounded-full p-0.5 border-2 border-theme-muted shadow-md">
-                                  <img
-                                    src="/flarelogo.png"
-                                    alt="Flare"
-                                    className="w-4 h-4 rounded-full"
-                                  />
-                                </div>
-                              </div>
-                            ) : (
-                              <div
-                                className={clsx(
-                                  "w-10 h-10 rounded-full flex items-center justify-center text-base font-bold backdrop-blur-sm",
-                                  isSelected
-                                    ? "bg-primary/20 text-primary"
-                                    : "bg-theme-muted text-theme"
-                                )}
-                              >
-                                {token.symbol.charAt(0)}
-                              </div>
-                            )}
-                            {isSelected && (
-                              <motion.div
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                className="absolute -top-1 -left-1 bg-primary rounded-full p-0.5 border-2 border-theme-muted"
-                              >
-                                <Check className="w-3 h-3 text-white" />
-                              </motion.div>
-                            )}
-                          </div>
-                          <div className="text-left flex-1 min-w-0">
-                            <div className="flex items-center gap-2">
-                              <div
-                                className={clsx(
-                                  "font-bold text-base truncate",
-                                  isSelected ? "text-primary" : "text-theme"
-                                )}
-                              >
-                                {token.name}
-                              </div>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <div className="text-sm text-secondary font-medium truncate">
-                                {token.symbol}
-                              </div>
-                              {token.underlyingAsset && (
-                                <div className="text-xs text-secondary/70">
-                                  • Backed by {token.underlyingAsset}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-right shrink-0 ml-4">
-                          <div
-                            className={clsx(
-                              "font-bold text-base",
-                              isSelected ? "text-primary" : "text-theme"
-                            )}
-                          >
-                            {token.balance.toFixed(4)}
-                          </div>
-                          <div className="text-xs text-secondary">Balance</div>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {/* No results */}
-            {filteredRegularTokens.length === 0 && filteredFAssetTokens.length === 0 && (
+            {filteredRegularTokens.length === 0 && (
               <div className="p-4">
                 <div className="flex flex-col items-center justify-center py-12 text-secondary">
                   <Search className="w-12 h-12 mb-4 opacity-20" />

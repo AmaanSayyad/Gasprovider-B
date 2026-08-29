@@ -68,7 +68,7 @@ describe('PriceCalculator', () => {
       expect(nativeAmount).toBe(BigInt('10000000000000000000'));
     });
 
-    it('should calculate native amount for Flare correctly', () => {
+    it('should calculate native amount correctly', () => {
       // $1 USD worth of FLR at $0.02/FLR = 50 FLR
       const nativeAmount = calculator.getNativeAmount(14, 1);
       
@@ -86,8 +86,8 @@ describe('PriceCalculator', () => {
     it('should calculate distributions for multiple chains correctly', () => {
       // 100 USDC to be distributed (6 decimals)
       const sourceAmount = BigInt('100000000');
-      const destinationChains = [1, 137, 14]; // Ethereum, Polygon, Flare
-      const allocationPercentages = [50, 30, 20]; // 50%, 30%, 20%
+      const destinationChains = [1, 137]; // Ethereum, Polygon
+      const allocationPercentages = [60, 40]; // 60%, 40%
 
       const distributions = calculator.calculateDistributions(
         'USDC',
@@ -96,19 +96,15 @@ describe('PriceCalculator', () => {
         allocationPercentages
       );
 
-      expect(distributions).toHaveLength(3);
+      expect(distributions).toHaveLength(2);
 
-      // Chain 1 (Ethereum): $50 / $2000 = 0.025 ETH
+      // Chain 1 (Ethereum): $60 / $2000 = 0.03 ETH
       expect(distributions[0].chainId).toBe(1);
-      expect(distributions[0].amount).toBe(BigInt('25000000000000000'));
+      expect(distributions[0].amount).toBe(BigInt('30000000000000000'));
 
-      // Chain 137 (Polygon): $30 / $0.8 = 37.5 MATIC
+      // Chain 137 (Polygon): $40 / $0.8 = 50 MATIC
       expect(distributions[1].chainId).toBe(137);
-      expect(distributions[1].amount).toBe(BigInt('37500000000000000000'));
-
-      // Chain 14 (Flare): $20 / $0.02 = 1000 FLR
-      expect(distributions[2].chainId).toBe(14);
-      expect(distributions[2].amount).toBe(BigInt('1000000000000000000000'));
+      expect(distributions[1].amount).toBe(BigInt('50000000000000000000'));
     });
 
     it('should throw error if percentages do not sum to 100', () => {

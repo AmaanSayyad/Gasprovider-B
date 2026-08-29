@@ -202,17 +202,17 @@ async function main() {
     console.warn('Failed to initialize achievements:', err);
   });
 
-  // Initialize Smart Account Manager and Relayer Service if Flare is enabled
+  // Initialize Smart Account Manager and Relayer Service when enabled
   let smartAccountManager: any = undefined;
   let relayerService: any = undefined;
 
   const enableSmartAccounts = process.env.ENABLE_SMART_ACCOUNTS === 'true';
-  const flareRpcUrl = process.env.FLARE_RPC_URL || process.env.COSTON2_RPC_URL;
-  const smartAccountFactoryAddress = process.env.SMART_ACCOUNT_FACTORY_ADDRESS_COSTON2 || process.env.SMART_ACCOUNT_FACTORY_ADDRESS_MAINNET;
+  const smartAccountRpcUrl = process.env.BOTCHAIN_RPC_URL;
+  const smartAccountFactoryAddress = process.env.SMART_ACCOUNT_FACTORY_ADDRESS;
   const { getRelayerPrivateKey } = await import('./utils/keys');
   const relayerPrivateKey = getRelayerPrivateKey();
 
-  if (enableSmartAccounts && flareRpcUrl && smartAccountFactoryAddress && relayerPrivateKey) {
+  if (enableSmartAccounts && smartAccountRpcUrl && smartAccountFactoryAddress && relayerPrivateKey) {
     try {
       const { SmartAccountManager } = await import('./services/smartaccount');
       const { RelayerService } = await import('./services/relayer');
@@ -223,7 +223,7 @@ async function main() {
 
       // Initialize Smart Account Manager
       smartAccountManager = new SmartAccountManager(
-        flareRpcUrl,
+        smartAccountRpcUrl,
         smartAccountFactoryAddress,
         storageAdapter
       );
@@ -231,7 +231,7 @@ async function main() {
       // Initialize Relayer Service
       const balanceThreshold = process.env.RELAYER_BALANCE_THRESHOLD_FLR || "10.0";
       relayerService = new RelayerService(
-        flareRpcUrl,
+        smartAccountRpcUrl,
         relayerPrivateKey,
         balanceThreshold
       );

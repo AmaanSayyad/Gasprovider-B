@@ -19,7 +19,7 @@ describe('DispersalService - Property-Based Tests', () => {
   });
 
   /**
-   * Feature: flare-integration, Property 23: Verified Attestation Progression
+   * Property 23: Verified Attestation Progression
    * Validates: Requirements 7.5
    * 
    * For any successfully verified attestation, the system should update the intent status 
@@ -72,7 +72,7 @@ describe('DispersalService - Property-Based Tests', () => {
           // Create intent from deposit event
           const intent = await store.upsertFromDepositEvent(payload);
 
-          // Simulate FDC attestation verification
+          // Simulate attestation verification
           const updatedIntent = await store.updateIntent(intent.id, {
             fdcAttestationRound: attestationData.roundId,
             fdcAttestationStatus: attestationData.attestationStatus,

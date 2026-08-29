@@ -6,45 +6,18 @@ import { PITCH_DECK_URL, DEMO_VIDEO_URL } from "../data/links";
 const steps = [
   {
     icon: Coins,
-    title: "Deposit on Flare",
-    body: "Fund with FXRP or C2FLR on Coston2. One payment covers gas across the destinations you pick.",
+    title: "Deposit on BOT Chain",
+    body: "Fund with USDT on BOT Chain. One payment covers gas across the destinations you pick.",
   },
   {
     icon: Radio,
-    title: "Priced by FTSO",
-    body: "Flare Time Series Oracle converts your deposit into fair USD gas budgets per chain — block-latency feeds.",
+    title: "Split by budget",
+    body: "Your deposit is divided into a USD gas budget per destination, exactly as you allocate it.",
   },
   {
     icon: Waves,
     title: "Gas drips out",
     body: "Treasury sends native gas to Base, Optimism, World, and more — ready to spend.",
-  },
-];
-
-const protocols = [
-  {
-    name: "FAssets",
-    blurb: "Bring XRP into programmable finance as FXRP — the payment rail for this demo.",
-    href: "https://flare.network/products/fassets",
-    docs: "https://dev.flare.network/fassets/overview/",
-  },
-  {
-    name: "FTSO",
-    blurb: "High-integrity, block-latency price feeds that price every gas quote in this app.",
-    href: "https://flare.network/products/flare-time-series-oracle",
-    docs: "https://dev.flare.network/",
-  },
-  {
-    name: "FDC",
-    blurb: "Flare Data Connector attests deposit transactions so dispersal can be verified.",
-    href: "https://flare.network/products/flare-data-connector",
-    docs: "https://dev.flare.network/",
-  },
-  {
-    name: "Smart Accounts",
-    blurb: "Control assets from XRPL, execute on Flare — the long-term UX path for FXRP users.",
-    href: "https://flare.network/products/flare-smart-accounts",
-    docs: "https://dev.flare.network/",
   },
 ];
 
@@ -76,8 +49,8 @@ const ProductStory: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.06 }}
           className="mt-4 text-base leading-relaxed text-secondary sm:text-lg"
         >
-          New wallets burn time hunting faucet gas on every testnet. Gas Provider turns a single Flare deposit
-          into usable native gas on the networks your demo already needs — powered by enshrined data protocols.
+          New wallets burn time hunting faucet gas on every testnet. Gas Provider turns a single
+          BOT Chain deposit into usable native gas on the networks your demo already needs.
         </motion.p>
       </div>
 
@@ -106,45 +79,6 @@ const ProductStory: React.FC = () => {
         })}
       </div>
 
-      <div>
-        <div className="mb-6">
-          <p className="font-display text-[11px] font-semibold uppercase tracking-[0.22em] text-[#E62058]">
-            Built with Flare
-          </p>
-          <h3 className="font-display text-2xl font-bold tracking-tight text-theme">
-            Enshrined protocols in this product
-          </h3>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          {protocols.map((p, i) => (
-            <motion.a
-              key={p.name}
-              href={p.href}
-              target="_blank"
-              rel="noreferrer"
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.05 }}
-              className="gp-product-tile group block p-6"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="font-display text-lg font-bold text-theme group-hover:text-[#E62058]">
-                    {p.name}
-                  </p>
-                  <p className="mt-2 text-sm leading-relaxed text-secondary">{p.blurb}</p>
-                </div>
-                <ArrowUpRight className="mt-1 h-4 w-4 shrink-0 text-[#E46389] opacity-70 transition group-hover:opacity-100" />
-              </div>
-              <p className="mt-4 text-xs font-medium text-[#E62058]">
-                {p.docs.replace("https://", "")}
-              </p>
-            </motion.a>
-          ))}
-        </div>
-      </div>
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -155,39 +89,23 @@ const ProductStory: React.FC = () => {
         <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
           <div className="space-y-5 p-7 sm:p-9">
             <p className="font-display text-xs font-semibold uppercase tracking-[0.22em] text-[#E62058]">
-              For hackathon judges
+              How it works
             </p>
             <h3 className="font-display text-2xl font-bold tracking-tight text-theme sm:text-3xl">
-              Flare-native gas provisioning — not a generic multi-send.
+              Purpose-built gas provisioning — not a generic multi-send.
             </h3>
             <ul className="space-y-4 text-sm leading-relaxed text-secondary">
               <li className="border-t border-theme pt-4 first:border-0 first:pt-0">
-                <span className="font-semibold text-theme">Interoperable assets · </span>
-                FXRP + C2FLR payment rail aligned with{" "}
-                <a className="text-[#E62058] hover:underline" href="https://flare.network/products/fassets" target="_blank" rel="noreferrer">
-                  FAssets
-                </a>
-                .
+                <span className="font-semibold text-theme">One deposit · </span>
+                Pay USDT once on BOT Chain; the escrow records your per-chain split on-chain.
               </li>
               <li className="border-t border-theme pt-4">
-                <span className="font-semibold text-theme">FTSO pricing · </span>
-                Live feeds from{" "}
-                <a className="text-[#E62058] hover:underline" href="https://flare.network/products/flare-time-series-oracle" target="_blank" rel="noreferrer">
-                  Flare Time Series Oracle
-                </a>
-                .
-              </li>
-              <li className="border-t border-theme pt-4">
-                <span className="font-semibold text-theme">FDC attestation · </span>
-                Best-effort deposit proofs via{" "}
-                <a className="text-[#E62058] hover:underline" href="https://flare.network/products/flare-data-connector" target="_blank" rel="noreferrer">
-                  Flare Data Connector
-                </a>
-                .
+                <span className="font-semibold text-theme">Native gas out · </span>
+                A treasury on each destination sends real native gas to your address.
               </li>
               <li className="border-t border-theme pt-4">
                 <span className="font-semibold text-theme">Try it · </span>
-                Connect MetaMask → Coston2 → Review → Disperse. See confirmed drips in Activity.
+                Connect MetaMask → BOT Chain → Review → Disperse. See confirmed drips in Activity.
               </li>
               <li className="border-t border-theme pt-4">
                 <span className="font-semibold text-theme">Demo video · </span>
@@ -217,24 +135,24 @@ const ProductStory: React.FC = () => {
           </div>
           <div className="relative min-h-[240px] overflow-hidden bg-[#E62058] lg:min-h-full">
             <img
-              src="/flare/particle-field.svg"
+              src="/particle-field.svg"
               alt=""
               className="absolute inset-0 h-full w-full object-cover opacity-40 mix-blend-screen"
               aria-hidden
             />
             <div className="relative z-10 flex h-full flex-col justify-end p-8">
-              <img src="/flarelogo.png" alt="Flare" className="mb-4 h-14 w-14 rounded-full object-cover shadow-lg" />
-              <p className="font-display text-2xl font-bold text-white">Powered by Flare</p>
+              <img src="/botchain.png" alt="BOT Chain" className="mb-4 h-14 w-14 rounded-full object-cover shadow-lg" />
+              <p className="font-display text-2xl font-bold text-white">Settled on BOT Chain</p>
               <p className="mt-1 text-sm text-white/85">
-                FTSO · FDC · FAssets · Smart Accounts
+                USDT in · native gas out
               </p>
               <a
-                href="https://flare.network/"
+                href="https://scan.botchain.ai/"
                 target="_blank"
                 rel="noreferrer"
                 className="mt-5 inline-flex w-fit items-center gap-1 rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#E62058]"
               >
-                flare.network
+                scan.botchain.ai
                 <ArrowUpRight className="h-4 w-4" />
               </a>
             </div>

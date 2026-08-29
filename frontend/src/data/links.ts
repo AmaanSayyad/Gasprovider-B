@@ -1,4 +1,4 @@
-/** Shared public links for the Flare Summer Signal submission. */
+/** Shared public links. */
 export const PITCH_DECK_URL =
   "https://docs.google.com/presentation/d/1dcDHlryNzrDfVudiqPB-xnrNiIX9w971PFaoAP4Jztk/edit?usp=sharing";
 

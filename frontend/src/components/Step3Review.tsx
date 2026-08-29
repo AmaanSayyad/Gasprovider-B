@@ -3,34 +3,20 @@ import { useGasFountain } from "../context/GasFountainContext";
 import VisualizationCanvas from "./VisualizationCanvas";
 import { ChevronLeft, Loader2, AlertCircle } from "lucide-react";
 import { useDeposit } from "../hooks/useDeposit";
-import { useAccount, useSendTransaction, useWriteContract } from "wagmi";
-import { parseEther, parseUnits } from "viem";
-import { getExplorerUrl, TREASURY_ADDRESSES } from "../data/chains";
-import { getTokenAddress } from "../data/tokens";
+import { useAccount } from "wagmi";
+import { getExplorerUrl } from "../data/chains";
 import { useReferral } from "../hooks/useReferral";
 import { updateStreak } from "../utils/api";
 import {
-  useFtsoPrices,
+  usePrices,
   getTokenUsdPrice,
   usdToTokenAmount,
   protocolFeeUsd,
-} from "../hooks/useFtsoPrices";
+} from "../hooks/usePrices";
 import ChainLogo from "./ChainLogo";
 
 type Status = "idle" | "dispersing" | "error";
 
-const ERC20_TRANSFER_ABI = [
-  {
-    type: "function",
-    name: "transfer",
-    stateMutability: "nonpayable",
-    inputs: [
-      { name: "to", type: "address" },
-      { name: "amount", type: "uint256" },
-    ],
-    outputs: [{ type: "bool" }],
-  },
-] as const;
 
 const Step3Review: React.FC = () => {
   const {
@@ -45,27 +31,19 @@ const Step3Review: React.FC = () => {
 
   const { address, chainId } = useAccount();
   const { applyReferral } = useReferral();
-  const { prices: ftsoPrices } = useFtsoPrices();
+  const { prices: prices } = usePrices();
   const estimatedFees = protocolFeeUsd(depositAmount);
-  const tokenUsdPrice = getTokenUsdPrice(sourceToken?.symbol, ftsoPrices);
+  const tokenUsdPrice = getTokenUsdPrice(sourceToken?.symbol, prices);
   const tokensNeeded = usdToTokenAmount(
     depositAmount,
     sourceToken?.symbol,
-    ftsoPrices
+    prices
   );
   const [status, setStatus] = useState<Status>("idle");
   const [txHash, setTxHash] = useState<`0x${string}` | undefined>(undefined);
-  const { sendTransactionAsync } = useSendTransaction();
-  const { writeContractAsync } = useWriteContract();
 
-  const tokenSymbol = (sourceToken?.symbol || "USDC").toUpperCase();
-  const isFlareAsset =
-    tokenSymbol === "FXRP" ||
-    tokenSymbol === "C2FLR" ||
-    tokenSymbol === "FLR" ||
-    tokenSymbol === "WFLR";
-  const isFlareSource =
-    sourceChain?.id === "coston2" || sourceChain?.id === "flare";
+  const tokenSymbol = (sourceToken?.symbol || "USDT").toUpperCase();
+
 
   const {
     deposit,
@@ -146,27 +124,17 @@ const Step3Review: React.FC = () => {
           });
           console.log("=".repeat(60));
 
-          // Submit deposit to backend — use selected source token (FXRP / C2FLR / USDC)
+          // Submit deposit to backend using the selected source token
           const { submitTreasuryDeposit } = await import("../utils/api");
-          const tokenSymbol = (sourceToken?.symbol || "USDC").toUpperCase();
           const decimals =
-            tokenSymbol === "USDC" ||
-            tokenSymbol === "USDT" ||
-            tokenSymbol === "FXRP" ||
-            tokenSymbol === "FTESTXRP"
-              ? 6
-              : tokenSymbol === "FBTC" ||
-                  tokenSymbol === "FDOGE" ||
-                  tokenSymbol === "FLTC"
-                ? 8
-                : 18;
+            tokenSymbol === "USDC" || tokenSymbol === "USDT" ? 6 : 18;
           const amountBase = BigInt(
             Math.floor(depositAmount * 10 ** decimals)
           ).toString();
 
           const response = await submitTreasuryDeposit({
             userAddress: address,
-            sourceChain: sourceChain.viemChain?.id || 114, // Coston2 default (Flare)
+            sourceChain: sourceChain.viemChain?.id || 677, // BOT Chain
             sourceToken: tokenSymbol,
             amount: amountBase,
             destinationChains: destinationChainIds,
@@ -226,112 +194,6 @@ const Step3Review: React.FC = () => {
 
   const handleBack = (): void => setCurrentStep(1);
 
-  const submitFlareBackend = async (
-    onChainTxHash: `0x${string}`,
-    tokenAmount: number
-  ) => {
-    if (!address || !sourceChain?.viemChain?.id) return;
-    const destinationChainIds = selectedChains
-      .map((chain) => chain.viemChain?.id)
-      .filter((id): id is number => id !== undefined);
-    const equal = 100 / Math.max(destinationChainIds.length, 1);
-    const allocationPercentages = destinationChainIds.map(() => equal);
-    const sum = allocationPercentages.reduce((a, b) => a + b, 0);
-    if (allocationPercentages.length > 0) {
-      allocationPercentages[0] += 100 - sum;
-    }
-
-    const decimals =
-      tokenSymbol === "USDC" || tokenSymbol === "USDT" ? 6 : 18;
-    const amountBase = parseUnits(
-      Math.max(tokenAmount, 0.000001).toFixed(6),
-      decimals
-    ).toString();
-
-    const { submitTreasuryDeposit } = await import("../utils/api");
-    const response = await submitTreasuryDeposit({
-      userAddress: address,
-      sourceChain: sourceChain.viemChain.id,
-      sourceToken: tokenSymbol,
-      amount: amountBase,
-      destinationChains: destinationChainIds,
-      allocationPercentages,
-      sourceTxHash: onChainTxHash,
-    });
-    if (response.intentId) {
-      setDepositTxHash(response.intentId);
-    } else {
-      setDepositTxHash(onChainTxHash);
-    }
-    setCurrentStep(3);
-  };
-
-  const handleFlareDisperse = async () => {
-    if (!address || !sourceChain?.viemChain?.id) {
-      setStatus("error");
-      return;
-    }
-    const chainNumeric = sourceChain.viemChain.id;
-    const treasury = TREASURY_ADDRESSES[chainNumeric] as `0x${string}` | undefined;
-    if (!treasury) {
-      console.error("No treasury for chain", chainNumeric);
-      setStatus("error");
-      return;
-    }
-
-    try {
-      setStatus("dispersing");
-      let hash: `0x${string}`;
-
-      // depositAmount in UI is USD notional — convert via live FTSO prices
-      let tokenAmount = depositAmount;
-      try {
-        const base =
-          typeof window !== "undefined" && window.location.hostname === "localhost"
-            ? "http://localhost:3000"
-            : (import.meta as any).env?.VITE_API_URL || "http://localhost:3000";
-        const priceRes = await fetch(`${base}/api/prices/ftso`);
-        if (priceRes.ok) {
-          const prices = await priceRes.json();
-          const usdPerToken = Number(prices?.tokens?.[tokenSymbol] || 0);
-          if (usdPerToken > 0) {
-            tokenAmount = depositAmount / usdPerToken;
-          }
-        }
-      } catch {
-        /* keep depositAmount as token units fallback */
-      }
-
-      if (tokenSymbol === "C2FLR" || tokenSymbol === "FLR") {
-        const value = parseEther(Math.max(tokenAmount, 0.000001).toFixed(6));
-        hash = await sendTransactionAsync({ to: treasury, value });
-      } else if (tokenSymbol === "FXRP") {
-        const fxrp = getTokenAddress(sourceChain.id, "FXRP") as `0x${string}` | null;
-        if (!fxrp) throw new Error("FXRP address missing on this chain");
-        // FXRP / FTestXRP is 6 decimals on Coston2 (not 18)
-        const amount = parseUnits(Math.max(tokenAmount, 0.000001).toFixed(6), 6);
-        hash = await writeContractAsync({
-          address: fxrp,
-          abi: ERC20_TRANSFER_ABI,
-          functionName: "transfer",
-          args: [treasury, amount],
-        });
-      } else {
-        throw new Error(`Unsupported Flare asset: ${tokenSymbol}`);
-      }
-
-      setTxHash(hash);
-      await submitFlareBackend(hash, tokenAmount);
-      if (address) {
-        applyReferral(hash).catch(console.error);
-        updateStreak(address, "dispersal").catch(console.error);
-      }
-    } catch (err) {
-      console.error("Flare disperse failed:", err);
-      setStatus("error");
-    }
-  };
-
   const handleDisperse = (): void => {
     if (!address) {
       setStatus("error");
@@ -344,12 +206,6 @@ const Step3Review: React.FC = () => {
     }
     if (chainId !== requiredChainId) {
       setStatus("error");
-      return;
-    }
-
-    // Flare Summer Signal path: FXRP / C2FLR / FLR → treasury + FTSO/FDC backend
-    if (isFlareSource && isFlareAsset) {
-      void handleFlareDisperse();
       return;
     }
 
@@ -396,28 +252,9 @@ const Step3Review: React.FC = () => {
               Confirm details before sending.
             </p>
             <div className="mt-3 flex flex-wrap gap-2 text-xs">
-              <span className="px-2.5 py-1 rounded-lg bg-primary/15 border border-primary/30 text-primary font-semibold">
-                Live FTSO prices (ContractRegistry)
-              </span>
-              <span className="px-2.5 py-1 rounded-lg bg-primary/15 border border-primary/30 text-primary font-semibold">
-                FDC EVMTransaction attest (best-effort)
-              </span>
               <span className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-secondary font-medium">
-                Source: {(sourceToken?.symbol || "USDC").toUpperCase()}
-                {sourceChain?.id === "coston2" || sourceChain?.id === "flare"
-                  ? " on Coston2"
-                  : ""}
+                Source: {tokenSymbol} on {sourceChain?.name || "BOT Chain"}
               </span>
-              {(sourceChain?.id === "coston2" || sourceChain?.id === "flare") && (
-                <a
-                  href="https://faucet.flare.network/coston2"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 font-medium hover:bg-emerald-500/25"
-                >
-                  Coston2 faucet
-                </a>
-              )}
             </div>
           </div>
 

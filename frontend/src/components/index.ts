@@ -1,11 +1,6 @@
 // Component exports
 export { default as ActivityLog } from "./ActivityLog";
 export { default as ChainSelectorModal } from "./ChainSelectorModal";
-export { default as FAssetsMintingWizard } from "./FAssetsMintingWizard";
-export { default as FAssetsRedemptionModal } from "./FAssetsRedemptionModal";
-export { default as FDCAttestationStatus } from "./FDCAttestationStatus";
-export { default as FTSOPriceBadge } from "./FTSOPriceBadge";
-export { default as FTSOPriceDisplay } from "./FTSOPriceDisplay";
 export { default as Header } from "./Header";
 export { default as Layout } from "./Layout";
 export { default as SmartAccountManager } from "./SmartAccountManager";

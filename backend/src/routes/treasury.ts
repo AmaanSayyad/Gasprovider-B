@@ -74,8 +74,6 @@ export function registerTreasuryRoutes(
     const errorHandler = getErrorHandler();
 
     try {
-      // Prefer live FTSO prices for Track 1 demo accuracy
-      await priceCalculator.refreshFromFtso().catch(() => undefined);
       const exchangeRates = priceCalculator.getAllExchangeRates();
       
       // Build chain list from exchange rates configuration
@@ -93,10 +91,7 @@ export function registerTreasuryRoutes(
         chains,
         supportedTokens: priceCalculator.getSupportedTokens(),
         priceSource: priceCalculator.getLastPriceSource(),
-        poweredBy:
-          priceCalculator.getLastPriceSource() === "ftso"
-            ? "Flare FTSO"
-            : "fallback rates",
+        poweredBy: "static rate table",
       });
     } catch (error: any) {
       await errorHandler.handleHttpError(
@@ -111,16 +106,16 @@ export function registerTreasuryRoutes(
   });
 
   // ==========================================================================
-  // GET /api/prices/ftso
-  // Live Flare FTSO-backed prices for hackathon UI
+  // GET /api/prices
+  // USD rates from the static exchange rate table
   // ==========================================================================
-  fastify.get("/api/prices/ftso", async (_request, reply) => {
+  fastify.get("/api/prices", async (_request, reply) => {
     try {
-      const source = await priceCalculator.refreshFromFtso(true);
+      const source = priceCalculator.getLastPriceSource();
       const rates = priceCalculator.getAllExchangeRates();
       return reply.code(200).send({
         priceSource: source,
-        poweredBy: source === "ftso" ? "Flare FTSO" : "fallback rates",
+        poweredBy: "static rate table",
         tokens: rates.tokens,
         chains: Object.fromEntries(
           Object.entries(rates.chains).map(([id, c]) => [
@@ -132,7 +127,7 @@ export function registerTreasuryRoutes(
       });
     } catch (error: any) {
       return reply.code(500).send({
-        error: "Failed to refresh FTSO prices",
+        error: "Failed to read prices",
         details: error?.message || String(error),
       });
     }
@@ -173,8 +168,8 @@ export function registerTreasuryRoutes(
           return reply.code(400).send(error);
         }
 
-        // Refresh FTSO prices (Flare Summer Signal — live Flare oracle pricing)
-        const priceSource = await priceCalculator.refreshFromFtso();
+        // Static USD rate table
+        const priceSource = priceCalculator.getLastPriceSource();
 
         // Calculate USD value of source amount
         const sourceAmount = BigInt(payload.amount);
@@ -215,7 +210,7 @@ export function registerTreasuryRoutes(
           exchangeRatesVersion: exchangeRates.version,
           exchangeRatesTimestamp: exchangeRates.lastUpdated,
           priceSource,
-          poweredBy: priceSource === "ftso" ? "Flare FTSO" : "fallback rates",
+          poweredBy: "static rate table",
         });
       } catch (error) {
         if (error instanceof z.ZodError) {
@@ -272,8 +267,7 @@ export function registerTreasuryRoutes(
           return reply.code(400).send(error);
         }
 
-        // Refresh FTSO before creating intent (Track 1 — interoperable asset pricing)
-        await priceCalculator.refreshFromFtso();
+        priceCalculator.getLastPriceSource();
 
         // Create intent
         const intent = await intentManager.createIntent({
@@ -337,44 +331,6 @@ export function registerTreasuryRoutes(
         // Update intent status to validating
         await intentManager.updateIntentStatus(intent.id, "validating");
 
-        // Request Flare FDC attestation when we have an on-chain deposit tx (async)
-        if (payload.sourceTxHash && process.env.ENABLE_FDC !== "false") {
-          try {
-            const { EventProcessor } = await import("../services/eventProcessor");
-            // Lightweight store adapter for FDC status updates on treasury intents
-            const storeAdapter = {
-              updateIntent: async (txOrId: string, data: Record<string, unknown>) => {
-                const id = txOrId === payload.sourceTxHash ? intent.id : txOrId;
-                await intentManager.updateIntentStatus(id, "validating", data as any);
-              },
-            } as any;
-            const processor = new EventProcessor(storeAdapter);
-            processor
-              .processDepositEvent({
-                chainId: payload.sourceChain,
-                txHash: payload.sourceTxHash,
-                logIndex: 0,
-                blockNumber: 0,
-                eventName: "Deposited",
-                data: {
-                  user: payload.userAddress,
-                  token: payload.sourceToken,
-                  amountTokenRaw: payload.amount,
-                  amountUsd: intent.usdValue.toFixed(2),
-                  allocations: payload.destinationChains.map((chainId, i) => ({
-                    chainId,
-                    weightBps: Math.round((payload.allocationPercentages[i] || 0) * 100),
-                  })),
-                },
-              } as any)
-              .catch((err: Error) =>
-                console.warn("FDC attestation request failed (non-blocking):", err.message)
-              );
-          } catch (err) {
-            console.warn("FDC wiring skipped:", err);
-          }
-        }
-
         // Trigger distributions (async, don't wait)
         triggerDistributions(
           intent.id,
@@ -391,12 +347,6 @@ export function registerTreasuryRoutes(
           status: "validating",
           message: "Deposit request accepted, distributions will be processed",
           priceSource: priceCalculator.getLastPriceSource(),
-          fdcRequested: Boolean(payload.sourceTxHash && process.env.ENABLE_FDC !== "false"),
-          flareIntegration: {
-            ftso: true,
-            fdc: process.env.ENABLE_FDC !== "false",
-            fassets: ["FXRP", "C2FLR", "FLR"].includes(payload.sourceToken.toUpperCase()),
-          },
         });
       } catch (error) {
         if (error instanceof z.ZodError) {
@@ -749,8 +699,6 @@ function getChainIcon(chainId: number): string {
     43114: "🔺", // Avalanche
     42161: "🔵", // Arbitrum
     10: "🔴", // Optimism
-    14: "🔥", // Flare
-    114: "🔥", // Coston2
   };
 
   return icons[chainId] || "⛓️";

@@ -59,7 +59,7 @@ const MainContent: React.FC = () => {
               Disperse gas
             </h2>
             <p className="mt-1 max-w-xl text-sm text-secondary">
-              Pick destinations, pay FXRP or C2FLR on Coston2, and watch native gas land on each chain.
+              Pick destinations, pay USDT on BOT Chain, and watch native gas land on each chain.
             </p>
           </div>
         </div>

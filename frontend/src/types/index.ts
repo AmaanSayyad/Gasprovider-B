@@ -18,7 +18,6 @@ export interface Token {
   isNative: boolean;
   address?: string | null;
   isLoading?: boolean;
-  isFAsset?: boolean;
   underlyingAsset?: string;
   underlyingLogo?: string;
 }
@@ -125,21 +124,6 @@ export interface DepositIntent {
   createdAt: string;
   updatedAt: string;
   completedAt?: string;
-  // Flare-specific fields
-  fdcAttestationRound?: number;
-  fdcAttestationStatus?: "pending" | "verified" | "failed";
-  fdcProofHash?: string;
-  isFAsset?: boolean;
-  underlyingAsset?: string;
-  ftsoFeedIds?: string[];
-  ftsoPrices?: Array<{
-    feedId: string;
-    symbol: string;
-    value: string;
-    decimals: number;
-    timestamp: number;
-    source: "ftso" | "fallback";
-  }>;
   smartAccountUsed?: boolean;
   relayerTxHash?: string;
 }
@@ -165,16 +149,7 @@ export interface HistoryEntry {
     amountUsd: string;
     status: ChainDispersalStatus;
   }[];
-  // Flare-specific fields
-  isFAsset?: boolean;
-  underlyingAsset?: string;
   smartAccountUsed?: boolean;
-  fdcAttestationStatus?: "pending" | "verified" | "failed";
-  ftsoPrices?: Array<{
-    symbol: string;
-    value: string;
-    source: "ftso" | "fallback";
-  }>;
 }
 
 export interface GetHistoryResponse {

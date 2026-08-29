@@ -77,8 +77,6 @@ describe("TransactionExecutor", () => {
   describe("Configuration", () => {
     it("should support all required chains", () => {
       const requiredChains = [
-        114,       // Coston2 Testnet
-        14,        // Flare Mainnet
         11155111,  // Ethereum Sepolia
         80002,     // Polygon Amoy
         421614,    // Arbitrum Sepolia
@@ -92,7 +90,7 @@ describe("TransactionExecutor", () => {
       ];
 
       // Verify we have the expected number of chains
-      expect(requiredChains.length).toBe(12);
+      expect(requiredChains.length).toBe(10);
     });
   });
 });

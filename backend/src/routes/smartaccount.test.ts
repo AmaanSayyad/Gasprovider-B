@@ -29,21 +29,21 @@ describe("Smart Account API Routes", () => {
     dispersalService = new DispersalService(store);
 
     // Initialize Smart Account services if configuration is available
-    const flareRpcUrl = process.env.COSTON2_RPC_URL;
-    const smartAccountFactoryAddress = process.env.SMART_ACCOUNT_FACTORY_ADDRESS_COSTON2;
+    const smartAccountRpcUrl = process.env.BOTCHAIN_RPC_URL;
+    const smartAccountFactoryAddress = process.env.SMART_ACCOUNT_FACTORY_ADDRESS;
     const relayerPrivateKey = process.env.RELAYER_PRIVATE_KEY;
 
-    if (flareRpcUrl && smartAccountFactoryAddress && relayerPrivateKey) {
+    if (smartAccountRpcUrl && smartAccountFactoryAddress && relayerPrivateKey) {
       const storageAdapter = new PrismaSmartAccountStorageAdapter(prisma);
       
       smartAccountManager = new SmartAccountManager(
-        flareRpcUrl,
+        smartAccountRpcUrl,
         smartAccountFactoryAddress,
         storageAdapter
       );
 
       relayerService = new RelayerService(
-        flareRpcUrl,
+        smartAccountRpcUrl,
         relayerPrivateKey,
         "10.0"
       );

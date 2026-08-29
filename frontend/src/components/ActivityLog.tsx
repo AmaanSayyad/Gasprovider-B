@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { useGasFountain } from "../context/GasFountainContext";
 import { useRecentActivity } from "../hooks/useRecentActivity";
-import { Clock, CheckCircle, XCircle, Loader2, Zap, Shield, TrendingUp } from "lucide-react";
+import { Clock, CheckCircle, XCircle, Loader2, Zap } from "lucide-react";
 import { HistoryItem, HistoryEntry } from "../types";
 import IntentDetailModal from "./IntentDetailModal";
 
@@ -37,11 +37,9 @@ const ActivityLog: React.FC = () => {
   // Convert backend HistoryEntry to frontend HistoryItem format
   const history: (HistoryItem & { 
     intentId: string;
-    isFAsset?: boolean;
     underlyingAsset?: string;
     smartAccountUsed?: boolean;
     fdcAttestationStatus?: "pending" | "verified" | "failed";
-    ftsoPrices?: Array<{ symbol: string; value: string; source: "ftso" | "fallback" }>;
   })[] = useMemo(() => {
     if (!historyEntries || historyEntries.length === 0) return [];
 
@@ -67,12 +65,7 @@ const ActivityLog: React.FC = () => {
         chains: entry.numChains,
         status,
         intentId: entry.id, // Store the intent ID for opening the modal
-        // Flare-specific fields
-        isFAsset: entry.isFAsset,
-        underlyingAsset: entry.underlyingAsset,
         smartAccountUsed: entry.smartAccountUsed,
-        fdcAttestationStatus: entry.fdcAttestationStatus,
-        ftsoPrices: entry.ftsoPrices,
       };
     });
   }, [historyEntries]);
@@ -135,11 +128,6 @@ const ActivityLog: React.FC = () => {
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="font-medium">Dispersed ${item.amount}</span>
-                        {item.isFAsset && item.underlyingAsset && (
-                          <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/30">
-                            F{item.underlyingAsset}
-                          </span>
-                        )}
                       </div>
                       <div className="text-xs text-secondary">
                         {new Date(item.timestamp).toLocaleDateString()} •{" "}
@@ -165,27 +153,12 @@ const ActivityLog: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Flare-specific indicators */}
-                {(item.smartAccountUsed || item.fdcAttestationStatus || item.ftsoPrices) && (
+                {item.smartAccountUsed && (
                   <div className="flex items-center gap-2 ml-8 mt-2">
-                    {item.smartAccountUsed && (
-                      <div className="flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-primary/10 text-primary">
-                        <Zap className="w-3 h-3" />
-                        <span>Gasless</span>
-                      </div>
-                    )}
-                    {item.fdcAttestationStatus === "verified" && (
-                      <div className="flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-green-500/10 text-green-500">
-                        <Shield className="w-3 h-3" />
-                        <span>FDC Verified</span>
-                      </div>
-                    )}
-                    {item.ftsoPrices && item.ftsoPrices.length > 0 && (
-                      <div className="flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-primary/10 text-primary">
-                        <TrendingUp className="w-3 h-3" />
-                        <span>FTSO Prices</span>
-                      </div>
-                    )}
+                    <div className="flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-primary/10 text-primary">
+                      <Zap className="w-3 h-3" />
+                      <span>Gasless</span>
+                    </div>
                   </div>
                 )}
               </div>

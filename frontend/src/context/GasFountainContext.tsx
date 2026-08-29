@@ -55,7 +55,7 @@ export const GasFountainProvider: React.FC<GasFountainProviderProps> = ({
 
   const { address, isConnected, chainId } = useAccount();
   const { switchChain } = useSwitchChain();
-  const sourceChainId = sourceChain?.id || "coston2";
+  const sourceChainId = sourceChain?.id || "botchain";
   
   // Try to use unified balances from Nexus SDK first, fallback to wagmi balances
   const { unifiedBalance } = useNexus();
@@ -104,10 +104,8 @@ export const GasFountainProvider: React.FC<GasFountainProviderProps> = ({
           // Fallback to wagmi balance if not found in unified balance
           const wagmiToken = wagmiBalances.find((wt) => wt.symbol === token.symbol);
           
-          // Include FAssets on Flare chains even without address
-          const isFlareChain = sourceChain && (sourceChain.id === 'coston2' || sourceChain.id === 'flare');
           const tokenAddress = getTokenAddress(sourceChain.id, token.symbol);
-          const shouldInclude = token.isNative || tokenAddress !== null || (token.isFAsset && isFlareChain);
+          const shouldInclude = token.isNative || tokenAddress !== null;
           
           if (wagmiToken) {
             return wagmiToken;
@@ -125,11 +123,9 @@ export const GasFountainProvider: React.FC<GasFountainProviderProps> = ({
     }
     
     // Fallback to wagmi balances if unified balance not available
-    // Filter to include FAssets on Flare chains
-    const isFlareChain = sourceChain && (sourceChain.id === 'coston2' || sourceChain.id === 'flare');
     const filteredWagmiBalances = (wagmiBalances || []).filter((token: Token) => {
       const tokenAddress = getTokenAddress(sourceChain?.id || '', token.symbol);
-      return token.isNative || tokenAddress !== null || (token.isFAsset && isFlareChain);
+      return token.isNative || tokenAddress !== null;
     });
     
     return filteredWagmiBalances;
@@ -196,27 +192,12 @@ export const GasFountainProvider: React.FC<GasFountainProviderProps> = ({
     };
   }, []);
 
-  // Initialize source chain to Coston2 (Flare Summer Signal — Flare-first)
+  // BOT Chain is the only source chain.
   useEffect(() => {
     if (!sourceChain && SOURCE_CHAINS.length > 0) {
-      const coston2 = SOURCE_CHAINS.find((chain) => chain.id === "coston2");
-      setSourceChainState(coston2 || SOURCE_CHAINS[0]);
+      setSourceChainState(SOURCE_CHAINS[0]);
     }
   }, [sourceChain]);
-
-  // Prefer FXRP (then C2FLR) when source is Coston2 / Flare
-  useEffect(() => {
-    if (!sourceChain || sourceToken) return;
-    const isFlare =
-      sourceChain.id === "coston2" || sourceChain.id === "flare";
-    if (!isFlare || tokenBalances.length === 0) return;
-    const fxrp = tokenBalances.find((t) => t.symbol.toUpperCase() === "FXRP");
-    const c2flr = tokenBalances.find((t) => t.symbol.toUpperCase() === "C2FLR");
-    const flr = tokenBalances.find((t) => t.symbol.toUpperCase() === "FLR");
-    if (fxrp) setSourceToken(fxrp);
-    else if (c2flr) setSourceToken(c2flr);
-    else if (flr) setSourceToken(flr);
-  }, [sourceChain, sourceToken, tokenBalances, setSourceToken]);
 
   // Keep selected token balance in sync when wagmi/Nexus balances refresh
   useEffect(() => {

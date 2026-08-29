@@ -9,7 +9,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { useTokenBalances } from "../../hooks/useTokenBalances";
 import { getViemChain, getChainIdFromNumeric, chains } from "../../data/chains";
-import { useFtsoPrices, getTokenUsdPrice } from "../../hooks/useFtsoPrices";
+import { usePrices, getTokenUsdPrice } from "../../hooks/usePrices";
 import type { UserAsset } from "@avail-project/nexus-core";
 import ChainLogo from "../ChainLogo";
 
@@ -29,7 +29,7 @@ const UnifiedBalance = ({ className }: { className?: string }) => {
   const { unifiedBalance, fetchUnifiedBalance } = useNexus();
   const { chainId, isConnected, address } = useAccount();
   const [refreshing, setRefreshing] = useState(false);
-  const { prices: ftsoPrices } = useFtsoPrices();
+  const { prices: prices } = usePrices();
 
   const currentChainIdString = chainId ? getChainIdFromNumeric(chainId) : undefined;
   const chainMeta = useMemo(
@@ -56,13 +56,13 @@ const UnifiedBalance = ({ className }: { className?: string }) => {
     if (!isConnected || !wagmiBalances?.length) return [];
     const viemChain = currentChainIdString ? getViemChain(currentChainIdString) : undefined;
     const chainName = chainMeta?.name || viemChain?.name || `Chain ${chainId}`;
-    const chainLogo = chainMeta?.logo || "/flarelogo.png";
+    const chainLogo = chainMeta?.logo || "/botchain.png";
 
     return wagmiBalances
       .filter((t) => (t.balance ?? 0) > 0)
       .map((t) => {
         const bal = Number(t.balance) || 0;
-        const usd = bal * getTokenUsdPrice(t.symbol, ftsoPrices);
+        const usd = bal * getTokenUsdPrice(t.symbol, prices);
         return {
           symbol: t.symbol,
           balance: String(bal),
@@ -92,7 +92,7 @@ const UnifiedBalance = ({ className }: { className?: string }) => {
     currentChainIdString,
     chainMeta,
     chainId,
-    ftsoPrices,
+    prices,
   ]);
 
   const tokens = useMemo(() => {
@@ -234,7 +234,7 @@ const UnifiedBalance = ({ className }: { className?: string }) => {
                                 }
                                 return (
                                   <img
-                                    src={chain?.chain?.logo || "/flarelogo.png"}
+                                    src={chain?.chain?.logo || "/botchain.png"}
                                     alt={chain.chain.name}
                                     className="rounded-full size-full ring-1 ring-theme object-cover"
                                     loading="lazy"

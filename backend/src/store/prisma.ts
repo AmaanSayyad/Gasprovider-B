@@ -7,8 +7,6 @@ import {
   ChainDispersal,
 } from "../types";
 import { IntentStore } from "./index";
-import { FAssetsService } from "../services/fassets";
-import { FAssetConfig } from "../types/fassets";
 import { SmartAccountStorageAdapter } from "../services/smartaccount";
 import { SmartAccountRecord } from "../types/smartaccount";
 
@@ -17,89 +15,9 @@ import { SmartAccountRecord } from "../types/smartaccount";
  * Uses Prisma ORM for type-safe database operations
  */
 export class PrismaIntentStore implements IntentStore {
-  private fAssetsService: FAssetsService | null = null;
 
-  constructor(private prisma: PrismaClient) {
-    // Initialize FAssets service if configuration is available
-    const flareRpcUrl = process.env.FLARE_RPC_URL || process.env.COSTON2_RPC_URL;
-    const enableFAssets = process.env.ENABLE_FASSETS === 'true';
-    
-    if (flareRpcUrl && enableFAssets) {
-      try {
-        const fAssetConfigs = this.loadFAssetConfigs();
-        if (fAssetConfigs.length > 0) {
-          this.fAssetsService = new FAssetsService(flareRpcUrl, fAssetConfigs);
-          console.log('✅ FAssets Service initialized in store');
-        }
-      } catch (error) {
-        console.warn('⚠️ Failed to initialize FAssets Service:', error);
-      }
-    }
-  }
+  constructor(private prisma: PrismaClient) {}
 
-  /**
-   * Load FAsset configurations from environment variables
-   */
-  private loadFAssetConfigs(): FAssetConfig[] {
-    const configs: FAssetConfig[] = [];
-    const useTestnet = process.env.USE_TESTNET === 'true';
-    const suffix = useTestnet ? 'COSTON2' : 'MAINNET';
-
-    // FBTC configuration
-    const fbtcAddress = process.env[`FASSET_FBTC_ADDRESS_${suffix}`];
-    const fbtcAssetManager = process.env[`FASSETS_ASSET_MANAGER_ADDRESS_${suffix}`];
-    if (fbtcAddress && fbtcAddress !== '0x0000000000000000000000000000000000000000' && fbtcAssetManager) {
-      configs.push({
-        address: fbtcAddress,
-        assetType: 'BTC',
-        symbol: 'FBTC',
-        underlyingSymbol: 'BTC',
-        ftsoFeedId: process.env.FTSO_FEED_ID_BTC_USD || '0x014254432f55534400000000000000000000000000',
-        assetManagerAddress: fbtcAssetManager,
-      });
-    }
-
-    // FXRP configuration
-    const fxrpAddress = process.env[`FASSET_FXRP_ADDRESS_${suffix}`];
-    if (fxrpAddress && fxrpAddress !== '0x0000000000000000000000000000000000000000' && fbtcAssetManager) {
-      configs.push({
-        address: fxrpAddress,
-        assetType: 'XRP',
-        symbol: 'FXRP',
-        underlyingSymbol: 'XRP',
-        ftsoFeedId: process.env.FTSO_FEED_ID_XRP_USD || '0x015852502f55534400000000000000000000000000',
-        assetManagerAddress: fbtcAssetManager,
-      });
-    }
-
-    // FDOGE configuration
-    const fdogeAddress = process.env[`FASSET_FDOGE_ADDRESS_${suffix}`];
-    if (fdogeAddress && fdogeAddress !== '0x0000000000000000000000000000000000000000' && fbtcAssetManager) {
-      configs.push({
-        address: fdogeAddress,
-        assetType: 'DOGE',
-        symbol: 'FDOGE',
-        underlyingSymbol: 'DOGE',
-        ftsoFeedId: process.env.FTSO_FEED_ID_DOGE_USD || '0x01444f47452f555344000000000000000000000000',
-        assetManagerAddress: fbtcAssetManager,
-      });
-    }
-
-    // FLTC configuration
-    const fltcAddress = process.env[`FASSET_FLTC_ADDRESS_${suffix}`];
-    if (fltcAddress && fltcAddress !== '0x0000000000000000000000000000000000000000' && fbtcAssetManager) {
-      configs.push({
-        address: fltcAddress,
-        assetType: 'LTC',
-        symbol: 'FLTC',
-        underlyingSymbol: 'LTC',
-        ftsoFeedId: process.env.FTSO_FEED_ID_LTC_USD || '0x014c54432f55534400000000000000000000000000',
-        assetManagerAddress: fbtcAssetManager,
-      });
-    }
-
-    return configs;
-  }
 
   async upsertFromDepositEvent(
     payload: DepositEventPayload
@@ -132,23 +50,8 @@ export class PrismaIntentStore implements IntentStore {
       })
     );
 
-    // Detect if this is a FAsset deposit
-    let isFAsset = false;
-    let underlyingAsset: string | undefined = undefined;
-    let tokenSymbol: string | null = null;
-
-    if (this.fAssetsService) {
-      isFAsset = this.fAssetsService.isFAsset(payload.data.token);
-      
-      if (isFAsset) {
-        const config = this.fAssetsService.getFAssetConfig(payload.data.token);
-        if (config) {
-          underlyingAsset = config.assetType;
-          tokenSymbol = config.symbol;
-          console.log(`✅ Detected FAsset deposit: ${tokenSymbol} (underlying: ${underlyingAsset})`);
-        }
-      }
-    }
+    // FAssets are no longer detected; the columns stay for existing rows.
+    const tokenSymbol: string | null = null;
 
     const intent = await this.prisma.intent.create({
       data: {
@@ -165,8 +68,6 @@ export class PrismaIntentStore implements IntentStore {
         globalPhase: "DEPOSIT_CONFIRMED",
         allocations: allocations as any,
         chainStatuses: chainStatuses as any,
-        isFAsset: isFAsset,
-        underlyingAsset: underlyingAsset,
         createdAt: now,
         updatedAt: now,
       },
@@ -273,7 +174,7 @@ export class PrismaIntentStore implements IntentStore {
         : null;
     }
 
-    // Flare-specific fields
+    // Legacy columns, still written when a caller supplies them
     if (patch.fdcAttestationRound !== undefined) {
       updateData.fdcAttestationRound = patch.fdcAttestationRound;
     }
@@ -353,7 +254,7 @@ export class PrismaIntentStore implements IntentStore {
         ? intent.completedAt.toISOString()
         : undefined,
       
-      // Flare-specific fields
+      // Legacy columns, still read for rows written before the migration
       fdcAttestationRound: intent.fdcAttestationRound ?? undefined,
       fdcAttestationStatus: intent.fdcAttestationStatus ?? undefined,
       fdcProofHash: intent.fdcProofHash ?? undefined,

@@ -112,9 +112,9 @@ const SmartAccountManager: React.FC<SmartAccountManagerProps> = ({ className }) 
   const getExplorerUrl = (txHash: string): string => {
     // Adjust based on chainId
     if (chainId === 14) {
-      return `https://flare-explorer.flare.network/tx/${txHash}`;
+      return `https://scan.botchain.ai/tx/${txHash}`;
     } else if (chainId === 114) {
-      return `https://coston2-explorer.flare.network/tx/${txHash}`;
+      return `https://scan.botchain.ai/tx/${txHash}`;
     }
     return `https://etherscan.io/tx/${txHash}`;
   };
@@ -260,7 +260,7 @@ const SmartAccountManager: React.FC<SmartAccountManagerProps> = ({ className }) 
               {formatBalance(eoaBalance)}
             </div>
             <div className="text-xs text-secondary mt-1">
-              {chainId === 14 ? "FLR" : chainId === 114 ? "C2FLR" : "ETH"}
+              {chainId === 677 ? "BOT" : "ETH"}
             </div>
           </div>
 
@@ -273,7 +273,7 @@ const SmartAccountManager: React.FC<SmartAccountManagerProps> = ({ className }) 
               {formatBalance(smartAccountBalance)}
             </div>
             <div className="text-xs text-secondary mt-1">
-              {chainId === 14 ? "FLR" : chainId === 114 ? "C2FLR" : "ETH"}
+              {chainId === 677 ? "BOT" : "ETH"}
             </div>
           </div>
         </div>

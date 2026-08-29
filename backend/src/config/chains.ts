@@ -32,17 +32,6 @@ export const CHAIN_CONFIGS: Record<number, ChainConfig> = {
     nativeSymbol: "BOT",
     contractAddress: process.env.CONTRACT_ADDRESS_968,
   },
-  // Coston2 Testnet
-  114: {
-    chainId: 114,
-    name: "Coston2",
-    rpcUrl:
-      process.env.COSTON2_RPC_URL ||
-      "https://coston2-api.flare.network/ext/C/rpc",
-    explorerUrl: "https://coston2-explorer.flare.network",
-    nativeSymbol: "C2FLR",
-    contractAddress: process.env.CONTRACT_ADDRESS_114,
-  },
   // BSC Testnet
   97: {
     chainId: 97,
@@ -133,15 +122,6 @@ export const CHAIN_CONFIGS: Record<number, ChainConfig> = {
     explorerUrl: "https://sepolia.scrollscan.com",
     nativeSymbol: "ETH",
     contractAddress: process.env.TREASURY_SCROLL_SEPOLIA_ADDRESS,
-  },
-  // Monad Testnet
-  10143: {
-    chainId: 10143,
-    name: "Monad Testnet",
-    rpcUrl: process.env.MONAD_TESTNET_RPC_URL || "https://testnet-rpc.monad.xyz",
-    explorerUrl: "https://testnet.monadvision.com",
-    nativeSymbol: "MON",
-    contractAddress: process.env.TREASURY_MONAD_TESTNET_ADDRESS,
   },
   // zkSync Sepolia
   300: {

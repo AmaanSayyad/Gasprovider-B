@@ -37,8 +37,8 @@ const Header: React.FC = () => {
           title="Go to home"
         >
           <img
-            src="/flarelogo.png"
-            alt="Flare"
+            src="/botchain.png"
+            alt="BOT Chain"
             className="h-10 w-10 rounded-full object-cover transition-transform group-hover:scale-105"
           />
           <div>
@@ -46,7 +46,7 @@ const Header: React.FC = () => {
               Gas Provider
             </h1>
             <p className="text-xs font-medium text-secondary">
-              Built on <span className="text-[#E62058]">flare</span>
+              Built on <span className="text-[#E62058]">BOT Chain</span>
             </p>
           </div>
         </button>
@@ -67,14 +67,6 @@ const Header: React.FC = () => {
             className="hidden rounded-full border border-theme px-3 py-2 text-xs font-semibold text-secondary hover:border-[#E62058] hover:text-[#E62058] md:inline-flex"
           >
             Pitch deck
-          </a>
-          <a
-            href="https://flare.network/"
-            target="_blank"
-            rel="noreferrer"
-            className="hidden rounded-full border border-theme px-3 py-2 text-xs font-semibold text-secondary hover:border-[#E62058] hover:text-[#E62058] lg:inline-flex"
-          >
-            flare.network
           </a>
           <motion.button
             onClick={toggleTheme}

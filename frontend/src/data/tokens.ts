@@ -30,46 +30,6 @@ export const SUPPORTED_TOKENS: Record<number, TokenInfo[]> = {
       decimals: 6,
     },
   ],
-  // Coston2
-  114: [
-    {
-      symbol: "C2FLR",
-      name: "Coston2 Flare",
-      decimals: 18,
-      isNative: true,
-    },
-    {
-      symbol: "USDC",
-      name: "USD Coin",
-      address: "0x...", // TODO: Add actual USDC address on Coston2
-      decimals: 6,
-    },
-    // FAssets (will be populated from environment or contract)
-    {
-      symbol: "FBTC",
-      name: "Flare Bitcoin",
-      address: "0x...", // Will be resolved from environment
-      decimals: 8,
-    },
-    {
-      symbol: "FXRP",
-      name: "Flare XRP",
-      address: "0x0b6A3645c240605887a5532109323A3E12273dc7",
-      decimals: 6,
-    },
-    {
-      symbol: "FDOGE",
-      name: "Flare Dogecoin",
-      address: "0x...", // Will be resolved from environment
-      decimals: 8,
-    },
-    {
-      symbol: "FLTC",
-      name: "Flare Litecoin",
-      address: "0x...", // Will be resolved from environment
-      decimals: 8,
-    },
-  ],
   // Ethereum Sepolia
   11155111: [
     {
@@ -202,21 +162,6 @@ export const SUPPORTED_TOKENS: Record<number, TokenInfo[]> = {
       decimals: 6,
     },
   ],
-  // Monad Testnet
-  10143: [
-    {
-      symbol: "MON",
-      name: "Monad",
-      decimals: 18,
-      isNative: true,
-    },
-    {
-      symbol: "USDC",
-      name: "USD Coin",
-      address: "0x...", // TODO: Add actual USDC address on Monad Testnet
-      decimals: 6,
-    },
-  ],
   300: [{ symbol: "ETH", name: "Ether", decimals: 18, isNative: true }],
   314159: [{ symbol: "tFIL", name: "testnet FIL", decimals: 18, isNative: true }],
   1301: [{ symbol: "ETH", name: "Ether", decimals: 18, isNative: true }],
@@ -261,15 +206,6 @@ const TOKEN_ADDRESSES: Record<string, Record<string, string>> = {
   "677": {
     USDT: "0xababc7ddc03e501d190c676bf3d92ef0e6e87a3c",
   },
-  // Coston2
-  "114": {
-    USDC: "0x...", // TODO: optional USDC on Coston2
-    // Real FXRP on Coston2 (resolved via Flare Contract Registry → AssetManagerFXRP.fAsset)
-    FXRP: "0x0b6A3645c240605887a5532109323A3E12273dc7",
-    FBTC: "0x...",
-    FDOGE: "0x...",
-    FLTC: "0x...",
-  },
   // Base Sepolia
   "84532": {
     USDC: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
@@ -310,10 +246,6 @@ const TOKEN_ADDRESSES: Record<string, Record<string, string>> = {
   "80002": {
     USDC: "0x...", // TODO: Add actual USDC address on Polygon Amoy
   },
-  // Monad Testnet
-  "10143": {
-    USDC: "0x...", // TODO: Add actual USDC address on Monad Testnet
-  },
 };
 
 // Get token address for a chain and symbol
@@ -347,20 +279,13 @@ export const getEscrowTokenAddress = (
 // Logo mapping for tokens
 const TOKEN_LOGO_MAP: Record<string, string> = {
   ETH: "/web3icons/tokens/eth.svg",
-  C2FLR: "/flarelogo.png",
-  FLR: "/flarelogo.png",
   MATIC: "/web3icons/tokens/matic.svg",
   POL: "/web3icons/tokens/pol.svg",
   AVAX: "/web3icons/tokens/avax.svg",
   tBNB: "/web3icons/tokens/bnb.svg",
   BNB: "/web3icons/tokens/bnb.svg",
-  MON: "/monad_logo.png",
   USDC: "/web3icons/tokens/usdc.svg",
   USDT: "/web3icons/tokens/usdt.svg",
-  FBTC: "/web3icons/tokens/btc.svg",
-  FXRP: "/web3icons/tokens/xrp.svg",
-  FDOGE: "/web3icons/tokens/doge.svg",
-  FLTC: "/web3icons/tokens/ltc.svg",
   tFIL: "/web3icons/networks/filecoin.svg",
   FIL: "/web3icons/networks/filecoin.svg",
   FLOW: "/chains/flow-llama.jpg",
@@ -399,24 +324,6 @@ export const tokens: Token[] = [
     isLoading: false,
   },
   {
-    symbol: "C2FLR",
-    name: "Coston2 Flare",
-    balance: 0,
-    logo: "/flarelogo.png",
-    isNative: true,
-    address: null,
-    isLoading: false,
-  },
-  {
-    symbol: "FLR",
-    name: "Flare",
-    balance: 0,
-    logo: "/flarelogo.png",
-    isNative: true,
-    address: null,
-    isLoading: false,
-  },
-  {
     symbol: "MATIC",
     name: "MATIC",
     balance: 0,
@@ -443,15 +350,6 @@ export const tokens: Token[] = [
     address: null,
     isLoading: false,
   },
-  {
-    symbol: "MON",
-    name: "Monad",
-    balance: 0,
-    logo: "/monad_logo.png",
-    isNative: true,
-    address: null,
-    isLoading: false,
-  },
   // Stablecoins
   {
     symbol: "USDC",
@@ -461,54 +359,5 @@ export const tokens: Token[] = [
     isNative: false,
     address: null, // Address will be resolved per chain
     isLoading: false,
-  },
-  // FAssets (Flare Wrapped Assets)
-  {
-    symbol: "FBTC",
-    name: "Flare Bitcoin",
-    balance: 0,
-    logo: "/web3icons/tokens/btc.svg",
-    isNative: false,
-    address: null, // Address will be resolved per chain
-    isLoading: false,
-    isFAsset: true,
-    underlyingAsset: "BTC",
-    underlyingLogo: "/web3icons/tokens/btc.svg",
-  },
-  {
-    symbol: "FXRP",
-    name: "Flare XRP",
-    balance: 0,
-    logo: "/web3icons/tokens/xrp.svg",
-    isNative: false,
-    address: null, // Address will be resolved per chain
-    isLoading: false,
-    isFAsset: true,
-    underlyingAsset: "XRP",
-    underlyingLogo: "/web3icons/tokens/xrp.svg",
-  },
-  {
-    symbol: "FDOGE",
-    name: "Flare Dogecoin",
-    balance: 0,
-    logo: "/web3icons/tokens/doge.svg",
-    isNative: false,
-    address: null, // Address will be resolved per chain
-    isLoading: false,
-    isFAsset: true,
-    underlyingAsset: "DOGE",
-    underlyingLogo: "/web3icons/tokens/doge.svg",
-  },
-  {
-    symbol: "FLTC",
-    name: "Flare Litecoin",
-    balance: 0,
-    logo: "/web3icons/tokens/ltc.svg",
-    isNative: false,
-    address: null, // Address will be resolved per chain
-    isLoading: false,
-    isFAsset: true,
-    underlyingAsset: "LTC",
-    underlyingLogo: "/web3icons/tokens/ltc.svg",
   },
 ];

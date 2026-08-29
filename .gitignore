@@ -51,3 +51,4 @@ GasProvider-main 2/
 
 # local migration plan (not committed)
 BOTCHAIN_MIGRATION.md
+.relayer.json

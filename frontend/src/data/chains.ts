@@ -10,7 +10,6 @@ import { botChain, BOT_CHAIN_ID } from "./botchain";
 export const TREASURY_ADDRESSES: Record<number, string> = {
   // BOT Chain — source chain. Set after `npm run deploy:botchain`.
   [BOT_CHAIN_ID]: import.meta.env?.VITE_BOTCHAIN_TREASURY_ADDRESS || "",
-  114: "0xc031c437d6b915dbdc946dbd8613a1ac9dd75d63", // Coston2
   11155111: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Ethereum Sepolia
   80002: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Polygon Amoy
   421614: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Arbitrum Sepolia
@@ -21,7 +20,6 @@ export const TREASURY_ADDRESSES: Record<number, string> = {
   534351: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Scroll Sepolia
   43113: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Avalanche Fuji
   97: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // BSC Testnet
-  10143: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Monad Testnet
   300: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // zkSync Sepolia
   314159: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Filecoin Calibration
   1301: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Unichain Sepolia
@@ -31,31 +29,7 @@ export const TREASURY_ADDRESSES: Record<number, string> = {
   44787: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Celo Alfajores
 };
 
-// Define Flare testnet chain (not in viem/chains yet)
-const coston2: Chain = {
-  id: 114,
-  name: "Coston2",
-  nativeCurrency: {
-    name: "Coston2 Flare",
-    symbol: "C2FLR",
-    decimals: 18,
-  },
-  rpcUrls: {
-    default: {
-      http: ["https://coston2-api.flare.network/ext/C/rpc"],
-    },
-    public: {
-      http: ["https://coston2-api.flare.network/ext/C/rpc"],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: "Coston2 Explorer",
-      url: "https://coston2-explorer.flare.network",
-    },
-  },
-  testnet: true,
-};
+// Chain definitions not present in viem/chains
 
 // Define testnet chains for Treasury system
 // Requirements: 13.4
@@ -284,30 +258,6 @@ const avalancheFuji: Chain = {
   testnet: true,
 };
 
-const monadTestnet: Chain = {
-  id: 10143,
-  name: "Monad Testnet",
-  nativeCurrency: {
-    name: "Monad",
-    symbol: "MON",
-    decimals: 18,
-  },
-  rpcUrls: {
-    default: {
-      http: ["https://testnet-rpc.monad.xyz"],
-    },
-    public: {
-      http: ["https://testnet-rpc.monad.xyz", "https://rpc.ankr.com/monad_testnet"],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: "MonadVision",
-      url: "https://testnet.monadvision.com",
-    },
-  },
-  testnet: true,
-};
 
 const zkSyncSepolia: Chain = {
   id: 300,
@@ -410,7 +360,6 @@ const celoAlfajores: Chain = {
 // Map chain IDs to viem chain objects (testnets only)
 const chainIdMap: Record<string, Chain> = {
   botchain: botChain,
-  coston2: coston2,
   // Testnet chains for Treasury
   sepolia: sepolia,
   polygonAmoy: polygonAmoy,
@@ -421,7 +370,6 @@ const chainIdMap: Record<string, Chain> = {
   zoraSepolia: zoraSepolia,
   scrollSepolia: scrollSepolia,
   avalancheFuji: avalancheFuji,
-  monadTestnet: monadTestnet,
   zkSyncSepolia: zkSyncSepolia,
   filecoinCalibration: filecoinCalibration,
   unichainSepolia: unichainSepolia,
@@ -441,16 +389,6 @@ const allChains: ChainData[] = [
     avgTxCost: 0.002,
     nativePrice: 1,
     viemChain: botChain,
-  },
-  {
-    id: "coston2",
-    name: "Coston2",
-    symbol: "C2FLR",
-    logo: chainLogoUrl(114, "Coston2"),
-    // ~1 simple transfer on Flare C-chain (very cheap)
-    avgTxCost: 0.002,
-    nativePrice: 0.006,
-    viemChain: coston2,
   },
   // Testnet chains for Treasury system
   {
@@ -537,15 +475,6 @@ const allChains: ChainData[] = [
     viemChain: avalancheFuji,
   },
   {
-    id: "monadTestnet",
-    name: "Monad Testnet",
-    symbol: "MON",
-    logo: chainLogoUrl(10143, "Monad Testnet"),
-    avgTxCost: 0.008,
-    nativePrice: 0.05,
-    viemChain: monadTestnet,
-  },
-  {
     id: "zkSyncSepolia",
     name: "zkSync Sepolia",
     symbol: "ETH",
@@ -610,12 +539,11 @@ const allChains: ChainData[] = [
   },
 ];
 
-// Destination catalog: curated Flare demo chains first, then ~1000 EVM chains.
+// Destination catalog: curated chains first, then ~1000 EVM chains.
 // Selectable only when the destination treasury actually has native balance.
 import { CATALOG_CHAINS } from "./catalogChains";
 
 const destinationChainIds = [
-  "coston2",
   "optimismSepolia",
   "worldSepolia",
   "baseSepolia",
@@ -644,13 +572,12 @@ const DISABLED_DESTINATION_NUMERIC_IDS = new Set([
 
 /** Pre-select these so a demo doesn't auto-include unfunded chains. */
 export const DEFAULT_DESTINATION_IDS = [
-  "coston2",
   "optimismSepolia",
   "worldSepolia",
   "baseSepolia",
 ] as const;
 
-export const SOURCE_CHAINS = ["botchain", "coston2", "monadTestnet"]
+export const SOURCE_CHAINS = ["botchain"]
   .map((id) => allChains.find((chain) => chain.id === id))
   .filter((chain): chain is ChainData => chain !== undefined);
 
@@ -677,7 +604,7 @@ export const DEFAULT_DESTINATION_CHAINS = DEFAULT_DESTINATION_IDS
   .map((id) => allChains.find((chain) => chain.id === id))
   .filter((chain): chain is ChainData => chain !== undefined);
 
-// UI list = destinations + any source-only extras (e.g. Monad)
+// UI list = destinations + any source-only extras
 const destinationIds = new Set(DESTINATION_CHAINS.map((c) => c.id));
 export const chains: ChainData[] = [
   ...DESTINATION_CHAINS,

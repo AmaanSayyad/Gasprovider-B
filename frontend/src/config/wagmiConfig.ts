@@ -3,20 +3,6 @@ import { sepolia, bscTestnet, avalancheFuji } from "wagmi/chains";
 import { botChain } from "../data/botchain";
 
 // Custom testnet chain definitions
-const coston2 = {
-  id: 114,
-  name: "Coston2",
-  nativeCurrency: { name: "Coston2 Flare", symbol: "C2FLR", decimals: 18 },
-  rpcUrls: {
-    default: { http: ["https://coston2-api.flare.network/ext/C/rpc"] },
-    public: { http: ["https://coston2-api.flare.network/ext/C/rpc"] },
-  },
-  blockExplorers: {
-    default: { name: "Coston2 Explorer", url: "https://coston2-explorer.flare.network" },
-  },
-  testnet: true,
-} as const;
-
 const baseSepolia = {
   id: 84532,
   name: "Base Sepolia",
@@ -111,20 +97,6 @@ const worldSepolia = {
   },
   blockExplorers: {
     default: { name: "World Explorer", url: "https://worldchain-sepolia.explorer.alchemy.com" },
-  },
-  testnet: true,
-} as const;
-
-const monadTestnet = {
-  id: 10143,
-  name: "Monad Testnet",
-  nativeCurrency: { name: "Monad", symbol: "MON", decimals: 18 },
-  rpcUrls: {
-    default: { http: ["https://testnet-rpc.monad.xyz"] },
-    public: { http: ["https://testnet-rpc.monad.xyz", "https://rpc.ankr.com/monad_testnet"] },
-  },
-  blockExplorers: {
-    default: { name: "MonadVision", url: "https://testnet.monadvision.com" },
   },
   testnet: true,
 } as const;
@@ -232,7 +204,6 @@ const celoAlfajores = {
 export const wagmiConfig = createConfig({
   chains: [
     botChain,
-    coston2,
     sepolia,
     baseSepolia,
     arbitrumSepolia,
@@ -243,7 +214,6 @@ export const wagmiConfig = createConfig({
     scrollSepolia,
     zoraSepolia,
     worldSepolia,
-    monadTestnet,
     zkSyncSepolia,
     filecoinCalibration,
     unichainSepolia,
@@ -254,7 +224,6 @@ export const wagmiConfig = createConfig({
   ],
   transports: {
     [botChain.id]: http(),
-    [coston2.id]: http(),
     [sepolia.id]: http(),
     [baseSepolia.id]: http(),
     [arbitrumSepolia.id]: http(),
@@ -265,7 +234,6 @@ export const wagmiConfig = createConfig({
     [scrollSepolia.id]: http(),
     [zoraSepolia.id]: http(),
     [worldSepolia.id]: http(),
-    [monadTestnet.id]: http(),
     [zkSyncSepolia.id]: http(),
     [filecoinCalibration.id]: http(),
     [unichainSepolia.id]: http(),

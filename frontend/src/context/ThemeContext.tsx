@@ -29,7 +29,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     if (savedTheme) {
       return savedTheme;
     }
-    // Prefer Flare light theme for first visit (judges / new users)
+    // Default to the light theme on first visit
     if (window.matchMedia("(prefers-color-scheme: light)").matches) {
       return "light";
     }

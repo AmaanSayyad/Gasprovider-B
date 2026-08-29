@@ -7,17 +7,17 @@ import { ethers } from "ethers";
 /**
  * Property-Based Tests for Smart Account Manager
  * 
- * **Feature: flare-integration, Property 28: Smart Account Existence Check**
+ * **Property 28: Smart Account Existence Check**
  * **Validates: Requirements 9.1**
  * 
- * Property: For any user first connecting to the platform on Flare,
+ * Property: For any user first connecting to the platform,
  * the system should check if a Smart Account exists for their EOA address.
  */
 
 describe("SmartAccountManager - Property-Based Tests", () => {
   let manager: SmartAccountManager;
-  const rpcUrl = process.env.COSTON2_RPC_URL || "https://coston2-api.flare.network/ext/C/rpc";
-  // Smart Account Factory address for Coston2 (placeholder - would need actual deployment)
+  const rpcUrl = process.env.BOTCHAIN_RPC_URL || "https://rpc.botchain.ai";
+  // Smart Account Factory address (placeholder - would need actual deployment)
   const factoryAddress =
     process.env.SMART_ACCOUNT_FACTORY_ADDRESS || "0x0000000000000000000000000000000000000001";
 
@@ -75,7 +75,7 @@ describe("SmartAccountManager - Property-Based Tests", () => {
    * 4. Validate that the returned address has deployed code
    * 
    * NOTE: This test is currently skipped because it requires a deployed
-   * Smart Account Factory contract on Coston2. Once the factory is deployed
+   * Smart Account Factory contract. Once the factory is deployed
    * (task 7), this test can be enabled.
    */
   it.skip("Property 28: Smart Account Existence Check - should correctly check Smart Account existence for any EOA", async () => {
@@ -123,7 +123,7 @@ describe("SmartAccountManager - Property-Based Tests", () => {
    * and utilize caching effectively.
    * 
    * NOTE: This test is currently skipped because it requires a deployed
-   * Smart Account Factory contract on Coston2.
+   * Smart Account Factory contract.
    */
   it.skip("Property 28 Extension: Cache should provide consistent results across multiple queries", async () => {
     const addressArbitrary = fc
@@ -163,7 +163,7 @@ describe("SmartAccountManager - Property-Based Tests", () => {
    * and treat different casings of the same address as identical.
    * 
    * NOTE: This test is currently skipped because it requires a deployed
-   * Smart Account Factory contract on Coston2.
+   * Smart Account Factory contract.
    */
   it.skip("Property 28 Extension: Should normalize addresses and handle different casings", async () => {
     const addressArbitrary = fc
@@ -210,7 +210,7 @@ describe("SmartAccountManager - Property-Based Tests", () => {
    * treating it as no Smart Account deployed.
    * 
    * NOTE: This test is currently skipped because it requires a deployed
-   * Smart Account Factory contract on Coston2.
+   * Smart Account Factory contract.
    */
   it.skip("Property 28 Extension: Should handle zero address correctly", async () => {
     // When factory returns zero address, getSmartAccount should return null
@@ -262,8 +262,8 @@ describe("SmartAccountManager - Property-Based Tests", () => {
    * Property 29: Smart Account Deployment
    * Property 30: Smart Account Storage
    * 
-   * **Feature: flare-integration, Property 29: Smart Account Deployment**
-   * **Feature: flare-integration, Property 30: Smart Account Storage**
+   * **Property 29: Smart Account Deployment**
+   * **Property 30: Smart Account Storage**
    * **Validates: Requirements 9.3, 9.4**
    * 
    * For any Smart Account creation request, the system should deploy the
@@ -271,7 +271,7 @@ describe("SmartAccountManager - Property-Based Tests", () => {
    * the mapping in the database.
    * 
    * NOTE: This test is currently skipped because it requires a deployed
-   * Smart Account Factory contract on Coston2.
+   * Smart Account Factory contract.
    */
   it.skip("Property 29 & 30: Smart Account Deployment and Storage", async () => {
     // Generator for valid Ethereum addresses
@@ -337,7 +337,7 @@ describe("SmartAccountManager - Property-Based Tests", () => {
   it("Property 29 & 30: Smart Account Deployment and Storage - unit test version", async () => {
     const testEoaAddress = ethers.Wallet.createRandom().address;
     const testSmartAccountAddress = ethers.Wallet.createRandom().address;
-    const testChainId = 114; // Coston2
+    const testChainId = 677; // BOT Chain
     const testTxHash = "0x" + "a".repeat(64);
 
     // Manually store a Smart Account record
@@ -371,14 +371,14 @@ describe("SmartAccountManager - Property-Based Tests", () => {
   /**
    * Property 13: Smart Account Transaction Bundling
    * 
-   * **Feature: flare-integration, Property 13: Smart Account Transaction Bundling**
+   * **Property 13: Smart Account Transaction Bundling**
    * **Validates: Requirements 4.2**
    * 
    * For any deposit initiated through a Smart Account, the system should bundle
    * approval and deposit calls into a single transaction.
    * 
    * NOTE: This test is currently skipped because it requires a deployed
-   * Smart Account contract on Coston2.
+   * Smart Account contract.
    */
   it.skip("Property 13: Smart Account Transaction Bundling", async () => {
     // Generator for Smart Account addresses
@@ -472,14 +472,14 @@ describe("SmartAccountManager - Property-Based Tests", () => {
   /**
    * Property 16: Automatic Smart Account Routing
    * 
-   * **Feature: flare-integration, Property 16: Automatic Smart Account Routing**
+   * **Property 16: Automatic Smart Account Routing**
    * **Validates: Requirements 4.5**
    * 
    * For any user with insufficient FLR balance for gas, the system should
    * automatically route the transaction through their Smart Account if one exists.
    * 
    * NOTE: This test is currently skipped because it requires a deployed
-   * Smart Account Factory contract on Coston2 and funded test accounts.
+   * Smart Account Factory contract and funded test accounts.
    */
   it.skip("Property 16: Automatic Smart Account Routing", async () => {
     // Generator for Ethereum addresses

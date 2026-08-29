@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-export type FtsoPrices = {
+export type Prices = {
   tokens: Record<string, number>;
   chains: Record<
     string,
@@ -15,34 +15,27 @@ const API_BASE =
   import.meta.env.VITE_API_BASE_URL ||
   "http://localhost:3000";
 
-/** Fallback when FTSO API is unreachable — keep close to recent market. */
+/** Used when the price API is unreachable — keep close to recent market. */
 export const FALLBACK_TOKEN_USD: Record<string, number> = {
   USDC: 1,
   USDT: 1,
-  FXRP: 1,
-  XRP: 1,
-  C2FLR: 0.006,
-  FLR: 0.006,
-  WFLR: 0.006,
-  ETH: 1900,
-  BTC: 64000,
-  FBTC: 64000,
-  MON: 0.05,
+  ETH: 2450,
+  BTC: 78000,
+  BNB: 600,
+  TBNB: 600,
   MATIC: 0.45,
   POL: 0.45,
   AVAX: 25,
-  BNB: 600,
-  TBNB: 600,
   TFIL: 4,
   FIL: 4,
   FLOW: 0.4,
   CELO: 0.35,
-  CBTC: 64000,
+  CBTC: 78000,
 };
 
 export function getTokenUsdPrice(
   symbol: string | undefined,
-  prices?: FtsoPrices | null
+  prices?: Prices | null
 ): number {
   if (!symbol) return 1;
   const key = symbol.toUpperCase();
@@ -54,7 +47,7 @@ export function getTokenUsdPrice(
 export function usdToTokenAmount(
   usd: number,
   symbol: string | undefined,
-  prices?: FtsoPrices | null
+  prices?: Prices | null
 ): number {
   const px = getTokenUsdPrice(symbol, prices);
   if (px <= 0) return usd;
@@ -67,15 +60,15 @@ export function protocolFeeUsd(depositUsd: number): number {
   return Math.min(0.25, Math.max(0.02, depositUsd * 0.02));
 }
 
-export function useFtsoPrices(pollMs = 30_000) {
-  const [prices, setPrices] = useState<FtsoPrices | null>(null);
+export function usePrices(pollMs = 30_000) {
+  const [prices, setPrices] = useState<Prices | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const refresh = useCallback(async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/prices/ftso`);
-      if (!res.ok) throw new Error(`FTSO HTTP ${res.status}`);
+      const res = await fetch(`${API_BASE}/api/prices`);
+      if (!res.ok) throw new Error(`Prices HTTP ${res.status}`);
       const data = await res.json();
       setPrices({
         tokens: data.tokens || {},
@@ -85,7 +78,7 @@ export function useFtsoPrices(pollMs = 30_000) {
       });
       setError(null);
     } catch (e: any) {
-      setError(e?.message || "Failed to load FTSO prices");
+      setError(e?.message || "Failed to load prices");
     } finally {
       setLoading(false);
     }

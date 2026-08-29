@@ -285,13 +285,6 @@ export class IntentManager {
       updateData.chainStatuses = chainStatuses;
     }
 
-    // Flare FDC / FTSO fields for hackathon attestation UI
-    if ((updates as any)?.fdcAttestationStatus !== undefined) {
-      updateData.fdcAttestationStatus = (updates as any).fdcAttestationStatus;
-    }
-    if ((updates as any)?.fdcAttestationRound !== undefined) {
-      updateData.fdcAttestationRound = (updates as any).fdcAttestationRound;
-    }
     // Intent schema has no errorMessage column — keep failure text only in logs/chainStatuses
     if ((updates as any)?.error !== undefined) {
       console.warn(`Intent ${intentId} error:`, (updates as any).error);

@@ -158,16 +158,6 @@ const Step2Execution: React.FC = () => {
             <Loader2 className="w-4 h-4 animate-spin" />
             <span>{getStatusMessage()}</span>
           </div>
-          <div className="flex flex-wrap gap-2 text-[11px]">
-            <span className="px-2 py-0.5 rounded bg-primary/20 border border-primary/30 text-primary">
-              FTSO-priced
-            </span>
-            <span className="px-2 py-0.5 rounded bg-primary/20 border border-primary/30 text-primary">
-              FDC:{" "}
-              {(intentData?.intent as any)?.fdcAttestationStatus ||
-                (depositTxHash ? "requested" : "n/a")}
-            </span>
-          </div>
         </div>
 
         <div className="flex-1 w-full h-full pt-20 relative overflow-hidden">

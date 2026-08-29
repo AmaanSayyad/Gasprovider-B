@@ -43,15 +43,10 @@ export const useTokenBalances = (chainId: string): UseTokenBalancesReturn => {
 
   // Filter tokens that are available on this chain
   const availableTokens = useMemo(() => {
-    const isFlareChain = chainId === 'coston2' || chainId === 'flare' || 
-                         (viemChain && (viemChain.id === 114 || viemChain.id === 14));
-    
     return tokens.filter((token: Token) => {
       const tokenAddress = getTokenAddress(chainId, token.symbol);
-      // Include token if it's native OR has an address on this chain
-      // OR if it's an FAsset on a Flare chain (even without address yet)
-      const isFAssetOnFlare = token.isFAsset && isFlareChain;
-      return token.isNative || tokenAddress !== null || isFAssetOnFlare;
+      // Native tokens, or anything with an address on this chain.
+      return token.isNative || tokenAddress !== null;
     });
   }, [chainId, viemChain]);
 
@@ -102,11 +97,10 @@ export const useTokenBalances = (chainId: string): UseTokenBalancesReturn => {
 
       if (isNative) {
         // Check if this is the correct native token for this chain
-        const isCorrectNative = 
-          (chainId === 'coston2' && token.symbol === 'C2FLR') ||
-          (chainId === 'flare' && token.symbol === 'FLR') ||
-          (chainId === 'monadTestnet' && token.symbol === 'MON') ||
-          (chainId !== 'coston2' && chainId !== 'flare' && chainId !== 'monadTestnet' && token.symbol === 'ETH');
+        const isCorrectNative =
+          chainId === 'botchain'
+            ? token.symbol === 'BOT'
+            : token.symbol === 'ETH';
 
         if (!isCorrectNative) {
           // Skip this native token if it's not for this chain
@@ -146,10 +140,9 @@ export const useTokenBalances = (chainId: string): UseTokenBalancesReturn => {
             )
           : 0;
 
-      // For FAssets without addresses, show balance as 0 (will be fetched separately if needed)
       return {
         ...token,
-        balance: tokenAddress ? balance : (token.isFAsset ? 0 : balance),
+        balance,
         address: tokenAddress,
         isLoading: tokenAddress ? contractsLoading : false,
       };

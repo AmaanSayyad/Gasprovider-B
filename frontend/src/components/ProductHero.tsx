@@ -17,7 +17,7 @@ const ProductHero: React.FC = () => {
     <section className="gp-hero relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen overflow-hidden">
       <div className="absolute inset-0">
         <img
-          src="/flare/particle-field.svg"
+          src="/particle-field.svg"
           alt=""
           className="h-full w-full object-cover gp-hero-kenburns opacity-90"
           aria-hidden
@@ -37,19 +37,16 @@ const ProductHero: React.FC = () => {
           className="mb-6 flex flex-wrap items-center gap-3"
         >
           <a
-            href="https://flare.network/"
+            href="https://scan.botchain.ai/"
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center gap-2 rounded-full border border-[rgba(36,41,46,0.12)] bg-white/80 px-3 py-1.5 backdrop-blur"
           >
-            <img src="/flarelogo.png" alt="Flare" className="h-6 w-6 rounded-full object-cover" />
+            <img src="/botchain.png" alt="BOT Chain" className="h-6 w-6 rounded-full object-cover" />
             <span className="font-display text-sm font-semibold tracking-tight text-[#24292E]">
-              flare
+              BOT Chain
             </span>
           </a>
-          <span className="font-display text-[11px] font-semibold uppercase tracking-[0.22em] text-[#E62058]">
-            Summer Signal · Track 1
-          </span>
         </motion.div>
 
         <motion.h1
@@ -67,8 +64,8 @@ const ProductHero: React.FC = () => {
           transition={{ duration: 0.55, delay: 0.15 }}
           className="mt-5 max-w-xl text-lg leading-relaxed text-[#5c656d] dark:text-white/80 sm:text-xl"
         >
-          Pay once in FXRP or C2FLR on Coston2 — get native gas on the chains you use.
-          Priced by FTSO. Verified with FDC. Built on Flare, the blockchain for data.
+          Pay once in USDT on BOT Chain — get native gas on the chains you use.
+          One deposit, split across every destination you pick.
         </motion.p>
 
         <motion.div
@@ -88,14 +85,6 @@ const ProductHero: React.FC = () => {
           >
             {isConnected ? "Open app" : "Connect wallet"}
           </button>
-          <a
-            href="https://faucet.flare.network/coston2"
-            target="_blank"
-            rel="noreferrer"
-            className="gp-btn-ghost inline-flex items-center gap-2 px-5 py-3 text-sm font-medium"
-          >
-            Coston2 faucet
-          </a>
           <a
             href={DEMO_VIDEO_URL}
             target="_blank"

@@ -25,7 +25,7 @@ describe("TreasuryDistributionService", () => {
     mockCalculator = {
       getAllExchangeRates: vi.fn().mockReturnValue({
         chains: {
-          "114": { chainId: 114, name: "Coston2", nativeSymbol: "C2FLR", usdPrice: 0.02 },
+          "84532": { chainId: 84532, name: "Base Sepolia", nativeSymbol: "ETH", usdPrice: 2450 },
           "11155111": { chainId: 11155111, name: "Sepolia", nativeSymbol: "ETH", usdPrice: 2000 },
         },
       }),
@@ -55,7 +55,7 @@ describe("TreasuryDistributionService", () => {
       vi.mocked(mockExecutor.executeTransaction).mockResolvedValue(mockReceipt);
 
       const result = await service.distributeToChain(
-        114,
+        84532,
         "0x742D35CC6634c0532925A3b844BC9E7595F0BEb0",
         ethers.parseEther("1.0"),
         "test-intent-1"
@@ -73,7 +73,7 @@ describe("TreasuryDistributionService", () => {
       );
 
       const result = await service.distributeToChain(
-        114,
+        84532,
         "0x742D35CC6634c0532925A3b844BC9E7595F0BEb0",
         ethers.parseEther("1.0"),
         "test-intent-1"
@@ -95,7 +95,7 @@ describe("TreasuryDistributionService", () => {
       vi.mocked(mockExecutor.executeTransaction).mockResolvedValue(mockReceipt);
 
       await service.distributeToChain(
-        114,
+        84532,
         "0x742D35CC6634c0532925A3b844BC9E7595F0BEb0",
         ethers.parseEther("1.0"),
         "test-intent-1"
@@ -113,7 +113,7 @@ describe("TreasuryDistributionService", () => {
       );
 
       await service.distributeToChain(
-        114,
+        84532,
         "0x742D35CC6634c0532925A3b844BC9E7595F0BEb0",
         ethers.parseEther("1.0"),
         "test-intent-1"
@@ -140,7 +140,7 @@ describe("TreasuryDistributionService", () => {
 
       const distributions: ChainDistribution[] = [
         {
-          chainId: 114,
+          chainId: 84532,
           recipient: "0x742D35CC6634c0532925A3b844BC9E7595F0BEb0",
           amount: ethers.parseEther("1.0"),
         },
@@ -172,7 +172,7 @@ describe("TreasuryDistributionService", () => {
 
       const distributions: ChainDistribution[] = [
         {
-          chainId: 114,
+          chainId: 84532,
           recipient: "0x742D35CC6634c0532925A3b844BC9E7595F0BEb0",
           amount: ethers.parseEther("1.0"),
         },
@@ -201,7 +201,7 @@ describe("TreasuryDistributionService", () => {
 
       vi.mocked(mockExecutor as any).getProvider = vi.fn().mockResolvedValue(mockProvider);
 
-      const balance = await service.getTreasuryBalance(114);
+      const balance = await service.getTreasuryBalance(84532);
 
       expect(balance).toBe(ethers.parseEther("100"));
       expect(mockProvider.call).toHaveBeenCalledOnce();
@@ -215,7 +215,7 @@ describe("TreasuryDistributionService", () => {
 
       vi.mocked(mockExecutor as any).getProvider = vi.fn().mockResolvedValue(mockProvider);
 
-      await expect(service.getTreasuryBalance(114)).rejects.toThrow("RPC error");
+      await expect(service.getTreasuryBalance(84532)).rejects.toThrow("RPC error");
     });
   });
 
@@ -231,7 +231,7 @@ describe("TreasuryDistributionService", () => {
 
       const distributions: ChainDistribution[] = [
         {
-          chainId: 114,
+          chainId: 84532,
           recipient: "0x742D35CC6634c0532925A3b844BC9E7595F0BEb0",
           amount: ethers.parseEther("1.0"),
         },
@@ -253,7 +253,7 @@ describe("TreasuryDistributionService", () => {
 
       const distributions: ChainDistribution[] = [
         {
-          chainId: 114,
+          chainId: 84532,
           recipient: "0x742D35CC6634c0532925A3b844BC9E7595F0BEb0",
           amount: ethers.parseEther("1.0"),
         },
@@ -275,12 +275,12 @@ describe("TreasuryDistributionService", () => {
 
       const distributions: ChainDistribution[] = [
         {
-          chainId: 114,
+          chainId: 84532,
           recipient: "0x742D35CC6634c0532925A3b844BC9E7595F0BEb0",
           amount: ethers.parseEther("1.0"),
         },
         {
-          chainId: 114,
+          chainId: 84532,
           recipient: "0x742D35CC6634c0532925A3b844BC9E7595F0BEb0",
           amount: ethers.parseEther("2.0"),
         },
@@ -308,14 +308,14 @@ describe("TreasuryDistributionService", () => {
 
       // Perform multiple distributions
       await service.distributeToChain(
-        114,
+        84532,
         "0x742D35CC6634c0532925A3b844BC9E7595F0BEb0",
         ethers.parseEther("1.0"),
         "intent-1"
       );
 
       await service.distributeToChain(
-        114,
+        84532,
         "0x742D35CC6634c0532925A3b844BC9E7595F0BEb0",
         ethers.parseEther("1.0"),
         "intent-2"
@@ -341,14 +341,14 @@ describe("TreasuryDistributionService", () => {
         .mockRejectedValueOnce(new Error("Error"));
 
       await service.distributeToChain(
-        114,
+        84532,
         "0x742D35CC6634c0532925A3b844BC9E7595F0BEb0",
         ethers.parseEther("1.0"),
         "intent-1"
       );
 
       await service.distributeToChain(
-        114,
+        84532,
         "0x742D35CC6634c0532925A3b844BC9E7595F0BEb0",
         ethers.parseEther("1.0"),
         "intent-2"
@@ -356,7 +356,7 @@ describe("TreasuryDistributionService", () => {
 
       const metrics = service.getMetrics();
 
-      expect(metrics.successRateByChain[114]).toBe(0.5);
+      expect(metrics.successRateByChain[84532]).toBe(0.5);
     });
 
     it("should reset metrics", () => {
@@ -385,7 +385,7 @@ describe("TreasuryDistributionService", () => {
       vi.mocked(mockExecutor.executeTransaction).mockResolvedValue(mockReceipt);
 
       await service.distributeToChain(
-        114,
+        84532,
         "0x742D35CC6634c0532925A3b844BC9E7595F0BEb0",
         ethers.parseEther("1.0"),
         "test-intent-1"
@@ -394,7 +394,7 @@ describe("TreasuryDistributionService", () => {
       expect(alertCallback).toHaveBeenCalled();
       const alert = alertCallback.mock.calls[0][0];
       expect(alert.severity).toBe("info");
-      expect(alert.chainId).toBe(114);
+      expect(alert.chainId).toBe(84532);
     });
 
     it("should emit critical alerts on failures", async () => {
@@ -406,7 +406,7 @@ describe("TreasuryDistributionService", () => {
       );
 
       await service.distributeToChain(
-        114,
+        84532,
         "0x742D35CC6634c0532925A3b844BC9E7595F0BEb0",
         ethers.parseEther("1.0"),
         "test-intent-1"

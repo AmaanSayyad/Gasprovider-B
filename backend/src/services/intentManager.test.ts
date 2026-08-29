@@ -49,7 +49,7 @@ describe('IntentManager', () => {
     it('should create a valid intent successfully', async () => {
       const request: IntentRequest = {
         userAddress: '0x1234567890123456789012345678901234567890',
-        sourceChain: 14, // Flare
+        sourceChain: 677, // BOT Chain
         sourceToken: 'USDC',
         sourceAmount: BigInt('100000000'), // 100 USDC (6 decimals)
         destinationChains: [1, 137], // Ethereum, Polygon

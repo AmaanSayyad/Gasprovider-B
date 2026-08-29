@@ -32,36 +32,6 @@ export const RPC_CONFIGS: Record<number, ChainRpcConfig> = {
     ],
     healthCheckInterval: 60000,
   },
-  // Coston2 Testnet
-  114: {
-    chainId: 114,
-    endpoints: [
-      {
-        url: process.env.COSTON2_RPC_URL || "https://coston2-api.flare.network/ext/C/rpc",
-        priority: 1,
-      },
-      {
-        url: "https://coston2-api.flare.network/ext/C/rpc",
-        priority: 2,
-      },
-    ],
-    healthCheckInterval: 60000, // 1 minute
-  },
-  // Flare Mainnet (disabled for testnet-only mode)
-  // 14: {
-  //   chainId: 14,
-  //   endpoints: [
-  //     {
-  //       url: process.env.FLARE_RPC_URL || "https://flare-api.flare.network/ext/C/rpc",
-  //       priority: 1,
-  //     },
-  //     {
-  //       url: "https://flare-api.flare.network/ext/C/rpc",
-  //       priority: 2,
-  //     },
-  //   ],
-  //   healthCheckInterval: 60000,
-  // },
   // Ethereum Sepolia
   11155111: {
     chainId: 11155111,

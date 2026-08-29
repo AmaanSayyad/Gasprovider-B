@@ -7,15 +7,14 @@ import ChainSelectorModal from "./ChainSelectorModal";
 import TokenSelectorModal from "./TokenSelectorModal";
 import ScheduleModal from "./ScheduleModal";
 import DispersalTemplates from "./DispersalTemplates";
-import FAssetsMintingWizard from "./FAssetsMintingWizard";
 import { createSchedule } from "../utils/api";
 import { ChainData } from "../types";
 import {
-  useFtsoPrices,
+  usePrices,
   getTokenUsdPrice,
   usdToTokenAmount,
   protocolFeeUsd,
-} from "../hooks/useFtsoPrices";
+} from "../hooks/usePrices";
 import { useTreasuryFunding } from "../hooks/useTreasuryFunding";
 import ChainLogo from "./ChainLogo";
 const Step1Destinations: React.FC = () => {
@@ -41,9 +40,8 @@ const Step1Destinations: React.FC = () => {
   const [isTokenModalOpen, setIsTokenModalOpen] = useState<boolean>(false);
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState<boolean>(false);
   const [isTemplatesOpen, setIsTemplatesOpen] = useState<boolean>(false);
-  const [isMintWizardOpen, setIsMintWizardOpen] = useState<boolean>(false);
   const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
-  const { prices: ftsoPrices } = useFtsoPrices();
+  const { prices: prices } = usePrices();
   const { fundedChainIds } = useTreasuryFunding();
 
   // Get available tokens with balances for current chain
@@ -155,9 +153,9 @@ const Step1Destinations: React.FC = () => {
     )?.balance ??
     sourceToken?.balance ??
     0;
-  const tokenUsdPrice = getTokenUsdPrice(sourceToken?.symbol, ftsoPrices);
+  const tokenUsdPrice = getTokenUsdPrice(sourceToken?.symbol, prices);
   const balanceUsd = liveBalance * tokenUsdPrice;
-  const tokensNeeded = usdToTokenAmount(depositAmount, sourceToken?.symbol, ftsoPrices);
+  const tokensNeeded = usdToTokenAmount(depositAmount, sourceToken?.symbol, prices);
   const feeUsd = protocolFeeUsd(depositAmount);
   const isBalanceInsufficient =
     !!sourceToken && isConnected && !balancesLoading && depositAmount > balanceUsd * 0.98;
@@ -202,33 +200,6 @@ const Step1Destinations: React.FC = () => {
               Total estimated cost for{" "}
               <span className="font-bold text-white">{selectedChains.length} chains</span>
             </p>
-            <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
-              <span className="rounded-full border border-white/25 bg-black/10 px-2.5 py-1 font-semibold text-white/95">
-                Flare Summer Signal · Track 1
-              </span>
-              <span className="rounded-full border border-white/25 bg-black/10 px-2.5 py-1 text-white/85">
-                Pay FXRP / C2FLR → gas everywhere
-              </span>
-              <a
-                href="https://faucet.flare.network/coston2"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full border border-white/30 bg-white/15 px-2.5 py-1 font-semibold text-white transition-colors hover:bg-white/25"
-              >
-                Get C2FLR + FXRP faucet →
-              </a>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setIsMintWizardOpen(true);
-                }}
-                className="rounded-full border border-white/30 bg-white/15 px-2.5 py-1 font-semibold text-white transition-colors hover:bg-white/25"
-              >
-                Mint FXRP wizard
-              </button>
-            </div>
           </div>
         </div>
       </div>
@@ -427,7 +398,7 @@ const Step1Destinations: React.FC = () => {
                 ) : (
                   <ChainLogo
                     chainId={SOURCE_CHAINS[0]?.viemChain.id || 114}
-                    name={SOURCE_CHAINS[0]?.name || "Coston2"}
+                    name={SOURCE_CHAINS[0]?.name || "BOT Chain"}
                     src={SOURCE_CHAINS[0]?.logo}
                     size={40}
                     className="bg-theme-muted p-0.5 shadow-md"
@@ -597,12 +568,6 @@ const Step1Destinations: React.FC = () => {
       {/* Templates Modal */}
       {isTemplatesOpen && <DispersalTemplates onClose={() => setIsTemplatesOpen(false)} />}
 
-      {/* FAssets mint wizard (demo / Track 1 education) */}
-      <FAssetsMintingWizard
-        isOpen={isMintWizardOpen}
-        onClose={() => setIsMintWizardOpen(false)}
-        assetType="XRP"
-      />
     </div>
   );
 };

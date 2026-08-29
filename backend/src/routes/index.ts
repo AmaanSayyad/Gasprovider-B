@@ -330,10 +330,10 @@ export function registerRoutes(
         const intent = await store.upsertFromDepositEvent(payload);
         console.log("Created new intent", intent);
         
-        // Request FDC attestation if event processor is available
+        // Hand the deposit to the event processor if available
         if (eventProcessor) {
           eventProcessor.processDepositEvent(payload).catch((err) => {
-            console.error('Error processing FDC attestation:', err);
+            console.error('Error processing deposit event:', err);
             // Continue even if attestation fails
           });
         }
@@ -642,7 +642,7 @@ export function registerRoutes(
           }
 
           // Get GasStation contract address from environment
-          const gasStationAddress = process.env.FLARE_GAS_STATION_ADDRESS || process.env.COSTON2_GAS_STATION_ADDRESS;
+          const gasStationAddress = process.env.CONTRACT_ADDRESS_677;
           
           if (!gasStationAddress) {
             const error: ApiError = {

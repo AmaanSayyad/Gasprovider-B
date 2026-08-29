@@ -27,7 +27,6 @@ const TreasuryTransactionHash: React.FC<TreasuryTransactionHashProps> = ({
 
   const getExplorerUrl = (chainId: number, txHash: string): string => {
     const explorers: Record<number, string> = {
-      114: "https://coston2-explorer.flare.network",
       11155111: "https://sepolia.etherscan.io",
       80002: "https://amoy.polygonscan.com",
       421614: "https://sepolia.arbiscan.io",
@@ -38,7 +37,6 @@ const TreasuryTransactionHash: React.FC<TreasuryTransactionHashProps> = ({
       534351: "https://sepolia.scrollscan.com",
       43113: "https://testnet.snowtrace.io",
       97: "https://testnet.bscscan.com",
-      10143: "https://testnet.monadvision.com",
       300: "https://sepolia.explorer.zksync.io",
       314159: "https://calibration.filfox.info/en",
       1301: "https://sepolia.uniscan.xyz",

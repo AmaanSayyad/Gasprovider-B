@@ -6,7 +6,6 @@ import { GaslessTransaction, Call } from "../types/smartaccount";
 
 /**
  * Property-Based Tests for RelayerService
- * Feature: flare-integration
  * 
  * These tests verify universal properties that should hold across all inputs
  * using fast-check for property-based testing with 100+ iterations per test.
@@ -18,8 +17,8 @@ describe("RelayerService - Property-Based Tests", () => {
   let testPrivateKey: string;
 
   beforeAll(() => {
-    // Use Coston2 testnet for testing
-    testRpcUrl = process.env.COSTON2_RPC_URL || "https://coston2-api.flare.network/ext/C/rpc";
+    // A public testnet RPC; every assertion here is offline or structural.
+    testRpcUrl = process.env.BOTCHAIN_RPC_URL || "https://rpc.botchain.ai";
     
     // Generate a test private key (not used for real transactions in validation tests)
     testPrivateKey = "0x" + "1".repeat(64);
@@ -28,7 +27,7 @@ describe("RelayerService - Property-Based Tests", () => {
   });
 
   /**
-   * **Feature: flare-integration, Property 31: Relayer Transaction Validation**
+   * **Property 31: Relayer Transaction Validation**
    * **Validates: Requirements 10.2**
    * 
    * Property: For any gasless transaction request, the relayer should validate
@@ -264,8 +263,8 @@ describe("RelayerService - Property-Based Tests", () => {
   });
 
   /**
-   * **Feature: flare-integration, Property 14: Relayer Gas Payment**
-   * **Feature: flare-integration, Property 32: Relayer Transaction Submission**
+   * **Property 14: Relayer Gas Payment**
+   * **Property 32: Relayer Transaction Submission**
    * **Validates: Requirements 4.3, 10.3**
    * 
    * Property 14: For any Smart Account transaction execution, the relayer should
@@ -389,8 +388,8 @@ describe("RelayerService - Property-Based Tests", () => {
   });
 
   /**
-   * **Feature: flare-integration, Property 15: Smart Account Transaction Tracking**
-   * **Feature: flare-integration, Property 33: Relayer Transaction Tracking**
+   * **Property 15: Smart Account Transaction Tracking**
+   * **Property 33: Relayer Transaction Tracking**
    * **Validates: Requirements 4.4, 10.4**
    * 
    * Property 15: For any submitted Smart Account transaction, the system should
@@ -469,7 +468,7 @@ describe("RelayerService - Property-Based Tests", () => {
   });
 
   /**
-   * **Feature: flare-integration, Property 34: Relayer Balance Warning**
+   * **Property 34: Relayer Balance Warning**
    * **Validates: Requirements 10.5**
    * 
    * Property: For any relayer balance check that falls below the configured threshold,

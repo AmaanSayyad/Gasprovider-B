@@ -5,11 +5,9 @@
  */
 export const ACTIVE_CHAIN_IDS: readonly number[] = [
   677, // BOT Chain (source)
-  114, // Coston2
   11155420, // Optimism Sepolia
   84532, // Base Sepolia
   4801, // World Sepolia
-  10143, // Monad Testnet
 ];
 
 export const DISABLED_DESTINATION_CHAIN_IDS: ReadonlySet<number> = new Set([

@@ -103,7 +103,7 @@ const ReferralProgram: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         className="glass-card rounded-3xl p-8 relative overflow-hidden"
       >
-        {/* Background gradient — Flare brand */}
+        {/* Background gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-[rgba(230,32,88,0.14)] via-transparent to-[rgba(228,99,137,0.08)]" />
         <div className="absolute top-0 right-0 w-64 h-64 bg-[rgba(230,32,88,0.06)] rounded-full blur-3xl" />
         

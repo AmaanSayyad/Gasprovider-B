@@ -19,10 +19,10 @@ describe('EventProcessor - Property-Based Tests', () => {
   });
 
   /**
-   * Feature: flare-integration, Property 20: FDC Attestation Submission
+   * Property 20: Deposit Event Handling
    * Validates: Requirements 7.2
    * 
-   * For any prepared attestation request, the system should submit it to the FDC attestation 
+   * For any prepared attestation request, the system should submit it to the deposit event 
    * client within 30 seconds of preparation.
    */
   it('Property 20: Attestation should be submitted within 30 seconds', async () => {
@@ -70,7 +70,7 @@ describe('EventProcessor - Property-Based Tests', () => {
           const startTime = Date.now();
 
           // Process deposit event (this would normally submit attestation)
-          // Since we don't have a real FDC client in tests, this will skip attestation
+          // Since we don't have a real event processor in tests, this will skip attestation
           await processor.processDepositEvent(payload);
 
           // Record end time
@@ -78,7 +78,7 @@ describe('EventProcessor - Property-Based Tests', () => {
           const elapsedMs = endTime - startTime;
 
           // Property: Processing should complete within 30 seconds (30000ms)
-          // In a real implementation with FDC client, we'd verify the attestation was submitted
+          // In a real implementation with event processor, we'd verify the attestation was submitted
           // For now, we verify the processing completes quickly
           expect(elapsedMs).toBeLessThan(30000);
 
@@ -87,7 +87,7 @@ describe('EventProcessor - Property-Based Tests', () => {
           expect(updatedIntent).toBeDefined();
           expect(updatedIntent?.id).toBe(intent.id);
 
-          // If FDC client was available, we would verify:
+          // If event processor was available, we would verify:
           // - fdcAttestationStatus is set to 'pending'
           // - fdcAttestationRound is set
           // For now, we just verify the intent wasn't corrupted
