@@ -1,7 +1,12 @@
 import "dotenv/config";
 import { ethers } from "ethers";
 
-const CONTRACT_ADDRESS = "0x839eaf1fe9fc3d46309893f5ec4c2c289783f991";
+// GasProvider escrow on BOT Chain — the source chain deposits arrive on.
+// Set CONTRACT_ADDRESS_677 after deploying; see contracts/DEPLOYED_ADDRESSES.md.
+const CONTRACT_ADDRESS =
+  process.env.CONTRACT_ADDRESS_677 ||
+  process.env.BOTCHAIN_CONTRACT_ADDRESS ||
+  "";
 const ABI = [
   "event Deposited(address indexed user, uint256 totalAmount, uint256[] chainIds, uint256[] chainAmounts)",
   "function usdc() view returns (address)",
@@ -142,13 +147,16 @@ async function postDepositEvent(
 }
 
 async function main(): Promise<void> {
-  const rpcUrl = process.env.BASE_RPC_URL;
-  if (!rpcUrl) {
-    console.error("Missing BASE_RPC_URL in .env");
+  const rpcUrl =
+    process.env.BOTCHAIN_RPC_URL || "https://rpc.botchain.ai";
+  if (!CONTRACT_ADDRESS) {
+    console.error(
+      "Missing CONTRACT_ADDRESS_677 in .env — deploy the escrow to BOT Chain first"
+    );
     process.exit(1);
   }
 
-  const wsUrl = process.env.BASE_WS_URL;
+  const wsUrl = process.env.BOTCHAIN_WS_URL;
   const pollingIntervalMs =
     process.env.POLLING_INTERVAL_MS !== undefined
       ? Number(process.env.POLLING_INTERVAL_MS)

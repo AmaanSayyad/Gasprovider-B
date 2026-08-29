@@ -1,112 +1,61 @@
 # Deployed Contract Addresses
 
-> **Flare Summer Signal · Track 1** — Pay FXRP/C2FLR on Coston2 → native gas on destination chains (FTSO + FDC + treasuries).
+> BOT Chain is the **source chain**: users deposit USDT into the GasStation
+> escrow here, and the listener forwards the `Deposited` event to the backend,
+> which disperses native gas on the destination chains.
 
+## BOT Chain mainnet (chainId 677)
 
-## Coston2 Testnet (Chain ID: 114)
+| Contract | Address |
+|----------|---------|
+| GasStation (escrow) | `0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c` |
+| USDT (deposit asset, 6 decimals) | `0xababc7ddc03e501d190c676bf3d92ef0e6e87a3c` |
+| MockWETH | `0xA318dCFa9bb24c83357F5AB170c32dEd02C17De2` |
+| MockSwapRouter | `0xfd025D625d93ed39C9a7a6F24E1eDCD1Ab8fBcb7` |
 
-### Deployment Date
-December 6, 2024
+Explorer: https://scan.botchain.ai/address/0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c
+Deployer: `0x562d89c9709B5F51dDAcABafC8e0e7A074186428` · 3,301,188 gas total
 
-### Deployer Address
-`0x56b9768f769b88c861955ca2ea3ec1f91870d61c`
+## BOT Chain testnet (chainId 968)
 
-### Deployed Contracts
+| Contract | Address |
+|----------|---------|
+| GasStation (escrow) | `0xE329210534a500Fa7AC6DA1C15Ae73132836E35d` |
+| USDT | `0x75edC9335175Fc0552D51D48439F229c10420fe3` |
+| MockWETH | `0xD8F69A3E5227f871994Fa64B848A31e3826c0d30` |
+| MockSwapRouter | `0x43531ca25679d518Db72B02a5781f8C1143A63f2` |
 
-#### GasProvider (Main Contract)
-- **Address**: `0x0df12f3eb5131f004d2378d0b265415386dfb97a`
-- **Explorer**: https://coston2-explorer.flare.network/address/0x0df12f3eb5131f004d2378d0b265415386dfb97a
-- **Features**: 
-  - FTSO price feed integration
-  - FDC attestation verification
-  - FAsset token support
-  - Smart Account compatibility
+Explorer: https://scan.bohr.life/address/0xE329210534a500Fa7AC6DA1C15Ae73132836E35d
 
-#### Mock USDC (Test Token)
-- **Address**: `0x5b402676535a3ba75c851c14e1e249a4257d2265`
-- **Symbol**: USDC
-- **Decimals**: 6
-- **Explorer**: https://coston2-explorer.flare.network/address/0x5b402676535a3ba75c851c14e1e249a4257d2265
+### Why the router and wrapped-native are mocks
 
-#### Mock WETH (Wrapped FLR)
-- **Address**: `0x945b176b7f9505f7541eb3c219bd91efbfc33699`
-- **Symbol**: WETH
-- **Decimals**: 18
-- **Explorer**: https://coston2-explorer.flare.network/address/0x945b176b7f9505f7541eb3c219bd91efbfc33699
+`GasStation.drip()` swaps USDT for the native coin through a Uniswap-style
+router. BOT Chain has no DEX, and the constructor rejects zero addresses for
+those two, so they are mocks. Nothing on the source chain calls `drip()` —
+deposits only need `usdc`, and dispersal runs against the Treasury contracts on
+the destination chains.
 
-#### Mock Swap Router
-- **Address**: `0x9ee30c1ad4b02e6ac981cf03ae9e37565117e179`
-- **Explorer**: https://coston2-explorer.flare.network/address/0x9ee30c1ad4b02e6ac981cf03ae9e37565117e179
-
-### Flare Integration Addresses
-
-#### FTSO FastUpdater
-- **Address**: `0x58fb598EC6DB6901aA6F26a9A2087E9274128E59`
-- **Purpose**: Real-time price feed queries
-- **Documentation**: https://docs.flare.network/ftso/
-
-#### FDC Verification
-- **Address**: `0x0c13aDA1C7143Cf0a0795FFaB93eEBb6FAD6e4e3`
-- **Purpose**: Cross-chain attestation verification
-- **Documentation**: https://docs.flare.network/fdc/
-
-### Configuration
-
-Add these to your `backend/.env.flare.local`:
+## Configuration
 
 ```bash
-# GasStation Contract
-CONTRACT_ADDRESS_114=0x0df12f3eb5131f004d2378d0b265415386dfb97a
-
-# Flare Integrations
-FTSO_FAST_UPDATER_ADDRESS_COSTON2=0x58fb598EC6DB6901aA6F26a9A2087E9274128E59
-FDC_VERIFICATION_ADDRESS_COSTON2=0x0c13aDA1C7143Cf0a0795FFaB93eEBb6FAD6e4e3
-STATE_CONNECTOR_ADDRESS_COSTON2=0x0c13aDA1C7143Cf0a0795FFaB93eEBb6FAD6e4e3
-
-# Test Tokens
-MOCK_USDC_ADDRESS_COSTON2=0x5b402676535a3ba75c851c14e1e249a4257d2265
-MOCK_WETH_ADDRESS_COSTON2=0x945b176b7f9505f7541eb3c219bd91efbfc33699
+# backend/.env and listener/.env
+CONTRACT_ADDRESS_677=0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c
+BOTCHAIN_RPC_URL=https://rpc.botchain.ai
 ```
 
-### Verification Command
-
-To verify the GasStation contract on the block explorer:
+## Commands
 
 ```bash
-npx hardhat verify --network coston2 0x0df12f3eb5131f004d2378d0b265415386dfb97a \
-  "0x5b402676535a3ba75c851c14e1e249a4257d2265" \
-  "0x9ee30c1ad4b02e6ac981cf03ae9e37565117e179" \
-  "0x945b176b7f9505f7541eb3c219bd91efbfc33699" \
-  3000 \
-  "0x58fb598EC6DB6901aA6F26a9A2087E9274128E59" \
-  "0x0c13aDA1C7143Cf0a0795FFaB93eEBb6FAD6e4e3"
+cd contracts
+BOTCHAIN_NETWORK=testnet PRIVATE_KEY=0x... node scripts/deploy-botchain.mjs
+BOTCHAIN_NETWORK=testnet PRIVATE_KEY=0x... node scripts/e2e-botchain.mjs
 ```
 
-### Next Steps
+`e2e-botchain.mjs` deposits 0.00001 USDT and asserts the `Deposited` event
+round-trips, plus the rejection paths. It passes 9/9 on testnet. On mainnet the
+two deposit checks need the signer to hold USDT.
 
-1. ✅ Contracts deployed successfully
-2. ✅ Configuration updated in backend/.env.flare.local
-3. ⏳ Verify contracts on block explorer
-4. ⏳ Test FTSO price queries
-5. ⏳ Test FDC attestation verification
-6. ⏳ Test deposits through frontend
+## Destination chains
 
-### Testing
-
-Test the deployment:
-
-```bash
-# Test FTSO integration
-npx hardhat run scripts/test-ftso-coston2.ts --network coston2
-
-# Test deposit flow
-npx hardhat run scripts/test-deposit-coston2.ts --network coston2
-```
-
-### Notes
-
-- All contracts are deployed on Coston2 testnet
-- Use C2FLR for gas fees
-- Mock tokens are for testing only
-- FAsset support is ready but requires real FAsset addresses
-- Smart Account factory address needs to be configured when available
+Unchanged — see the treasury addresses in `frontend/src/data/chains.ts` and the
+`TREASURY_*_ADDRESS` variables in `backend/.env`.

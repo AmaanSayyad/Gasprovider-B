@@ -1,0 +1,13 @@
+{
+  "chainId": 968,
+  "network": "BOT Chain Testnet",
+  "gasProvider": "0xE329210534a500Fa7AC6DA1C15Ae73132836E35d",
+  "mockWeth": "0xD8F69A3E5227f871994Fa64B848A31e3826c0d30",
+  "mockSwapRouter": "0x43531ca25679d518Db72B02a5781f8C1143A63f2",
+  "usdt": "0x75edC9335175Fc0552D51D48439F229c10420fe3",
+  "poolFee": 3000,
+  "deployer": "0x562d89c9709B5F51dDAcABafC8e0e7A074186428",
+  "txHash": "0x0c4cc06f8869cb396a103281d2f3360805db26cb8297639cff1ea6d9cebca408",
+  "deployedAt": "2026-08-29T18:09:00.403Z",
+  "explorer": "https://scan.bohr.life/address/0xE329210534a500Fa7AC6DA1C15Ae73132836E35d"
+}

@@ -1,0 +1,13 @@
+{
+  "chainId": 677,
+  "network": "BOT Chain",
+  "gasProvider": "0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c",
+  "mockWeth": "0xA318dCFa9bb24c83357F5AB170c32dEd02C17De2",
+  "mockSwapRouter": "0xfd025D625d93ed39C9a7a6F24E1eDCD1Ab8fBcb7",
+  "usdt": "0xababc7ddc03e501d190c676bf3d92ef0e6e87a3c",
+  "poolFee": 3000,
+  "deployer": "0x562d89c9709B5F51dDAcABafC8e0e7A074186428",
+  "txHash": "0x16566ee8c08d643dd5727c47a5e5d69bcf004942ababf447825e9f9f078d8f07",
+  "deployedAt": "2026-08-29T18:10:44.521Z",
+  "explorer": "https://scan.botchain.ai/address/0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c"
+}
