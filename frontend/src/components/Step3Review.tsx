@@ -510,7 +510,7 @@ const Step3Review: React.FC = () => {
                 status === "dispersing" ||
                 isApproving ||
                 !address ||
-                (sourceChain?.viemChain?.id &&
+                (!!sourceChain?.viemChain?.id &&
                   chainId !== sourceChain.viemChain.id)
               }
               title={

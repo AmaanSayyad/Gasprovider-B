@@ -7,7 +7,6 @@ import {
 import { parseUnits, maxUint256 } from "viem";
 import {
   GAS_FOUNDATION_ABI,
-  GAS_FOUNDATION_CONTRACT_ADDRESS,
   getContractAddress,
   USDC_DECIMALS,
 } from "../contracts/gasFountain";
@@ -52,10 +51,10 @@ export function useDeposit({
   const { address } = useAccount();
   const [error, setError] = useState<Error | null>(null);
 
-  // Get contract address based on source chain
-  const contractAddress = sourceChain
-    ? getContractAddress(sourceChain.id) || GAS_FOUNDATION_CONTRACT_ADDRESS
-    : GAS_FOUNDATION_CONTRACT_ADDRESS;
+  // Get contract address based on source chain.
+  // No cross-chain fallback: defaulting to Base's address on a chain that has
+  // no contract there would send the deposit into a dead address.
+  const contractAddress = sourceChain ? getContractAddress(sourceChain.id) : undefined;
 
   // Get USDC address on source chain
   const usdcAddress = sourceChain
@@ -82,9 +81,12 @@ export function useDeposit({
     address: usdcAddress || undefined,
     abi: ERC20_ABI,
     functionName: "allowance",
-    args: address && usdcAddress ? [address, contractAddress] : undefined,
+    args:
+      address && usdcAddress && contractAddress
+        ? [address, contractAddress]
+        : undefined,
     query: {
-      enabled: !!address && !!usdcAddress,
+      enabled: !!address && !!usdcAddress && !!contractAddress,
     },
   });
 
@@ -298,6 +300,15 @@ export function useDeposit({
       );
       setError(err);
       console.error("Deposit validation error:", err);
+      return;
+    }
+
+    if (!contractAddress) {
+      const err = new Error(
+        `No escrow contract is configured for ${sourceChain?.name || "this chain"}`
+      );
+      setError(err);
+      console.error("Deposit error:", err);
       return;
     }
 

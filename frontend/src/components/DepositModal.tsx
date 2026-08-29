@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { X, TrendingUp, DollarSign } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { chains } from "../data/chains";
+import { chains, findChainByNumericId } from "../data/chains";
 
 interface DepositModalProps {
   isOpen: boolean;
@@ -16,11 +16,10 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, onDeposit 
   const [amount, setAmount] = useState("");
   const [amountUsd, setAmountUsd] = useState("");
 
-  const selectedChain = chains.find((c) => c.id === chainId);
 
   const handleChainChange = (newChainId: number) => {
     setChainId(newChainId);
-    const chain = chains.find((c) => c.id === newChainId);
+    const chain = findChainByNumericId(newChainId);
     if (chain) {
       // Set default token for chain
       setTokenSymbol("USDC");

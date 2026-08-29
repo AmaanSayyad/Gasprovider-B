@@ -14,6 +14,22 @@ export interface TokenInfo {
 
 // Supported tokens per chain for Treasury system
 export const SUPPORTED_TOKENS: Record<number, TokenInfo[]> = {
+  // BOT Chain - the source chain. Deposits are made in USDT; BOT is listed so
+  // the native balance renders, but the escrow only accepts the ERC-20.
+  677: [
+    {
+      symbol: "BOT",
+      name: "BOT",
+      decimals: 18,
+      isNative: true,
+    },
+    {
+      symbol: "USDT",
+      name: "Tether USD",
+      address: "0xababc7ddc03e501d190c676bf3d92ef0e6e87a3c",
+      decimals: 6,
+    },
+  ],
   // Coston2
   114: [
     {
@@ -241,6 +257,10 @@ import { getNumericChainId } from "./chains";
 
 // Token addresses for testnet chains only
 const TOKEN_ADDRESSES: Record<string, Record<string, string>> = {
+  // BOT Chain
+  "677": {
+    USDT: "0xababc7ddc03e501d190c676bf3d92ef0e6e87a3c",
+  },
   // Coston2
   "114": {
     USDC: "0x...", // TODO: optional USDC on Coston2

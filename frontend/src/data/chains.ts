@@ -705,6 +705,20 @@ export const getNumericChainId = (chainId: string): number | undefined => {
   return chain?.viemChain.id;
 };
 
+/**
+ * Look a chain up by its numeric id.
+ *
+ * `ChainData.id` is a slug ("botchain"), while the API reports chains as
+ * numbers (677). Comparing the two directly always fails, silently leaving the
+ * chain unresolved, so anything holding a numeric id must come through here.
+ */
+export const findChainByNumericId = (
+  numericId: number | undefined
+): ChainData | undefined =>
+  numericId === undefined
+    ? undefined
+    : chains.find((c) => c.viemChain.id === numericId);
+
 // Get explorer URL for a chain
 export const getExplorerUrl = (chainId: string): string => {
   const chain = chains.find((c) => c.id === chainId);

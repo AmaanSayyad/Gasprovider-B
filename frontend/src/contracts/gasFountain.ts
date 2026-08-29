@@ -186,6 +186,9 @@ export const GAS_FOUNDATION_ABI = [
 // Contract addresses by chain
 export const GAS_FOUNDATION_CONTRACT_ADDRESSES: Record<string, `0x${string}`> =
   {
+    // BOT Chain - GasStation, see contracts/deployments/botchain-677.json
+    botchain: ((import.meta.env?.VITE_BOTCHAIN_CONTRACT_ADDRESS as string | undefined)?.trim() ||
+      "0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c") as `0x${string}`,
     base: "0x839eaf1fe9fc3d46309893f5ec4c2c289783f991" as `0x${string}`,
     arb: "0x839eaf1fe9fc3d46309893f5ec4c2c289783f991" as `0x${string}`,
     op: "0x839eaf1fe9fc3d46309893f5ec4c2c289783f991" as `0x${string}`,

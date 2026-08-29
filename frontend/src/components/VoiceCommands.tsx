@@ -125,10 +125,6 @@ const VoiceCommands: React.FC = () => {
       const isDisperseCommand = patterns.disperse.test(text);
       
       if (isDisperseCommand) {
-        // Extract amount
-        const amountMatch = text.match(patterns.amount);
-        const amount = amountMatch ? amountMatch[1] : null;
-
         // Send to backend
         const response = await fetch(`${getApiBaseUrl()}/voice/command`, {
           method: "POST",

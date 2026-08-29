@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Gift, X, CheckCircle, Sparkles } from "lucide-react";
+import { Gift, X, Sparkles } from "lucide-react";
 import { useAccount } from "wagmi";
 import { motion, AnimatePresence } from "framer-motion";
 import { useReferral } from "../hooks/useReferral";
 
 const ReferralBanner: React.FC = () => {
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
   const { referralCode } = useReferral();
   const [dismissed, setDismissed] = useState(false);
-  const [applied, setApplied] = useState(false);
 
   useEffect(() => {
     // Check if banner was dismissed for this referral code
@@ -25,7 +24,7 @@ const ReferralBanner: React.FC = () => {
     }
   };
 
-  if (!referralCode || dismissed || applied || !isConnected) {
+  if (!referralCode || dismissed || !isConnected) {
     return null;
   }
 

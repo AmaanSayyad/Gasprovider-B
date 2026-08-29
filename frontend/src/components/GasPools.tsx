@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Users, Plus, Search, Copy, Check, TrendingUp, DollarSign, Zap, Eye, LogOut } from "lucide-react";
+import { Users, Plus, Search, Copy, Check, DollarSign, LogOut } from "lucide-react";
 import { useAccount } from "wagmi";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   createGasPool,
   getPublicPools,
   getUserPools,
-  getPoolByCode,
   joinPool,
   leavePool,
   GasPool,

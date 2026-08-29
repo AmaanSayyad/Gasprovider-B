@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Share2, Copy, Check, Trophy, Users, DollarSign, Sparkles, TrendingUp, Gift, RefreshCw } from "lucide-react";
 import { useAccount } from "wagmi";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 interface ReferralStats {
   totalReferrals: number;

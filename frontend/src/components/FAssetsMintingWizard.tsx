@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronRight, ChevronLeft, Loader2, CheckCircle, AlertCircle, Copy, ExternalLink } from "lucide-react";
+import { X, ChevronRight, Loader2, CheckCircle, AlertCircle, Copy } from "lucide-react";
 import { clsx } from "clsx";
 
 interface Agent {
@@ -31,7 +31,6 @@ const FAssetsMintingWizard: React.FC<FAssetsMintingWizardProps> = ({
   isOpen,
   onClose,
   assetType,
-  onMintingComplete,
 }) => {
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [amount, setAmount] = useState<string>("");
@@ -40,7 +39,7 @@ const FAssetsMintingWizard: React.FC<FAssetsMintingWizardProps> = ({
   const [reservation, setReservation] = useState<Reservation | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [mintingStatus, setMintingStatus] = useState<"pending" | "confirmed" | "failed">("pending");
+  const [mintingStatus] = useState<"pending" | "confirmed" | "failed">("pending");
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
   // Mock data - replace with actual API calls

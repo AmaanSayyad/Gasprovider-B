@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Wallet, Zap, Copy, CheckCircle, ExternalLink, AlertCircle, Loader2 } from "lucide-react";
 import { clsx } from "clsx";
 import { useAccount } from "wagmi";

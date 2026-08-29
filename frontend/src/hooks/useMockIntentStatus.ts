@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { GetStatusResponse, DepositIntent, ChainDispersalStatus } from "../types";
-import { chains, getNumericChainId } from "../data/chains";
+import { getNumericChainId } from "../data/chains";
 import { ChainData } from "../types";
 
 interface UseMockIntentStatusOptions {
@@ -72,14 +72,12 @@ export function useMockIntentStatus({
         const numericChainId = getNumericChainId(chain.id);
         if (!numericChainId) return null;
 
-        const currentProgress = statusProgressRef.current.get(numericChainId) || 0;
         
         // Each chain progresses at different rates
         // Chain 0: fastest (every 2 seconds)
         // Chain 1: medium (every 3 seconds)
         // Chain 2+: slower (every 4+ seconds)
         const progressInterval = 2000 + (index % 3) * 1000;
-        const progressStep = Math.floor(elapsed / progressInterval);
         
         // Add some randomness - each chain starts at slightly different times
         const chainStartOffset = index * 500; // 500ms offset per chain

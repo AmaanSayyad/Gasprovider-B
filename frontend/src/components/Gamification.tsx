@@ -28,7 +28,7 @@ const Gamification: React.FC = () => {
   const [stats, setStats] = useState<UserStats | null>(null);
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [activeTab, setActiveTab] = useState<"achievements" | "badges" | "leaderboard">("achievements");
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
 
   useEffect(() => {
     if (isConnected && address) {

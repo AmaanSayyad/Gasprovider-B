@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TrendingUp, TrendingDown, Minus, RefreshCw } from "lucide-react";
 import { clsx } from "clsx";
-import FTSOPriceBadge from "./FTSOPriceBadge";
 
 interface PriceData {
   symbol: string;

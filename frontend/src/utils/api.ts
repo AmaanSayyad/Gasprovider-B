@@ -1,5 +1,5 @@
 import { GetStatusResponse, GetHistoryResponse, IntentStatus } from "../types";
-import { retryWithBackoff, classifyError, logError } from "./errorHandler";
+import { retryWithBackoff, logError } from "./errorHandler";
 
 // Use localhost when running on localhost, otherwise use environment variable or Railway URL
 export const getApiBaseUrl = () => {
@@ -123,7 +123,7 @@ export interface Schedule {
   monitorChainId?: number;
   balanceThreshold?: string;
   checkInterval?: number;
-  status: string;
+  status: "active" | "paused" | "completed" | "cancelled";
   lastExecutedAt?: string;
   nextExecutionAt?: string;
   executionCount: number;
@@ -500,6 +500,7 @@ export interface LiquidityDeposit {
   id: string;
   userAddress: string;
   chainId: number;
+  txHash?: string;
   tokenAddress: string;
   tokenSymbol: string;
   amount: string;

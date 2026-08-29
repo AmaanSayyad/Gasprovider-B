@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { X, CheckCircle, XCircle, Loader2, ExternalLink, Copy, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useIntentStatus } from "../hooks/useIntentStatus";
-import { DepositIntent, ChainDispersalStatus } from "../types";
+import { ChainDispersalStatus } from "../types";
 import { getChainIdFromNumeric, getExplorerUrl, chains } from "../data/chains";
 import ChainLogo from "./ChainLogo";
 

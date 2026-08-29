@@ -4,7 +4,6 @@ import { useRecentActivity } from "../hooks/useRecentActivity";
 import { Clock, CheckCircle, XCircle, Loader2, Zap, Shield, TrendingUp } from "lucide-react";
 import { HistoryItem, HistoryEntry } from "../types";
 import IntentDetailModal from "./IntentDetailModal";
-import { clsx } from "clsx";
 
 const ActivityLog: React.FC = () => {
   const { address, isConnected } = useGasFountain();

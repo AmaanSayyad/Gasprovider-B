@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Calendar, Clock, Repeat, Zap, Play, Pause, Trash2, Edit } from "lucide-react";
+import { Calendar, Clock, Repeat, Zap, Play, Pause, Trash2 } from "lucide-react";
 import { useAccount } from "wagmi";
-import { fetchSchedules, createSchedule, pauseSchedule, resumeSchedule, cancelSchedule } from "../utils/api";
+import { fetchSchedules, pauseSchedule, resumeSchedule, cancelSchedule } from "../utils/api";
 
 interface Schedule {
   id: string;

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { X, TrendingUp, Activity, ArrowUpRight, ArrowDownRight, DollarSign } from "lucide-react";
+import { X, TrendingUp, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { useAccount } from "wagmi";
 import { motion, AnimatePresence } from "framer-motion";
 import { getDepositDetails, withdrawDeposit, LiquidityDeposit } from "../utils/api";
-import { chains } from "../data/chains";
+import { findChainByNumericId, getExplorerUrl } from "../data/chains";
 
 interface DepositDetailsModalProps {
   deposit: LiquidityDeposit;
@@ -55,10 +55,7 @@ const DepositDetailsModal: React.FC<DepositDetailsModalProps> = ({
 
   if (!isOpen) return null;
 
-  const chain = chains.find((c) => c.id === deposit.chainId);
-  const available = details
-    ? parseFloat(details.available || "0")
-    : parseFloat(deposit.amount) - parseFloat(deposit.totalUsed);
+  const chain = findChainByNumericId(deposit.chainId);
   const availableUsd = details
     ? parseFloat(details.availableUsd || "0")
     : parseFloat(deposit.amountUsd) - parseFloat(deposit.totalUsedUsd);
@@ -207,7 +204,7 @@ const DepositDetailsModal: React.FC<DepositDetailsModalProps> = ({
                           <div className="flex justify-between">
                             <span className="text-secondary">Transaction:</span>
                             <a
-                              href={`${chain?.explorerUrl}/tx/${deposit.txHash}`}
+                              href={`${chain ? getExplorerUrl(chain.id) : ""}/tx/${deposit.txHash}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-primary hover:underline"

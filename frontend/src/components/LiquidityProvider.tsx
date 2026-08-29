@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TrendingUp, DollarSign, Activity, Plus, ArrowUpRight, ArrowDownRight, Zap, PieChart } from "lucide-react";
+import { TrendingUp, DollarSign, Plus, Zap, PieChart } from "lucide-react";
 import { useAccount } from "wagmi";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -12,7 +12,7 @@ import {
 } from "../utils/api";
 import DepositModal from "./DepositModal";
 import DepositDetailsModal from "./DepositDetailsModal";
-import { chains } from "../data/chains";
+import { chains, findChainByNumericId } from "../data/chains";
 
 const LiquidityProvider: React.FC = () => {
   const { address, isConnected } = useAccount();
@@ -260,7 +260,7 @@ const LiquidityProvider: React.FC = () => {
                         <div className="flex items-center justify-between">
                           <div>
                             <div className="font-semibold text-theme">
-                              {deposit.tokenSymbol} on {chains.find((c) => c.id === deposit.chainId)?.name || `Chain ${deposit.chainId}`}
+                              {deposit.tokenSymbol} on {findChainByNumericId(deposit.chainId)?.name || `Chain ${deposit.chainId}`}
                             </div>
                             <div className="text-sm text-secondary">
                               Deposited: ${parseFloat(deposit.amountUsd).toFixed(2)}
@@ -315,7 +315,7 @@ const LiquidityProvider: React.FC = () => {
                           {deposit.tokenSymbol}
                         </h3>
                         <p className="text-sm text-secondary">
-                          {chains.find((c) => c.id === deposit.chainId)?.name || `Chain ${deposit.chainId}`}
+                          {findChainByNumericId(deposit.chainId)?.name || `Chain ${deposit.chainId}`}
                         </p>
                       </div>
                       <div className={`px-3 py-1 rounded-full text-xs font-semibold ${

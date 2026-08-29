@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Save, FolderOpen, Trash2, Star, Sparkles, Plus, X } from "lucide-react";
 import { useGasFountain } from "../context/GasFountainContext";
-import { ChainData } from "../types";
+import { chains } from "../data/chains";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface DispersalTemplate {
@@ -26,7 +26,6 @@ const DispersalTemplates: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     setSourceChain,
     sourceToken,
     setSourceToken,
-    chains,
   } = useGasFountain();
 
   const [templates, setTemplates] = useState<DispersalTemplate[]>([]);

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ArrowRight, Loader2, CheckCircle, AlertCircle, ExternalLink, Copy } from "lucide-react";
-import { clsx } from "clsx";
 
 interface RedemptionEstimate {
   fAssetAmount: string;

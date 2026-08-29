@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { X, Users, DollarSign, TrendingUp, Activity, Copy, Check, Plus, Zap } from "lucide-react";
+import { X, Users, DollarSign, TrendingUp, Copy, Check, Plus } from "lucide-react";
 import { useAccount } from "wagmi";
 import { motion, AnimatePresence } from "framer-motion";
 import {

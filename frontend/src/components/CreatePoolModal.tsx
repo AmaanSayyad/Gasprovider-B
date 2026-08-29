@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, Users, DollarSign, Lock, Unlock, Zap, Sparkles } from "lucide-react";
+import { X, Lock, Unlock, Zap, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface CreatePoolModalProps {

@@ -208,6 +208,17 @@ describe("RelayerService - Property-Based Tests", () => {
     });
 
     it("should validate transaction structure for well-formed transactions", async () => {
+      // This property is about structural validation, so the deployment lookup
+      // is stubbed: hitting a public RPC 100 times makes the run slow and, under
+      // load, surfaces a network error whose message this property then reads as
+      // a structural failure. None of the generated addresses are deployed.
+      const service = relayerService as unknown as {
+        provider: { getCode: (address: string) => Promise<string> };
+      };
+      const realGetCode = service.provider.getCode.bind(service.provider);
+      service.provider.getCode = async () => "0x";
+
+      try {
       await fc.assert(
         fc.asyncProperty(
           fc.constantFrom(ethers.Wallet.createRandom().address),
@@ -246,7 +257,10 @@ describe("RelayerService - Property-Based Tests", () => {
         ),
         { numRuns: 100 }
       );
-    }, 30000); // 30 second timeout for network calls
+      } finally {
+        service.provider.getCode = realGetCode;
+      }
+    }, 30000);
   });
 
   /**
