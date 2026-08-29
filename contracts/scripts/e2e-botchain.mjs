@@ -101,7 +101,8 @@ await check('deposit splits across destinations and emits Deposited', async () =
   const escrowBefore = await usdt.balanceOf(deployment.gasProvider);
 
   // Two destination chains, splitting the total.
-  const chainIds = [8453, 10]; // Base, Optimism
+  // Destinations the backend is actually configured for (ACTIVE_CHAIN_IDS).
+  const chainIds = [84532, 11155420]; // Base Sepolia, Optimism Sepolia
   const half = AMOUNT / 2n;
   const chainAmounts = [half, AMOUNT - half];
 
@@ -139,23 +140,23 @@ await check('deposit splits across destinations and emits Deposited', async () =
 
 await check('a split that does not sum to the total is rejected', async () => {
   await assert.rejects(() =>
-    escrow.deposit.staticCall(AMOUNT, [8453, 10], [AMOUNT, AMOUNT])
+    escrow.deposit.staticCall(AMOUNT, [84532, 11155420], [AMOUNT, AMOUNT])
   );
 });
 
 await check('mismatched array lengths are rejected', async () => {
-  await assert.rejects(() => escrow.deposit.staticCall(AMOUNT, [8453, 10], [AMOUNT]));
+  await assert.rejects(() => escrow.deposit.staticCall(AMOUNT, [84532, 11155420], [AMOUNT]));
 });
 
 await check('a zero deposit is rejected', async () => {
-  await assert.rejects(() => escrow.deposit.staticCall(0, [8453], [0]));
+  await assert.rejects(() => escrow.deposit.staticCall(0, [84532], [0]));
 });
 
 await check('a non-owner cannot drip escrow funds out', async () => {
   const stranger = ethers.Wallet.createRandom().connect(provider);
   const asStranger = new ethers.Contract(deployment.gasProvider, GAS_STATION_ABI, stranger);
   await assert.rejects(() =>
-    asStranger.deposit.staticCall(AMOUNT, [8453], [AMOUNT], { from: stranger.address })
+    asStranger.deposit.staticCall(AMOUNT, [84532], [AMOUNT], { from: stranger.address })
   );
 });
 
