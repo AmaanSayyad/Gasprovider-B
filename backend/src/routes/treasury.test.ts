@@ -98,7 +98,7 @@ describe("Treasury API Routes", () => {
         payload: {
           sourceToken: "USDC",
           amount: "1000000", // 1 USDC (6 decimals)
-          destinationChains: [114, 84532],
+          destinationChains: [11155420, 84532],
           allocationPercentages: [50, 50],
         },
       });

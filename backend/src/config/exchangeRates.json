@@ -1,33 +1,18 @@
 {
   "$schema": "./exchangeRatesSchema.json",
   "version": 1,
-  "lastUpdated": "2024-12-06T00:00:00Z",
+  "lastUpdated": "2026-08-30T00:00:00Z",
   "tokens": {
     "USDC": 1.0,
     "USDT": 1.0,
-    "FLR": 0.02,
-    "C2FLR": 0.02,
-    "WFLR": 0.02,
-    "FXRP": 0.55,
-    "XRP": 0.55,
-    "FBTC": 65000,
-    "FDOGE": 0.1,
-    "FLTC": 80,
-    "MON": 0.05,
-    "ETH": 2000
+    "ETH": 2450
   },
   "chains": {
-    "114": {
-      "chainId": 114,
-      "name": "Coston2",
-      "nativeSymbol": "C2FLR",
-      "usdPrice": 0.02
-    },
     "11155111": {
       "chainId": 11155111,
       "name": "Ethereum Sepolia",
       "nativeSymbol": "ETH",
-      "usdPrice": 2000
+      "usdPrice": 2450
     },
     "80002": {
       "chainId": 80002,
@@ -39,37 +24,37 @@
       "chainId": 421614,
       "name": "Arbitrum Sepolia",
       "nativeSymbol": "ETH",
-      "usdPrice": 2000
+      "usdPrice": 2450
     },
     "11155420": {
       "chainId": 11155420,
       "name": "Optimism Sepolia",
       "nativeSymbol": "ETH",
-      "usdPrice": 2000
+      "usdPrice": 2450
     },
     "84532": {
       "chainId": 84532,
       "name": "Base Sepolia",
       "nativeSymbol": "ETH",
-      "usdPrice": 2000
+      "usdPrice": 2450
     },
     "4801": {
       "chainId": 4801,
       "name": "World Sepolia",
       "nativeSymbol": "ETH",
-      "usdPrice": 2000
+      "usdPrice": 2450
     },
     "999999999": {
       "chainId": 999999999,
       "name": "Zora Sepolia",
       "nativeSymbol": "ETH",
-      "usdPrice": 2000
+      "usdPrice": 2450
     },
     "534351": {
       "chainId": 534351,
       "name": "Scroll Sepolia",
       "nativeSymbol": "ETH",
-      "usdPrice": 2000
+      "usdPrice": 2450
     },
     "43113": {
       "chainId": 43113,
@@ -83,17 +68,11 @@
       "nativeSymbol": "tBNB",
       "usdPrice": 300
     },
-    "10143": {
-      "chainId": 10143,
-      "name": "Monad Testnet",
-      "nativeSymbol": "MON",
-      "usdPrice": 0.05
-    },
     "300": {
       "chainId": 300,
       "name": "zkSync Sepolia",
       "nativeSymbol": "ETH",
-      "usdPrice": 2000
+      "usdPrice": 2450
     },
     "314159": {
       "chainId": 314159,
@@ -105,13 +84,13 @@
       "chainId": 1301,
       "name": "Unichain Sepolia",
       "nativeSymbol": "ETH",
-      "usdPrice": 2000
+      "usdPrice": 2450
     },
     "48898": {
       "chainId": 48898,
       "name": "Zircuit Garfield",
       "nativeSymbol": "ETH",
-      "usdPrice": 2000
+      "usdPrice": 2450
     },
     "5115": {
       "chainId": 5115,
