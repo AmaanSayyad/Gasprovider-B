@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 import { DestinationAllocation } from "../types";
 import { DispersalService } from "./dispersal";
 import { BlockchainService } from "./blockchain";
@@ -90,7 +90,9 @@ export class ScheduledDispersalService {
   /**
    * Calculate next execution time based on schedule type
    */
-  private calculateNextExecution(config: ScheduledDispersalConfig): Date | null {
+  private calculateNextExecution(
+    config: Pick<ScheduledDispersalConfig, "scheduleType" | "scheduledAt" | "recurrencePattern">
+  ): Date | null {
     if (config.scheduleType === "one_time") {
       return config.scheduledAt || null;
     }
@@ -168,10 +170,10 @@ export class ScheduledDispersalService {
     }
 
     // Recalculate next execution if schedule changed
-    const config: ScheduledDispersalConfig = {
-      ...existing,
-      ...updates,
-      scheduleType: (updates.scheduleType || existing.scheduleType) as any,
+    const config = {
+      scheduleType: (updates.scheduleType || existing.scheduleType) as ScheduledDispersalConfig["scheduleType"],
+      scheduledAt: updates.scheduledAt ?? existing.scheduledAt ?? undefined,
+      recurrencePattern: updates.recurrencePattern ?? existing.recurrencePattern ?? undefined,
     };
     const nextExecutionAt = this.calculateNextExecution(config);
 
@@ -179,6 +181,7 @@ export class ScheduledDispersalService {
       where: { id },
       data: {
         ...updates,
+        allocations: updates.allocations as unknown as Prisma.InputJsonValue | undefined,
         nextExecutionAt,
         updatedAt: new Date(),
       },

@@ -233,7 +233,7 @@ export class FAssetsService {
       }
 
       const wallet = new ethers.Wallet(privateKey, this.provider);
-      const assetManagerWithSigner = assetManager.connect(wallet);
+      const assetManagerWithSigner = assetManager.connect(wallet) as ethers.Contract;
 
       // Call reserveCollateral (may require payment for reservation fee)
       const tx = await assetManagerWithSigner.reserveCollateral(agentAddress, lots, {
@@ -305,7 +305,7 @@ export class FAssetsService {
       }
 
       const wallet = new ethers.Wallet(privateKey, this.provider);
-      const assetManagerWithSigner = assetManager.connect(wallet);
+      const assetManagerWithSigner = assetManager.connect(wallet) as ethers.Contract;
 
       // Encode the proof
       const encodedProof = ethers.AbiCoder.defaultAbiCoder().encode(
@@ -371,7 +371,7 @@ export class FAssetsService {
       }
 
       const wallet = new ethers.Wallet(privateKey, this.provider);
-      const assetManagerWithSigner = assetManager.connect(wallet);
+      const assetManagerWithSigner = assetManager.connect(wallet) as ethers.Contract;
 
       // Initiate redemption
       const tx = await assetManagerWithSigner.redeem(amount, underlyingAddress);

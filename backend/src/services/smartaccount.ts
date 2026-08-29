@@ -139,7 +139,7 @@ export class SmartAccountManager {
       }
 
       const wallet = new ethers.Wallet(privateKey, this.provider);
-      const factoryWithSigner = this.factoryContract.connect(wallet);
+      const factoryWithSigner = this.factoryContract.connect(wallet) as ethers.Contract;
 
       // Deploy Smart Account
       const tx = await factoryWithSigner.deployAccount(normalized);

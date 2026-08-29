@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import * as fc from "fast-check";
 import { FDCAttestationClient } from "./fdc";
-import { AttestationRequest, AttestationType } from "../types/fdc";
+import { AttestationRequest, AttestationType, AttestationProof } from "../types/fdc";
 
 /**
  * Property-based tests for FDC Attestation Client

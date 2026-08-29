@@ -143,7 +143,10 @@ export class FDCAttestationClient {
         throw new Error(`Verifier service error: ${response.status} - ${errorText}`);
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as {
+        abiEncodedRequest?: string;
+        status?: string;
+      };
 
       if (!data.abiEncodedRequest) {
         throw new Error("Invalid response from verifier service: missing abiEncodedRequest");
@@ -188,7 +191,7 @@ export class FDCAttestationClient {
       }
 
       const wallet = new ethers.Wallet(privateKey, this.provider);
-      const fdcHubWithSigner = fdcHub.connect(wallet);
+      const fdcHubWithSigner = fdcHub.connect(wallet) as ethers.Contract;
 
       // Submit the request with attestation fee
       const tx = await fdcHubWithSigner.requestAttestation(
@@ -273,7 +276,7 @@ export class FDCAttestationClient {
           throw new Error(`DA Layer error: ${response.status} - ${errorText}`);
         }
 
-        const data: ProofResponse = await response.json();
+        const data = (await response.json()) as ProofResponse;
 
         if (!data.proof || !data.response) {
           throw new Error("Invalid proof response from DA Layer");

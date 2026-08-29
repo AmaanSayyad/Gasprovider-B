@@ -4,11 +4,11 @@ import { randomBytes } from "crypto";
 export interface GasPool {
   id: string;
   name: string;
-  description?: string;
+  description?: string | null;
   creatorAddress: string;
   poolCode: string;
   minContribution: string;
-  maxMembers?: number;
+  maxMembers?: number | null;
   isPublic: boolean;
   autoDistribute: boolean;
   status: string;
@@ -37,8 +37,8 @@ export interface GasPoolContribution {
   poolId: string;
   userAddress: string;
   amount: string;
-  intentId?: string;
-  txHash?: string;
+  intentId?: string | null;
+  txHash?: string | null;
   createdAt: Date;
 }
 
@@ -47,8 +47,8 @@ export interface GasPoolDistribution {
   poolId: string;
   recipientAddress: string;
   amount: string;
-  intentId?: string;
-  reason?: string;
+  intentId?: string | null;
+  reason?: string | null;
   createdAt: Date;
 }
 

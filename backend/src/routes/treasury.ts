@@ -619,7 +619,7 @@ export function registerTreasuryRoutes(
           nativeBalance: balance.native.toString(),
           nativeBalanceFormatted: formatTokenAmount(balance.native, 18),
           nativeUsdValue: nativeUsdValue.toFixed(2),
-          tokens: Object.entries(balance.tokens).map(([tokenAddress, tokenBalance]) => ({
+          tokens: Object.entries(balance.tokens as Record<string, bigint>).map(([tokenAddress, tokenBalance]) => ({
             address: tokenAddress,
             balance: tokenBalance.toString(),
             balanceFormatted: formatTokenAmount(tokenBalance, 18),

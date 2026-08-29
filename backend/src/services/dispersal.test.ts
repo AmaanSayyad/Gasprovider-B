@@ -49,7 +49,7 @@ describe('DispersalService - Property-Based Tests', () => {
         // Generate random attestation data
         fc.record({
           roundId: fc.integer({ min: 1, max: 100000 }),
-          attestationStatus: fc.constantFrom('pending', 'verified', 'failed'),
+          attestationStatus: fc.constantFrom(...(['pending', 'verified', 'failed'] as const)),
           proofHash: fc.hexaString({ minLength: 64, maxLength: 64 }).map(s => '0x' + s),
         }),
         async (depositData, attestationData) => {

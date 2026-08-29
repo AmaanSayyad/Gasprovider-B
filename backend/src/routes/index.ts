@@ -246,7 +246,7 @@ export function registerRoutes(
   // GET /history
   fastify.get<{ Querystring: z.infer<typeof HistoryQuerySchema> }>(
     "/history",
-    async (request: FastifyRequest<{ Querystring: any }>, reply: FastifyReply) => {
+    async (request, reply: FastifyReply) => {
       try {
         const query = HistoryQuerySchema.parse(request.query);
 
@@ -300,7 +300,7 @@ export function registerRoutes(
   // POST /event
   fastify.post<{ Body: DepositEventPayload }>(
     "/event",
-    async (request: FastifyRequest<{ Body: any }>, reply: FastifyReply) => {
+    async (request, reply: FastifyReply) => {
       // TODO: Validate X-Indexer-Secret header
       // const indexerSecret = request.headers['x-indexer-secret'];
       // if (indexerSecret !== process.env.INDEXER_SECRET) {
@@ -470,7 +470,7 @@ export function registerRoutes(
 
   fastify.post<{ Body: z.infer<typeof CreateSmartAccountSchema> }>(
     "/smart-account/create",
-    async (request: FastifyRequest<{ Body: any }>, reply: FastifyReply) => {
+    async (request, reply: FastifyReply) => {
       if (!smartAccountManager) {
         const error: ApiError = {
           error: "Smart Account functionality not available",
@@ -528,7 +528,7 @@ export function registerRoutes(
 
   fastify.post<{ Body: z.infer<typeof GaslessTransactionSchema> }>(
     "/smart-account/gasless-transaction",
-    async (request: FastifyRequest<{ Body: any }>, reply: FastifyReply) => {
+    async (request, reply: FastifyReply) => {
       if (!smartAccountManager || !relayerService) {
         const error: ApiError = {
           error: "Gasless transaction functionality not available",
@@ -599,7 +599,7 @@ export function registerRoutes(
 
   fastify.post<{ Body: z.infer<typeof SmartAccountDepositSchema> }>(
     "/deposit/smart-account",
-    async (request: FastifyRequest<{ Body: any }>, reply: FastifyReply) => {
+    async (request, reply: FastifyReply) => {
       if (!smartAccountManager || !relayerService) {
         const error: ApiError = {
           error: "Smart Account deposit functionality not available",
@@ -767,7 +767,7 @@ export function registerRoutes(
 
     fastify.post<{ Body: z.infer<typeof CreateScheduleSchema> }>(
       "/schedules",
-      async (request: FastifyRequest<{ Body: any }>, reply: FastifyReply) => {
+      async (request, reply: FastifyReply) => {
         try {
           const payload = CreateScheduleSchema.parse(request.body);
 
@@ -807,7 +807,7 @@ export function registerRoutes(
     // GET /schedules - Get all schedules for a user
     fastify.get<{ Querystring: { userAddress: string } }>(
       "/schedules",
-      async (request: FastifyRequest<{ Querystring: any }>, reply: FastifyReply) => {
+      async (request, reply: FastifyReply) => {
         try {
           const { userAddress } = request.query;
 
@@ -868,7 +868,7 @@ export function registerRoutes(
 
     fastify.patch<{ Params: { id: string }; Body: z.infer<typeof UpdateScheduleSchema> }>(
       "/schedules/:id",
-      async (request: FastifyRequest<{ Params: { id: string }; Body: any }>, reply: FastifyReply) => {
+      async (request, reply: FastifyReply) => {
         try {
           const { id } = request.params;
           const payload = UpdateScheduleSchema.parse(request.body);
@@ -960,7 +960,7 @@ export function registerRoutes(
     // GET /referrals/stats - Get user's referral stats
     fastify.get<{ Querystring: { userAddress: string } }>(
       "/referrals/stats",
-      async (request: FastifyRequest<{ Querystring: any }>, reply: FastifyReply) => {
+      async (request, reply: FastifyReply) => {
         try {
           const { userAddress } = request.query;
           if (!userAddress || !userAddress.match(/^0x[a-fA-F0-9]{40}$/)) {
@@ -997,7 +997,7 @@ export function registerRoutes(
 
     fastify.post<{ Body: z.infer<typeof UseReferralSchema> }>(
       "/referrals/use",
-      async (request: FastifyRequest<{ Body: any }>, reply: FastifyReply) => {
+      async (request, reply: FastifyReply) => {
         try {
           const payload = UseReferralSchema.parse(request.body);
           const result = await referralService.recordReferral(
@@ -1032,7 +1032,7 @@ export function registerRoutes(
     // GET /referrals/leaderboard - Get referral leaderboard
     fastify.get<{ Querystring: { limit?: string } }>(
       "/referrals/leaderboard",
-      async (request: FastifyRequest<{ Querystring: any }>, reply: FastifyReply) => {
+      async (request, reply: FastifyReply) => {
         try {
           const limit = request.query.limit
             ? parseInt(request.query.limit, 10)
@@ -1059,7 +1059,7 @@ export function registerRoutes(
     // GET /gamification/stats - Get user's gamification stats
     fastify.get<{ Querystring: { userAddress: string } }>(
       "/gamification/stats",
-      async (request: FastifyRequest<{ Querystring: any }>, reply: FastifyReply) => {
+      async (request, reply: FastifyReply) => {
         try {
           const { userAddress } = request.query;
           if (!userAddress || !userAddress.match(/^0x[a-fA-F0-9]{40}$/)) {
@@ -1106,7 +1106,7 @@ export function registerRoutes(
     // GET /gamification/leaderboard - Get leaderboard
     fastify.get<{ Querystring: { category: string; period?: string; limit?: string } }>(
       "/gamification/leaderboard",
-      async (request: FastifyRequest<{ Querystring: any }>, reply: FastifyReply) => {
+      async (request, reply: FastifyReply) => {
         try {
           const { category, period = "all_time", limit = "100" } = request.query;
           const leaderboard = await gamificationService.getLeaderboard(
@@ -1134,7 +1134,7 @@ export function registerRoutes(
 
     fastify.post<{ Body: z.infer<typeof UpdateStreakSchema> }>(
       "/gamification/update-streak",
-      async (request: FastifyRequest<{ Body: any }>, reply: FastifyReply) => {
+      async (request, reply: FastifyReply) => {
         try {
           const payload = UpdateStreakSchema.parse(request.body);
           const streak = await gamificationService.updateStreak(
@@ -1163,9 +1163,9 @@ export function registerRoutes(
 
   if (gasPoolService) {
     // POST /gas-pools - Create a new gas pool
-    fastify.post<{ Body: any }>(
+    fastify.post<{ Body: Record<string, any> }>(
       "/gas-pools",
-      async (request: FastifyRequest<{ Body: any }>, reply: FastifyReply) => {
+      async (request, reply: FastifyReply) => {
         try {
           const {
             name,
@@ -1218,7 +1218,7 @@ export function registerRoutes(
     // GET /gas-pools/public - Get public pools
     fastify.get<{ Querystring: { limit?: string } }>(
       "/gas-pools/public",
-      async (request: FastifyRequest<{ Querystring: any }>, reply: FastifyReply) => {
+      async (request, reply: FastifyReply) => {
         try {
           const limit = request.query.limit
             ? parseInt(request.query.limit, 10)
@@ -1266,7 +1266,7 @@ export function registerRoutes(
     // GET /gas-pools/:poolId - Get pool by ID
     fastify.get<{ Params: { poolId: string }; Querystring: { userAddress?: string } }>(
       "/gas-pools/:poolId",
-      async (request: FastifyRequest<{ Params: { poolId: string }; Querystring: any }>, reply: FastifyReply) => {
+      async (request, reply: FastifyReply) => {
         try {
           const { poolId } = request.params;
           const { userAddress } = request.query;
@@ -1309,9 +1309,9 @@ export function registerRoutes(
     );
 
     // POST /gas-pools/join - Join a pool
-    fastify.post<{ Body: any }>(
+    fastify.post<{ Body: Record<string, any> }>(
       "/gas-pools/join",
-      async (request: FastifyRequest<{ Body: any }>, reply: FastifyReply) => {
+      async (request, reply: FastifyReply) => {
         try {
           const { poolCode, userAddress } = request.body;
 
@@ -1345,9 +1345,9 @@ export function registerRoutes(
     );
 
     // POST /gas-pools/contribute - Contribute to a pool
-    fastify.post<{ Body: any }>(
+    fastify.post<{ Body: Record<string, any> }>(
       "/gas-pools/contribute",
-      async (request: FastifyRequest<{ Body: any }>, reply: FastifyReply) => {
+      async (request, reply: FastifyReply) => {
         try {
           const { poolId, userAddress, amount, intentId, txHash } = request.body;
 
@@ -1388,9 +1388,9 @@ export function registerRoutes(
     );
 
     // POST /gas-pools/distribute - Distribute from pool
-    fastify.post<{ Body: any }>(
+    fastify.post<{ Body: Record<string, any> }>(
       "/gas-pools/distribute",
-      async (request: FastifyRequest<{ Body: any }>, reply: FastifyReply) => {
+      async (request, reply: FastifyReply) => {
         try {
           const { poolId, recipientAddress, amount, intentId, reason } = request.body;
 
@@ -1433,7 +1433,7 @@ export function registerRoutes(
     // GET /gas-pools/:poolId/activity - Get pool activity
     fastify.get<{ Params: { poolId: string }; Querystring: { limit?: string } }>(
       "/gas-pools/:poolId/activity",
-      async (request: FastifyRequest<{ Params: { poolId: string }; Querystring: any }>, reply: FastifyReply) => {
+      async (request, reply: FastifyReply) => {
         try {
           const { poolId } = request.params;
           const limit = request.query.limit
@@ -1455,7 +1455,7 @@ export function registerRoutes(
     // POST /gas-pools/:poolId/leave - Leave a pool
     fastify.post<{ Params: { poolId: string }; Body: { userAddress: string } }>(
       "/gas-pools/:poolId/leave",
-      async (request: FastifyRequest<{ Params: { poolId: string }; Body: any }>, reply: FastifyReply) => {
+      async (request, reply: FastifyReply) => {
         try {
           const { poolId } = request.params;
           const { userAddress } = request.body;
@@ -1495,7 +1495,7 @@ export function registerRoutes(
 
   fastify.post<{ Body: z.infer<typeof VoiceCommandSchema> }>(
     "/voice/command",
-    async (request: FastifyRequest<{ Body: any }>, reply: FastifyReply) => {
+    async (request, reply: FastifyReply) => {
       try {
         const payload = VoiceCommandSchema.parse(request.body);
         
@@ -1527,9 +1527,9 @@ export function registerRoutes(
 
   if (liquidityService) {
     // POST /liquidity/deposit - Deposit tokens to earn
-    fastify.post<{ Body: any }>(
+    fastify.post<{ Body: Record<string, any> }>(
       "/liquidity/deposit",
-      async (request: FastifyRequest<{ Body: any }>, reply: FastifyReply) => {
+      async (request, reply: FastifyReply) => {
         try {
           const {
             userAddress,
@@ -1676,7 +1676,7 @@ export function registerRoutes(
     // POST /liquidity/withdraw - Withdraw deposit
     fastify.post<{ Body: { depositId: string; userAddress: string } }>(
       "/liquidity/withdraw",
-      async (request: FastifyRequest<{ Body: any }>, reply: FastifyReply) => {
+      async (request, reply: FastifyReply) => {
         try {
           const { depositId, userAddress } = request.body;
 

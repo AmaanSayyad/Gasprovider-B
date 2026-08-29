@@ -372,9 +372,11 @@ describe("FTSOPriceService - Retry and Metrics Tests", () => {
     const mockFallbackProvider = {
       getName: () => "MockFallback",
       getPrice: async (symbol: string) => ({
+        symbol,
         value: BigInt(100000000), // $1.00 with 8 decimals
         decimals: 8,
         timestamp: Math.floor(Date.now() / 1000),
+        source: "MockFallback",
       }),
     };
 
