@@ -48,3 +48,6 @@ temp/
 # Local checkouts
 GasProvider-Monad-main/
 GasProvider-main 2/
+
+# local migration plan (not committed)
+BOTCHAIN_MIGRATION.md

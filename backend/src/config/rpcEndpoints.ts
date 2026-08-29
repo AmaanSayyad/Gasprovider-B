@@ -21,6 +21,17 @@ export interface ChainRpcConfig {
  * Fallback endpoints are public RPC providers
  */
 export const RPC_CONFIGS: Record<number, ChainRpcConfig> = {
+  // BOT Chain mainnet — source chain
+  677: {
+    chainId: 677,
+    endpoints: [
+      {
+        url: process.env.BOTCHAIN_RPC_URL || "https://rpc.botchain.ai",
+        priority: 1,
+      },
+    ],
+    healthCheckInterval: 60000,
+  },
   // Coston2 Testnet
   114: {
     chainId: 114,

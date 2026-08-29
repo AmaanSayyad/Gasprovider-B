@@ -4,6 +4,7 @@
  * auto-detect retries were OOMing the service.
  */
 export const ACTIVE_CHAIN_IDS: readonly number[] = [
+  677, // BOT Chain (source)
   114, // Coston2
   11155420, // Optimism Sepolia
   84532, // Base Sepolia

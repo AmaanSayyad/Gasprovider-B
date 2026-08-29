@@ -1,5 +1,6 @@
 import { createConfig, http } from "wagmi";
 import { sepolia, bscTestnet, avalancheFuji } from "wagmi/chains";
+import { botChain } from "../data/botchain";
 
 // Custom testnet chain definitions
 const coston2 = {
@@ -230,6 +231,7 @@ const celoAlfajores = {
 // This is used by WagmiProvider in App.tsx
 export const wagmiConfig = createConfig({
   chains: [
+    botChain,
     coston2,
     sepolia,
     baseSepolia,
@@ -251,6 +253,7 @@ export const wagmiConfig = createConfig({
     celoAlfajores,
   ],
   transports: {
+    [botChain.id]: http(),
     [coston2.id]: http(),
     [sepolia.id]: http(),
     [baseSepolia.id]: http(),

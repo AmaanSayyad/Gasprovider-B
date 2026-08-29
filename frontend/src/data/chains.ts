@@ -3,10 +3,13 @@ import {
 } from "viem/chains";
 import { ChainData } from "../types";
 import { chainLogoUrl } from "./chainLogos";
+import { botChain, BOT_CHAIN_ID } from "./botchain";
 
 // Treasury contract addresses for all supported chains
 // Requirements: 1.1, 9.1, 13.4
 export const TREASURY_ADDRESSES: Record<number, string> = {
+  // BOT Chain — source chain. Set after `npm run deploy:botchain`.
+  [BOT_CHAIN_ID]: import.meta.env?.VITE_BOTCHAIN_TREASURY_ADDRESS || "",
   114: "0xc031c437d6b915dbdc946dbd8613a1ac9dd75d63", // Coston2
   11155111: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Ethereum Sepolia
   80002: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Polygon Amoy
@@ -406,6 +409,7 @@ const celoAlfajores: Chain = {
 
 // Map chain IDs to viem chain objects (testnets only)
 const chainIdMap: Record<string, Chain> = {
+  botchain: botChain,
   coston2: coston2,
   // Testnet chains for Treasury
   sepolia: sepolia,
@@ -429,6 +433,15 @@ const chainIdMap: Record<string, Chain> = {
 
 // All available chains (testnets only)
 const allChains: ChainData[] = [
+  {
+    id: "botchain",
+    name: botChain.name,
+    symbol: "BOT",
+    logo: "/botchain.png",
+    avgTxCost: 0.002,
+    nativePrice: 1,
+    viemChain: botChain,
+  },
   {
     id: "coston2",
     name: "Coston2",
@@ -637,7 +650,7 @@ export const DEFAULT_DESTINATION_IDS = [
   "baseSepolia",
 ] as const;
 
-export const SOURCE_CHAINS = ["coston2", "monadTestnet"]
+export const SOURCE_CHAINS = ["botchain", "coston2", "monadTestnet"]
   .map((id) => allChains.find((chain) => chain.id === id))
   .filter((chain): chain is ChainData => chain !== undefined);
 

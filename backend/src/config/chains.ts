@@ -13,6 +13,25 @@ export interface ChainConfig {
 }
 
 export const CHAIN_CONFIGS: Record<number, ChainConfig> = {
+  // BOT Chain mainnet — SOURCE chain (deposits + escrow/treasury live here).
+  // See BOTCHAIN_MIGRATION.md (ADR-2).
+  677: {
+    chainId: 677,
+    name: "BOT Chain",
+    rpcUrl: process.env.BOTCHAIN_RPC_URL || "https://rpc.botchain.ai",
+    explorerUrl: "https://scan.botchain.ai",
+    nativeSymbol: "BOT",
+    contractAddress: process.env.CONTRACT_ADDRESS_677,
+  },
+  // BOT Chain testnet — pre-deploy verification only.
+  968: {
+    chainId: 968,
+    name: "BOT Chain Testnet",
+    rpcUrl: process.env.BOTCHAIN_TESTNET_RPC_URL || "https://rpc.bohr.life",
+    explorerUrl: "https://scan.bohr.life",
+    nativeSymbol: "BOT",
+    contractAddress: process.env.CONTRACT_ADDRESS_968,
+  },
   // Coston2 Testnet
   114: {
     chainId: 114,
