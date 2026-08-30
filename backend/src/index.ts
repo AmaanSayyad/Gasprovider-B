@@ -301,6 +301,17 @@ async function main() {
     console.log(`📈 Status endpoint: http://${HOST}:${PORT}/status/:intentId`);
     console.log(`📜 History endpoint: http://${HOST}:${PORT}/history`);
     console.log(`📥 Event endpoint: http://${HOST}:${PORT}/event`);
+
+    // The deposit listener runs in this process rather than as its own service:
+    // free hosting tiers do not offer an always-on worker. Started after the
+    // server is up because it posts deposits back to /event, and detached so a
+    // listener that cannot reach the chain never stops the API from serving.
+    if (process.env.ENABLE_DEPOSIT_LISTENER !== "false") {
+      const { startDepositListener } = await import("./services/depositListener");
+      startDepositListener().catch((err) => {
+        console.error("Deposit listener stopped:", err);
+      });
+    }
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
