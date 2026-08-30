@@ -75,6 +75,9 @@ body {
   padding: 0;
   width: 100%;
   height: 100%;
+  /* The full-bleed hero is 100vw, which counts the scrollbar, so without this
+     the page picks up a horizontal scroll the moment content is tall enough. */
+  overflow-x: hidden;
   color: var(--gp-foreground);
   font-family: var(--font-body);
   background-image: var(--bg-gradient);
