@@ -27,11 +27,10 @@ const Header: React.FC = () => {
     return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
   };
 
-  // Full bleed: the negative margins only cancelled the container padding, so
-  // on wide screens the bar stopped at the container edge and the page showed
-  // through either side.
+  // Rendered outside Layout's max-width container so the bar spans the window;
+  // the row inside stays aligned with the page via max-w-6xl.
   return (
-    <div className="sticky top-0 z-50 left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen border-b border-theme bg-white/85 px-4 py-3 backdrop-blur-xl dark:bg-[#24292E]/85 sm:px-6 lg:px-8">
+    <div className="sticky top-0 z-50 w-full border-b border-theme bg-white/85 px-4 py-3 backdrop-blur-xl dark:bg-[#24292E]/85 sm:px-6 lg:px-8">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 sm:flex-row">
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

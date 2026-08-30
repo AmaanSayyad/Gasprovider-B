@@ -173,8 +173,8 @@ const App: React.FC = () => {
       <WagmiProvider config={appKitWagmiConfig}>
           <NexusProvider>
         <GasFountainProvider>
+            <Header />
             <Layout>
-              <Header />
               <ProductHero />
               <ProductStory />
               <MainContent />
