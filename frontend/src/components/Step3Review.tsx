@@ -92,15 +92,6 @@ const Step3Review: React.FC = () => {
 
   // Update status based on deposit hook state
   useEffect(() => {
-    console.log("Deposit state:", {
-      isLoading,
-      isPending,
-      isApproving,
-      isSuccess,
-      isError,
-      depositTxHash,
-      error: error?.message,
-    });
 
     if (isLoading || isPending || isApproving) {
       setStatus("dispersing");
@@ -130,25 +121,7 @@ const Step3Review: React.FC = () => {
             .filter((id): id is number => id !== undefined);
 
           // Calculate and log amounts per destination chain before submitting
-          const sourceAmountUsd = depositAmount;
-          console.log("💰 PRE-TRANSACTION DISTRIBUTION SUMMARY");
-          console.log("=".repeat(60));
-          console.log(`📤 Source Chain: ${sourceChain?.name} (${sourceChain?.viemChain?.id})`);
-          console.log(`💵 Total Deposit Amount: $${sourceAmountUsd.toFixed(2)} USD`);
-          console.log(`📋 Number of Destination Chains: ${selectedChains.length}`);
-          console.log("-".repeat(60));
           
-          selectedChains.forEach((chain, index) => {
-            const percentage = allocationPercentages[index];
-            const amountUsd = (sourceAmountUsd * percentage) / 100;
-            const txCount = transactionCounts[chain.id] || 10;
-            console.log(`📍 ${chain.name} (Chain ID: ${chain.viemChain?.id})`);
-            console.log(`   └─ Allocation: ${percentage.toFixed(2)}%`);
-            console.log(`   └─ Amount: $${amountUsd.toFixed(2)} USD`);
-            console.log(`   └─ Transaction Count: ${txCount}`);
-          });
-          console.log("=".repeat(60));
-
           // Submit deposit to backend using the selected source token
           const { submitTreasuryDeposit } = await import("../utils/api");
           const decimals =
@@ -167,7 +140,6 @@ const Step3Review: React.FC = () => {
             sourceTxHash: depositTxHash,
           });
 
-          console.log("Backend response:", response);
           
           // Store the intent ID from backend response
           if (response.intentId) {
@@ -245,34 +217,13 @@ const Step3Review: React.FC = () => {
       }
     }
 
-    console.log("Disperse clicked", {
-      needsApproval,
-      approvalTxHash,
-      selectedChains,
-      depositAmount,
-      address,
-      chainId,
-      requiredChainId: sourceChain?.viemChain?.id,
-    });
 
     if (needsApproval) {
       if (!approvalTxHash) {
-        console.log("Approval needed - calling approve...");
         approve();
       } else {
-        console.log(
-          "Approval transaction pending, waiting for confirmation..."
-        );
       }
     } else {
-      console.log(
-        "Approval not needed or already approved - calling deposit...",
-        {
-          totalAmountUsd: depositAmount,
-          selectedChains: selectedChains.length,
-          isApprovalSuccess,
-        }
-      );
       deposit();
     }
   };

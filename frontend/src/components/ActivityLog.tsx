@@ -24,14 +24,6 @@ const ActivityLog: React.FC = () => {
 
   // Debug logging
   React.useEffect(() => {
-    console.log("ActivityLog Debug:", {
-      address,
-      isConnected,
-      historyEntriesCount: historyEntries?.length || 0,
-      historyEntries,
-      isLoading,
-      error: error?.message,
-    });
   }, [address, isConnected, historyEntries, isLoading, error]);
 
   // Convert backend HistoryEntry to frontend HistoryItem format

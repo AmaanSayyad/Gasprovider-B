@@ -133,14 +133,6 @@ export function useDeposit({
   // Debug logging
   useEffect(() => {
     if (address && usdcAddress && contractAddress) {
-      console.log("Approval check:", {
-        needsApproval,
-        allowance: allowance?.toString(),
-        totalAmount: totalAmount.toString(),
-        hasAddress: !!address,
-        hasUsdcAddress: !!usdcAddress,
-        hasContractAddress: !!contractAddress,
-      });
     }
   }, [
     needsApproval,
@@ -171,7 +163,6 @@ export function useDeposit({
   // Refetch allowance after approval succeeds to verify it was updated
   useEffect(() => {
     if (isApprovalSuccess && approvalHash) {
-      console.log("Approval confirmed, refetching allowance...");
       // Refetch allowance after a short delay to ensure it's updated on-chain
       setTimeout(() => {
         refetchAllowance();
@@ -196,13 +187,6 @@ export function useDeposit({
       return;
     }
 
-    console.log("=== APPROVING DEPOSIT TOKEN ===");
-    console.log("Token address:", usdcAddress);
-    console.log("Contract Address:", contractAddress);
-    console.log("Amount to approve: MAX (maxUint256)");
-    console.log("Current allowance:", allowance?.toString() || "unknown");
-    console.log("Required amount:", totalAmount.toString());
-    console.log("====================");
 
     try {
       writeApprove({
@@ -211,7 +195,6 @@ export function useDeposit({
         functionName: "approve",
         args: [contractAddress, maxUint256], // Approve max for convenience
       });
-      console.log("✓ Approval transaction sent");
     } catch (err) {
       const error = err instanceof Error ? err : new Error("Unknown error");
       setError(error);
@@ -257,8 +240,6 @@ export function useDeposit({
         );
         setError(err);
         console.error("Deposit error:", err);
-        console.log("Current allowance:", allowance?.toString() || "unknown");
-        console.log("Required amount:", totalAmount.toString());
         return;
       }
       // If approval was successful but allowance hasn't updated yet, wait
@@ -268,8 +249,6 @@ export function useDeposit({
         );
         setError(err);
         console.error("Deposit error:", err);
-        console.log("Current allowance:", allowance?.toString() || "unknown");
-        console.log("Required amount:", totalAmount.toString());
         return;
       }
     }
@@ -280,48 +259,7 @@ export function useDeposit({
       0n
     );
 
-    // Build detailed payload log
-    const payloadDetails = {
-      selectedChains: selectedChains.map((chain, index) => ({
-        name: chain.name,
-        id: chain.id,
-        numericChainId: chainIds[index]?.toString(),
-        amountUsd: (transactionCounts[chain.id] || 10) * chain.avgTxCost,
-        amountUsdc: chainAmounts[index]?.toString(),
-        transactionCount: transactionCounts[chain.id] || 10,
-      })),
-      arrays: {
-        chainIds: chainIds.map((id) => id.toString()),
-        chainAmounts: chainAmounts.map((amt) => amt.toString()),
-      },
-      totals: {
-        totalAmountUsd: totalAmountUsd,
-        totalAmountUsdc: totalAmount.toString(),
-        sumOfChainAmountsUsdc: sumOfChainAmounts.toString(),
-        amountsMatch: sumOfChainAmounts === totalAmount,
-      },
-      validation: {
-        chainIdsLength: chainIds.length,
-        chainAmountsLength: chainAmounts.length,
-        arraysMatch: chainIds.length === chainAmounts.length,
-        sumMatchesTotal: sumOfChainAmounts === totalAmount,
-      },
-    };
 
-    console.log("=== DEPOSIT PAYLOAD ===");
-    console.log("Selected Chains with Amounts:", payloadDetails.selectedChains);
-    console.log("Chain IDs Array:", payloadDetails.arrays.chainIds);
-    console.log(
-      "Chain Amounts Array (USDC):",
-      payloadDetails.arrays.chainAmounts
-    );
-    console.log("Total Amount (USDC):", payloadDetails.totals.totalAmountUsdc);
-    console.log(
-      "Sum of Chain Amounts (USDC):",
-      payloadDetails.totals.sumOfChainAmountsUsdc
-    );
-    console.log("Validation:", payloadDetails.validation);
-    console.log("======================");
 
     // Verify sum matches total
     if (sumOfChainAmounts !== totalAmount) {
@@ -343,16 +281,6 @@ export function useDeposit({
     }
 
     // Final contract call payload
-    console.log("Contract Call Payload:", {
-      address: contractAddress,
-      sourceChain: sourceChain?.name || "Unknown",
-      functionName: "deposit",
-      args: [
-        totalAmount.toString(), // totalAmount
-        chainIds.map((id) => id.toString()), // chainIds
-        chainAmounts.map((amt) => amt.toString()), // chainAmounts
-      ],
-    });
 
     try {
       writeDeposit({
@@ -361,7 +289,6 @@ export function useDeposit({
         functionName: "deposit",
         args: [totalAmount, chainIds, chainAmounts],
       });
-      console.log("✓ writeDeposit called successfully");
     } catch (err) {
       const error = err instanceof Error ? err : new Error("Unknown error");
       setError(error);

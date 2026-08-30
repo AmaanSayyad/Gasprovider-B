@@ -15,7 +15,6 @@ const API_BASE_URL = getApiBaseUrl();
 
 // Log API URL in development
 if (import.meta.env.DEV) {
-  console.log("🔗 API Base URL:", API_BASE_URL);
 }
 
 export async function fetchIntentStatus(
@@ -66,8 +65,6 @@ export async function fetchHistory(
   const queryString = params.toString();
   const url = `${API_BASE_URL}/history${queryString ? `?${queryString}` : ""}`;
 
-  console.log("🔍 Fetching history from:", url);
-  console.log("📋 Options:", options);
 
   try {
     const response = await fetch(url);
@@ -84,11 +81,6 @@ export async function fetchHistory(
     }
 
     const data = await response.json();
-    console.log("✅ History response:", {
-      itemsCount: data.items?.length || 0,
-      items: data.items,
-      nextCursor: data.nextCursor,
-    });
     // Ensure we always return a valid response with items array
     return {
       items: data.items || [],
