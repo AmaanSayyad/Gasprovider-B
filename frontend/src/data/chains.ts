@@ -3,31 +3,8 @@ import {
 } from "viem/chains";
 import { ChainData } from "../types";
 import { chainLogoUrl } from "./chainLogos";
-import { botChain, BOT_CHAIN_ID } from "./botchain";
+import { botChain } from "./botchain";
 
-// Treasury contract addresses for all supported chains
-// Requirements: 1.1, 9.1, 13.4
-export const TREASURY_ADDRESSES: Record<number, string> = {
-  // BOT Chain — source chain. Set after `npm run deploy:botchain`.
-  [BOT_CHAIN_ID]: import.meta.env?.VITE_BOTCHAIN_TREASURY_ADDRESS || "",
-  11155111: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Ethereum Sepolia
-  80002: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Polygon Amoy
-  421614: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Arbitrum Sepolia
-  11155420: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Optimism Sepolia
-  84532: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Base Sepolia
-  4801: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // World Sepolia
-  999999999: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Zora Sepolia
-  534351: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Scroll Sepolia
-  43113: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Avalanche Fuji
-  97: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // BSC Testnet
-  300: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // zkSync Sepolia
-  314159: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Filecoin Calibration
-  1301: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Unichain Sepolia
-  48898: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Zircuit Garfield
-  5115: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Citrea Testnet
-  545: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Flow EVM Testnet
-  44787: "0x5b402676535a3ba75c851c14e1e249a4257d2265", // Celo Alfajores
-};
 
 // Chain definitions not present in viem/chains
 
@@ -545,7 +522,6 @@ import { CATALOG_CHAINS } from "./catalogChains";
 
 const destinationChainIds = [
   "optimismSepolia",
-  "worldSepolia",
   "baseSepolia",
   "polygonAmoy",
   "zoraSepolia",
@@ -576,7 +552,6 @@ const DISABLED_DESTINATION_NUMERIC_IDS = new Set([
 /** Pre-select these so a demo doesn't auto-include unfunded chains. */
 export const DEFAULT_DESTINATION_IDS = [
   "optimismSepolia",
-  "worldSepolia",
   "baseSepolia",
 ] as const;
 
@@ -671,15 +646,6 @@ export const getExplorerUrl = (chainId: string): string => {
   return explorerMap[chainId] || "https://basescan.org";
 };
 
-// Get Treasury contract address for a chain
-export const getTreasuryAddress = (chainId: number): string | undefined => {
-  return TREASURY_ADDRESSES[chainId];
-};
 
-// Get Treasury contract address by string chain ID
-export const getTreasuryAddressByStringId = (chainId: string): string | undefined => {
-  const numericId = getNumericChainId(chainId);
-  return numericId ? TREASURY_ADDRESSES[numericId] : undefined;
-};
 
 export { chainIdMap };

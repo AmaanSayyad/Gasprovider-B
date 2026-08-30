@@ -7,7 +7,8 @@ export const ACTIVE_CHAIN_IDS: readonly number[] = [
   677, // BOT Chain (source)
   11155420, // Optimism Sepolia
   84532, // Base Sepolia
-  4801, // World Sepolia
+  // 4801 World Sepolia — re-enable once the relayer holds gas there and
+  // scripts/deploy-destination-treasury.mjs worldSepolia has been run.
 ];
 
 export const DISABLED_DESTINATION_CHAIN_IDS: ReadonlySet<number> = new Set([

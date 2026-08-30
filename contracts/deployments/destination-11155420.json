@@ -1,0 +1,13 @@
+{
+  "chainId": 11155420,
+  "network": "Optimism Sepolia",
+  "destinationTreasury": "0x943e50fA192b30BECe6a5d8d3A31ea541b5f0031",
+  "owner": "0xf2c1B1F3A6d8578d46CA52c0B41512bc760e7808",
+  "relayer": "0xf2c1B1F3A6d8578d46CA52c0B41512bc760e7808",
+  "priceUsd6": "2450000000",
+  "maxDripWei": "10000000000000000",
+  "fundedEth": "0.02",
+  "txHash": "0x89bd2fb9efbfe44d3d6c0a03bc3a7b70a8c11e5031d802fdfd8d135083f709fd",
+  "deployedAt": "2026-08-30T07:52:00.146Z",
+  "explorer": "https://sepolia-optimism.etherscan.io/address/0x943e50fA192b30BECe6a5d8d3A31ea541b5f0031"
+}

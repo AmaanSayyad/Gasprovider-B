@@ -1,0 +1,13 @@
+{
+  "chainId": 84532,
+  "network": "Base Sepolia",
+  "destinationTreasury": "0x943e50fA192b30BECe6a5d8d3A31ea541b5f0031",
+  "owner": "0xf2c1B1F3A6d8578d46CA52c0B41512bc760e7808",
+  "relayer": "0xf2c1B1F3A6d8578d46CA52c0B41512bc760e7808",
+  "priceUsd6": "2450000000",
+  "maxDripWei": "10000000000000000",
+  "fundedEth": "0.02",
+  "txHash": "0x1759329e1a514913cf9eaf8525b39cf850089d758e79c12e02708a87604613b6",
+  "deployedAt": "2026-08-30T07:51:44.869Z",
+  "explorer": "https://sepolia.basescan.org/address/0x943e50fA192b30BECe6a5d8d3A31ea541b5f0031"
+}
