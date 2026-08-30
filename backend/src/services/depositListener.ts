@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { ethers } from "ethers";
 
 // GasProvider escrow on BOT Chain — the source chain deposits arrive on.
