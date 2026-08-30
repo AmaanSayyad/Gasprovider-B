@@ -3,7 +3,7 @@ import { useGasFountain } from "../context/GasFountainContext";
 import VisualizationCanvas from "./VisualizationCanvas";
 import { ChevronLeft, Loader2, AlertCircle } from "lucide-react";
 import { useDeposit } from "../hooks/useDeposit";
-import { useAccount } from "wagmi";
+import { useAccount, useSwitchChain } from "wagmi";
 import { getExplorerUrl } from "../data/chains";
 import { useReferral } from "../hooks/useReferral";
 import { updateStreak } from "../utils/api";
@@ -30,6 +30,7 @@ const Step3Review: React.FC = () => {
   } = useGasFountain();
 
   const { address, chainId } = useAccount();
+  const { switchChainAsync } = useSwitchChain();
   const { applyReferral } = useReferral();
   const { prices: prices } = usePrices();
   const estimatedFees = protocolFeeUsd(depositAmount);
@@ -194,7 +195,7 @@ const Step3Review: React.FC = () => {
 
   const handleBack = (): void => setCurrentStep(1);
 
-  const handleDisperse = (): void => {
+  const handleDisperse = async (): Promise<void> => {
     if (!address) {
       setStatus("error");
       return;
@@ -204,9 +205,15 @@ const Step3Review: React.FC = () => {
       setStatus("error");
       return;
     }
+    // Offer the switch instead of just refusing. The deposit that follows moves
+    // real value on the source chain, so it must never be signed elsewhere.
     if (chainId !== requiredChainId) {
-      setStatus("error");
-      return;
+      try {
+        await switchChainAsync({ chainId: requiredChainId });
+      } catch {
+        setStatus("error");
+        return;
+      }
     }
 
     console.log("Disperse clicked", {
@@ -342,7 +349,7 @@ const Step3Review: React.FC = () => {
               Back
             </button>
             <button
-              onClick={handleDisperse}
+              onClick={() => void handleDisperse()}
               disabled={
                 status === "dispersing" ||
                 isApproving ||

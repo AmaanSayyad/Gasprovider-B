@@ -14,15 +14,10 @@ export interface TokenInfo {
 
 // Supported tokens per chain for Treasury system
 export const SUPPORTED_TOKENS: Record<number, TokenInfo[]> = {
-  // BOT Chain - the source chain. Deposits are made in USDT; BOT is listed so
-  // the native balance renders, but the escrow only accepts the ERC-20.
+  // BOT Chain - the source chain. The escrow pulls USDT, so that is the only
+  // thing a user can actually deposit; listing native BOT here would let them
+  // pick a token the deposit then ignores.
   677: [
-    {
-      symbol: "BOT",
-      name: "BOT",
-      decimals: 18,
-      isNative: true,
-    },
     {
       symbol: "USDT",
       name: "Tether USD",

@@ -186,7 +186,7 @@ const Step1Destinations: React.FC = () => {
           className="pointer-events-none absolute inset-0 opacity-95"
           style={{
             background:
-              "linear-gradient(135deg, #E62058 0%, #E46389 55%, #24292E 160%)",
+              "linear-gradient(135deg, #0C9C78 0%, #12B88D 55%, #24292E 160%)",
           }}
         />
         <div className="pointer-events-none absolute -right-8 -top-10 h-40 w-40 rounded-full bg-white/20 blur-2xl" />

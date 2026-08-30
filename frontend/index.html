@@ -2,31 +2,42 @@
 <html lang="en" class="light">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/flarelogo.png" />
+    <link rel="icon" type="image/png" href="/botchain.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Gas Provider on Flare — pay FXRP or C2FLR on Coston2 and receive native gas on the chains you use. Powered by FTSO, FDC, and FAssets."
+      content="Gas Provider on BOT Chain — pay once in USDT and receive native gas on the chains you use."
     />
-    <meta property="og:title" content="Gas Provider · Built on Flare" />
+    <meta property="og:title" content="Gas Provider · Built on BOT Chain" />
     <meta
       property="og:description"
-      content="Pay once on Flare. Gas everywhere. FTSO-priced treasury drips for Flare Summer Signal Track 1."
+      content="Pay once on BOT Chain. Gas everywhere."
     />
-    <meta property="og:image" content="/flare/particle-field.svg" />
+    <meta property="og:image" content="/particle-field.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <title>Gas Provider · Built on Flare</title>
+    <title>Gas Provider · Built on BOT Chain</title>
     <script>
       (function () {
-        // Flare marketing is light-first
-        const saved = localStorage.getItem("theme");
-        const theme = saved === "dark" || saved === "light" ? saved : "light";
-        document.documentElement.classList.add(theme);
+        // Apply the saved theme before first paint so dark mode never flashes
+        // light. Falls back to the OS preference, then to light.
+        try {
+          const saved = localStorage.getItem("theme");
+          const theme =
+            saved === "dark" || saved === "light"
+              ? saved
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.classList.remove("light", "dark");
+          document.documentElement.classList.add(theme);
+        } catch (e) {
+          document.documentElement.classList.add("light");
+        }
       })();
     </script>
   </head>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Search, X, Check } from "lucide-react";
-import { chains, SOURCE_CHAINS } from "../data/chains";
+import { SOURCE_CHAINS } from "../data/chains";
 import { clsx } from "clsx";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChainData } from "../types";
@@ -21,7 +21,9 @@ const ChainSelectorModal: React.FC<ChainSelectorModalProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const filteredChains = chains
+  // Only chains we can actually source from. Listing the rest greyed out as
+  // "Coming Soon" just gave people things they cannot pick.
+  const filteredChains = SOURCE_CHAINS
     .filter(
       (chain) =>
         chain.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -135,11 +137,6 @@ const ChainSelectorModal: React.FC<ChainSelectorModalProps> = ({
                         )}
                       >
                         {chain.name}
-                        {!isAvailable && (
-                          <span className="text-xs text-secondary font-normal">
-                            (Coming Soon)
-                          </span>
-                        )}
                       </div>
                       <div className="text-sm text-secondary font-medium">
                         {chain.symbol}

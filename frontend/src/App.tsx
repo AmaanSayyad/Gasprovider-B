@@ -52,7 +52,7 @@ const MainContent: React.FC = () => {
       <div id="disperse" className="scroll-mt-28 min-h-[400px]">
         <div className="mb-6 flex items-end justify-between gap-4">
           <div>
-            <p className="font-display text-[11px] font-semibold uppercase tracking-[0.22em] text-[#E62058]">
+            <p className="font-display text-[11px] font-semibold uppercase tracking-[0.22em] text-[#0C9C78]">
               Live app
             </p>
             <h2 className="font-display text-2xl font-bold tracking-tight text-theme sm:text-3xl">

@@ -113,7 +113,7 @@ const ReferralProgram: React.FC = () => {
               whileHover={{ scale: 1.1, rotate: 5 }}
               className="p-4 bg-gradient-to-br from-[rgba(230,32,88,0.28)] to-[rgba(228,99,137,0.22)] rounded-2xl backdrop-blur-sm border border-[rgba(230,32,88,0.25)] shadow-lg shadow-[rgba(230,32,88,0.18)]"
             >
-              <Share2 className="w-6 h-6 text-[#E62058]" />
+              <Share2 className="w-6 h-6 text-[#0C9C78]" />
             </motion.div>
             <div>
               <h2 className="text-2xl font-bold text-white mb-1">Referral Program</h2>
@@ -156,7 +156,7 @@ const ReferralProgram: React.FC = () => {
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <div className="p-2 bg-[rgba(230,32,88,0.15)] rounded-lg">
-                      <DollarSign className="w-4 h-4 text-[#E62058]" />
+                      <DollarSign className="w-4 h-4 text-[#0C9C78]" />
                     </div>
                     <span className="text-xs text-white/60 font-semibold uppercase tracking-wider">Rewards</span>
                   </div>
@@ -176,7 +176,7 @@ const ReferralProgram: React.FC = () => {
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <div className="p-2 bg-[rgba(228,99,137,0.18)] rounded-lg">
-                      <Trophy className="w-4 h-4 text-[#E46389]" />
+                      <Trophy className="w-4 h-4 text-[#12B88D]" />
                     </div>
                     <span className="text-xs text-white/60 font-semibold uppercase tracking-wider">Active</span>
                   </div>
@@ -227,8 +227,8 @@ const ReferralProgram: React.FC = () => {
                     disabled={!stats.referralCode}
                     className={`px-6 py-4 rounded-xl font-semibold transition-all ${
                       copied === "code"
-                        ? "bg-[#E62058] text-white"
-                        : "bg-gradient-to-r from-[#E62058] to-[#E46389] text-white"
+                        ? "bg-[#0C9C78] text-white"
+                        : "bg-gradient-to-r from-[#0C9C78] to-[#12B88D] text-white"
                     } shadow-lg shadow-[rgba(230,32,88,0.25)] disabled:opacity-50 disabled:cursor-not-allowed`}
                   >
                     {copied === "code" ? (
@@ -246,7 +246,7 @@ const ReferralProgram: React.FC = () => {
                 </div>
                 {!stats.referralCode && (
                   <div className="mt-3 p-3 bg-[rgba(230,32,88,0.08)] border border-[rgba(230,32,88,0.2)] rounded-lg">
-                    <p className="text-xs text-[#E62058]">
+                    <p className="text-xs text-[#0C9C78]">
                       Click "Refresh" to generate your referral code
                     </p>
                   </div>
@@ -287,7 +287,7 @@ const ReferralProgram: React.FC = () => {
                     disabled={!stats.referralLink}
                     className={`px-4 py-3 rounded-xl transition-all ${
                       copied === "link"
-                        ? "bg-[#E62058] text-white"
+                        ? "bg-[#0C9C78] text-white"
                         : "bg-theme-muted hover:bg-[rgba(230,32,88,0.1)] text-theme border border-theme disabled:opacity-50 disabled:cursor-not-allowed"
                     }`}
                   >
@@ -300,7 +300,7 @@ const ReferralProgram: React.FC = () => {
                 </div>
                 {!stats.referralLink && (
                   <div className="mt-3 p-3 bg-[rgba(230,32,88,0.08)] border border-[rgba(230,32,88,0.2)] rounded-lg">
-                    <p className="text-xs text-[#E62058]">
+                    <p className="text-xs text-[#0C9C78]">
                       Click "Refresh" to generate your referral link
                     </p>
                   </div>
@@ -312,7 +312,7 @@ const ReferralProgram: React.FC = () => {
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={shareReferral}
-                className="w-full py-5 rounded-2xl bg-gradient-to-r from-[#E62058] to-[#E46389] text-white font-bold text-lg hover:shadow-2xl hover:shadow-[rgba(230,32,88,0.3)] transition-all flex items-center justify-center gap-3"
+                className="w-full py-5 rounded-2xl bg-gradient-to-r from-[#0C9C78] to-[#12B88D] text-white font-bold text-lg hover:shadow-2xl hover:shadow-[rgba(230,32,88,0.3)] transition-all flex items-center justify-center gap-3"
               >
                 <Share2 className="w-6 h-6" />
                 <span>Share Referral Link</span>
@@ -362,7 +362,7 @@ const ReferralProgram: React.FC = () => {
                 whileTap={{ scale: 0.95 }}
                 onClick={loadStats}
                 disabled={loading}
-                className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#E62058] to-[#E46389] text-white font-semibold hover:shadow-lg hover:shadow-[rgba(230,32,88,0.3)] transition-all flex items-center gap-2 mx-auto disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#0C9C78] to-[#12B88D] text-white font-semibold hover:shadow-lg hover:shadow-[rgba(230,32,88,0.3)] transition-all flex items-center gap-2 mx-auto disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <RefreshCw className={`w-5 h-5 ${loading ? "animate-spin" : ""}`} />
                 <span>Generate Referral Link</span>
@@ -382,7 +382,7 @@ const ReferralProgram: React.FC = () => {
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-gradient-to-br from-[rgba(230,32,88,0.2)] to-[rgba(228,99,137,0.18)] rounded-2xl border border-[rgba(230,32,88,0.3)]">
-              <Trophy className="w-6 h-6 text-[#E62058]" />
+              <Trophy className="w-6 h-6 text-[#0C9C78]" />
             </div>
             <div>
               <h2 className="text-2xl font-bold text-theme">Referral Leaderboard</h2>
@@ -431,11 +431,11 @@ const ReferralProgram: React.FC = () => {
                       transition={{ duration: 0.5 }}
                       className={`w-14 h-14 rounded-2xl flex items-center justify-center font-bold text-lg shadow-lg ${
                         index === 0
-                          ? "bg-gradient-to-br from-[#E62058] to-[#E46389] text-white"
+                          ? "bg-gradient-to-br from-[#0C9C78] to-[#12B88D] text-white"
                           : index === 1
                           ? "bg-gradient-to-br from-[#24292E] to-[#3d444b] text-white"
                           : index === 2
-                          ? "bg-gradient-to-br from-[#E46389] to-[#E62058] text-white"
+                          ? "bg-gradient-to-br from-[#12B88D] to-[#0C9C78] text-white"
                           : "bg-theme-muted text-theme border border-theme"
                       }`}
                     >
@@ -453,7 +453,7 @@ const ReferralProgram: React.FC = () => {
                   </div>
                   <div className="text-right">
                     <div className="flex items-center gap-2 mb-1">
-                      <TrendingUp className="w-4 h-4 text-[#E62058]" />
+                      <TrendingUp className="w-4 h-4 text-[#0C9C78]" />
                       <div className="font-bold text-theme text-xl">${entry.totalRewards}</div>
                     </div>
                     <div className="text-xs text-secondary">Total Rewards</div>

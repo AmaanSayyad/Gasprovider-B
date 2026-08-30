@@ -29,7 +29,7 @@ const ProductStory: React.FC = () => {
           initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          className="font-display text-[11px] font-semibold uppercase tracking-[0.24em] text-[#E62058]"
+          className="font-display text-[11px] font-semibold uppercase tracking-[0.24em] text-[#0C9C78]"
         >
           The blockchain for data
         </motion.p>
@@ -66,10 +66,10 @@ const ProductStory: React.FC = () => {
               transition={{ duration: 0.45, delay: i * 0.1 }}
               className="gp-step relative"
             >
-              <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[rgba(230,32,88,0.1)] text-[#E62058]">
+              <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[rgba(230,32,88,0.1)] text-[#0C9C78]">
                 <Icon className="h-5 w-5" strokeWidth={2.25} />
               </div>
-              <p className="mb-1 font-display text-xs font-semibold uppercase tracking-[0.2em] text-[#E46389]">
+              <p className="mb-1 font-display text-xs font-semibold uppercase tracking-[0.2em] text-[#12B88D]">
                 Step {i + 1}
               </p>
               <h3 className="font-display text-xl font-bold text-theme">{step.title}</h3>
@@ -88,7 +88,7 @@ const ProductStory: React.FC = () => {
       >
         <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
           <div className="space-y-5 p-7 sm:p-9">
-            <p className="font-display text-xs font-semibold uppercase tracking-[0.22em] text-[#E62058]">
+            <p className="font-display text-xs font-semibold uppercase tracking-[0.22em] text-[#0C9C78]">
               How it works
             </p>
             <h3 className="font-display text-2xl font-bold tracking-tight text-theme sm:text-3xl">
@@ -110,7 +110,7 @@ const ProductStory: React.FC = () => {
               <li className="border-t border-theme pt-4">
                 <span className="font-semibold text-theme">Demo video · </span>
                 <a
-                  className="text-[#E62058] hover:underline"
+                  className="text-[#0C9C78] hover:underline"
                   href={DEMO_VIDEO_URL}
                   target="_blank"
                   rel="noreferrer"
@@ -122,7 +122,7 @@ const ProductStory: React.FC = () => {
               <li className="border-t border-theme pt-4">
                 <span className="font-semibold text-theme">Pitch deck · </span>
                 <a
-                  className="text-[#E62058] hover:underline"
+                  className="text-[#0C9C78] hover:underline"
                   href={PITCH_DECK_URL}
                   target="_blank"
                   rel="noreferrer"
@@ -133,7 +133,7 @@ const ProductStory: React.FC = () => {
               </li>
             </ul>
           </div>
-          <div className="relative min-h-[240px] overflow-hidden bg-[#E62058] lg:min-h-full">
+          <div className="relative min-h-[240px] overflow-hidden bg-[#0C9C78] lg:min-h-full">
             <img
               src="/particle-field.svg"
               alt=""
@@ -150,7 +150,7 @@ const ProductStory: React.FC = () => {
                 href="https://scan.botchain.ai/"
                 target="_blank"
                 rel="noreferrer"
-                className="mt-5 inline-flex w-fit items-center gap-1 rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#E62058]"
+                className="mt-5 inline-flex w-fit items-center gap-1 rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#0C9C78]"
               >
                 scan.botchain.ai
                 <ArrowUpRight className="h-4 w-4" />

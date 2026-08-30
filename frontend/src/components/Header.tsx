@@ -5,7 +5,6 @@ import { Sun, Moon } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 import { motion, AnimatePresence } from "framer-motion";
 import BalanceModal from "./BalanceModal";
-import { PITCH_DECK_URL, DEMO_VIDEO_URL } from "../data/links";
 
 const Header: React.FC = () => {
   const { open } = useAppKit();
@@ -46,28 +45,12 @@ const Header: React.FC = () => {
               Gas Provider
             </h1>
             <p className="text-xs font-medium text-secondary">
-              Built on <span className="text-[#E62058]">BOT Chain</span>
+              Built on <span className="text-[#0C9C78]">BOT Chain</span>
             </p>
           </div>
         </button>
 
         <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-          <a
-            href={DEMO_VIDEO_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="hidden rounded-full border border-theme px-3 py-2 text-xs font-semibold text-secondary hover:border-[#E62058] hover:text-[#E62058] md:inline-flex"
-          >
-            Demo video
-          </a>
-          <a
-            href={PITCH_DECK_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="hidden rounded-full border border-theme px-3 py-2 text-xs font-semibold text-secondary hover:border-[#E62058] hover:text-[#E62058] md:inline-flex"
-          >
-            Pitch deck
-          </a>
           <motion.button
             onClick={toggleTheme}
             whileHover={{ scale: 1.05 }}
@@ -84,7 +67,7 @@ const Header: React.FC = () => {
                 transition={{ duration: 0.25 }}
               >
                 {theme === "dark" ? (
-                  <Sun className="h-5 w-5 text-[#E46389]" />
+                  <Sun className="h-5 w-5 text-[#12B88D]" />
                 ) : (
                   <Moon className="h-5 w-5 text-[#24292E]" />
                 )}
@@ -93,14 +76,14 @@ const Header: React.FC = () => {
           </motion.button>
           <button
             onClick={() => setIsBalancesOpen(true)}
-            className="rounded-full border border-theme bg-theme-muted px-4 py-2.5 text-sm font-medium text-theme transition-colors hover:border-[#E62058]"
+            className="rounded-full border border-theme bg-theme-muted px-4 py-2.5 text-sm font-medium text-theme transition-colors hover:border-[#0C9C78]"
           >
             Balances
           </button>
           {isConnected && (
             <button
               onClick={handleSwitchNetwork}
-              className="rounded-full border border-theme bg-theme-muted px-4 py-2.5 text-sm font-medium text-theme transition-colors hover:border-[#E62058]"
+              className="rounded-full border border-theme bg-theme-muted px-4 py-2.5 text-sm font-medium text-theme transition-colors hover:border-[#0C9C78]"
             >
               Switch Chain
             </button>

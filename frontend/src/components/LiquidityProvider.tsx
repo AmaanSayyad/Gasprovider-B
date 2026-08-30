@@ -97,7 +97,7 @@ const LiquidityProvider: React.FC = () => {
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 className="p-4 bg-gradient-to-br from-[rgba(230,32,88,0.28)] to-[rgba(228,99,137,0.22)] rounded-2xl backdrop-blur-sm border border-[rgba(230,32,88,0.25)] shadow-lg shadow-[rgba(230,32,88,0.18)]"
               >
-                <TrendingUp className="w-6 h-6 text-[#E62058]" />
+                <TrendingUp className="w-6 h-6 text-[#0C9C78]" />
               </motion.div>
               <div>
                 <h2 className="text-2xl font-bold text-theme mb-1">Liquidity Provider</h2>
@@ -108,7 +108,7 @@ const LiquidityProvider: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowDepositModal(true)}
-              className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#E62058] to-[#E46389] text-white font-bold hover:shadow-lg hover:shadow-[rgba(230,32,88,0.35)] transition-all flex items-center gap-2"
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#0C9C78] to-[#12B88D] text-white font-bold hover:shadow-lg hover:shadow-[rgba(230,32,88,0.35)] transition-all flex items-center gap-2"
             >
               <Plus className="w-5 h-5" />
               Deposit Tokens
@@ -127,7 +127,7 @@ const LiquidityProvider: React.FC = () => {
               </div>
               <div className="bg-theme-muted rounded-xl p-4 border border-theme">
                 <div className="text-xs text-secondary mb-1">Total Earned</div>
-                <div className="text-2xl font-bold text-[#E62058] flex items-center gap-1">
+                <div className="text-2xl font-bold text-[#0C9C78] flex items-center gap-1">
                   <TrendingUp className="w-5 h-5" />
                   ${parseFloat(stats.totalEarned).toFixed(2)}
                 </div>
@@ -267,7 +267,7 @@ const LiquidityProvider: React.FC = () => {
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className="font-bold text-[#E62058]">
+                            <div className="font-bold text-[#0C9C78]">
                               +${parseFloat(deposit.totalEarned).toFixed(2)}
                             </div>
                             <div className="text-xs text-secondary">Earned</div>
@@ -294,7 +294,7 @@ const LiquidityProvider: React.FC = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setShowDepositModal(true)}
-                    className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#E62058] to-[#E46389] text-white font-semibold hover:shadow-lg hover:shadow-[rgba(230,32,88,0.3)] transition-all"
+                    className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#0C9C78] to-[#12B88D] text-white font-semibold hover:shadow-lg hover:shadow-[rgba(230,32,88,0.3)] transition-all"
                   >
                     Deposit Tokens
                   </motion.button>
@@ -320,7 +320,7 @@ const LiquidityProvider: React.FC = () => {
                       </div>
                       <div className={`px-3 py-1 rounded-full text-xs font-semibold ${
                         deposit.status === "active"
-                          ? "bg-[rgba(230,32,88,0.15)] text-[#E62058]"
+                          ? "bg-[rgba(230,32,88,0.15)] text-[#0C9C78]"
                           : deposit.status === "depleted"
                           ? "bg-orange-500/20 text-orange-400"
                           : "bg-gray-500/20 text-gray-400"
@@ -344,7 +344,7 @@ const LiquidityProvider: React.FC = () => {
                       </div>
                       <div>
                         <div className="text-xs text-secondary mb-1">Earned</div>
-                        <div className="text-lg font-bold text-[#E62058]">
+                        <div className="text-lg font-bold text-[#0C9C78]">
                           ${parseFloat(deposit.totalEarned).toFixed(2)}
                         </div>
                       </div>
