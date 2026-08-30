@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { ArrowDown } from "lucide-react";
 import { useAppKit } from "@reown/appkit/react";
 import { useAccount } from "wagmi";
-import { PITCH_DECK_URL, DEMO_VIDEO_URL } from "../data/links";
 
 const ProductHero: React.FC = () => {
   const { open } = useAppKit();
@@ -85,22 +84,6 @@ const ProductHero: React.FC = () => {
           >
             {isConnected ? "Open app" : "Connect wallet"}
           </button>
-          <a
-            href={DEMO_VIDEO_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="gp-btn-ghost inline-flex items-center gap-2 px-5 py-3 text-sm font-medium"
-          >
-            Demo video
-          </a>
-          <a
-            href={PITCH_DECK_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="gp-btn-ghost inline-flex items-center gap-2 px-5 py-3 text-sm font-medium"
-          >
-            Pitch deck
-          </a>
         </motion.div>
       </div>
     </section>

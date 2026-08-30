@@ -4,7 +4,9 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: ['class', "class"],
+  // ['class', 'class'] compiled the variant to the selector `class`, an element
+  // type that never matches, so every dark: utility was dropped.
+  darkMode: 'class',
   theme: {
   	extend: {
   		colors: {
