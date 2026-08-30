@@ -59,6 +59,7 @@ const Step3Review: React.FC = () => {
     approvalTxHash,
     needsApproval,
     isApprovalSuccess,
+    hasSufficientBalance,
   } = useDeposit({
     totalAmountUsd: depositAmount,
     selectedChains,
@@ -370,7 +371,7 @@ const Step3Review: React.FC = () => {
           <div className="flex gap-4 pt-4 border-t border-border">
             <button
               onClick={handleBack}
-              disabled={status === "dispersing"}
+              disabled={status === "dispersing" || !hasSufficientBalance}
               className="flex-1 py-3 bg-muted text-secondary rounded-xl font-bold hover:bg-border transition-all flex items-center justify-center gap-2 disabled:opacity-50"
             >
               <ChevronLeft className="w-5 h-5" />
@@ -391,6 +392,8 @@ const Step3Review: React.FC = () => {
                   : sourceChain?.viemChain?.id &&
                     chainId !== sourceChain.viemChain.id
                   ? `Please switch to ${sourceChain.name} network`
+                  : !hasSufficientBalance
+                  ? `Your wallet does not hold enough ${tokenSymbol} for this deposit`
                   : needsApproval
                   ? `Click to approve ${tokenSymbol} spending`
                   : "Click to disperse gas"
@@ -411,6 +414,8 @@ const Step3Review: React.FC = () => {
                   <Loader2 className="w-5 h-5 animate-spin" />
                   {`Approving ${tokenSymbol}...`}
                 </>
+              ) : !hasSufficientBalance ? (
+                `Not enough ${tokenSymbol}`
               ) : needsApproval ? (
                 `Approve ${tokenSymbol}`
               ) : (

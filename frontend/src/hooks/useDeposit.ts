@@ -4,7 +4,7 @@ import {
   useWaitForTransactionReceipt,
   useReadContract,
 } from "wagmi";
-import { parseUnits, maxUint256 } from "viem";
+import { formatUnits, parseUnits, maxUint256 } from "viem";
 import {
   GAS_FOUNDATION_ABI,
   getContractAddress,
@@ -35,6 +35,7 @@ interface UseDepositReturn {
   txHash: `0x${string}` | undefined;
   approvalTxHash: `0x${string}` | undefined;
   needsApproval: boolean;
+  hasSufficientBalance: boolean;
   isApprovalSuccess: boolean;
 }
 
@@ -55,6 +56,9 @@ export function useDeposit({
   // No cross-chain fallback: defaulting to Base's address on a chain that has
   // no contract there would send the deposit into a dead address.
   const contractAddress = sourceChain ? getContractAddress(sourceChain.id) : undefined;
+
+  // Shown in messages so they name the token the user is actually spending.
+  const tokenLabel = sourceChain?.id === "botchain" ? "USDT" : "USDC";
 
   // The stablecoin this chain's escrow accepts (USDT on BOT Chain).
   const usdcAddress = (
@@ -87,6 +91,19 @@ export function useDeposit({
         : undefined,
     query: {
       enabled: !!address && !!usdcAddress && !!contractAddress,
+    },
+  });
+
+  // What the wallet actually holds of the escrow token. Without this the app
+  // happily walked the user through an approval and a deposit signature for a
+  // transfer that could only revert, then showed the raw chain error.
+  const { data: tokenBalance } = useReadContract({
+    address: usdcAddress || undefined,
+    abi: ERC20_ABI,
+    functionName: "balanceOf",
+    args: address ? [address] : undefined,
+    query: {
+      enabled: !!address && !!usdcAddress,
     },
   });
 
@@ -214,6 +231,19 @@ export function useDeposit({
 
     if (chainIds.length !== chainAmounts.length) {
       const err = new Error("Chain IDs and amounts mismatch");
+      setError(err);
+      console.error("Deposit error:", err);
+      return;
+    }
+
+    // Refuse before asking for a signature: the escrow reverts on an
+    // insufficient balance, and a raw revert is not something a user can act on.
+    if (typeof tokenBalance === "bigint" && tokenBalance < totalAmount) {
+      const short = formatUnits(totalAmount - tokenBalance, USDC_DECIMALS);
+      const held = formatUnits(tokenBalance, USDC_DECIMALS);
+      const err = new Error(
+        `Not enough ${tokenLabel} to deposit. You hold ${held} and need ${short} more.`
+      );
       setError(err);
       console.error("Deposit error:", err);
       return;
@@ -359,6 +389,8 @@ export function useDeposit({
     txHash: hash,
     approvalTxHash: approvalHash,
     needsApproval: needsApproval ?? false,
+    hasSufficientBalance:
+      typeof tokenBalance === "bigint" ? tokenBalance >= totalAmount : true,
     isApprovalSuccess: isApprovalSuccess ?? false,
   };
 }
