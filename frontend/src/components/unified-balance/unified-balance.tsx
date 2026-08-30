@@ -1,6 +1,5 @@
 "use client";
-import React, { memo, useMemo, useState, useEffect, useCallback } from "react";
-import { useNexus } from "../nexus/NexusProvider";
+import React, { memo, useMemo, useState, useCallback } from "react";
 import { useAccount } from "wagmi";
 import { DollarSign, RefreshCw, Loader2 } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
@@ -10,7 +9,22 @@ import { twMerge } from "tailwind-merge";
 import { useTokenBalances } from "../../hooks/useTokenBalances";
 import { getViemChain, getChainIdFromNumeric, chains } from "../../data/chains";
 import { usePrices, getTokenUsdPrice } from "../../hooks/usePrices";
-import type { UserAsset } from "@avail-project/nexus-core";
+/** Shape this list renders. */
+type UserAsset = {
+  symbol: string;
+  balance: string;
+  balanceInFiat?: number;
+  decimals?: number;
+  icon?: string;
+  breakdown: Array<{
+    chain: { id: number; name: string; logo?: string };
+    balance: string;
+    balanceInFiat?: number;
+    contractAddress: `0x${string}`;
+    decimals: number;
+    universe?: string;
+  }>;
+};
 import ChainLogo from "../ChainLogo";
 
 export function cn(...inputs: ClassValue[]) {
@@ -26,7 +40,6 @@ function formatBalance(value: string | number, decimals = 4): string {
 }
 
 const UnifiedBalance = ({ className }: { className?: string }) => {
-  const { unifiedBalance, fetchUnifiedBalance } = useNexus();
   const { chainId, isConnected, address } = useAccount();
   const [refreshing, setRefreshing] = useState(false);
   const { prices: prices } = usePrices();
@@ -43,13 +56,12 @@ const UnifiedBalance = ({ className }: { className?: string }) => {
   const handleRefresh = useCallback(async (): Promise<void> => {
     try {
       setRefreshing(true);
-      await fetchUnifiedBalance?.();
     } catch (err) {
       console.error("Balance refresh failed:", err);
     } finally {
       setRefreshing(false);
     }
-  }, [fetchUnifiedBalance]);
+  }, []);
 
   // Build assets from live wagmi balances (always available when wallet connected)
   const wagmiAssets = useMemo((): UserAsset[] => {
@@ -95,29 +107,14 @@ const UnifiedBalance = ({ className }: { className?: string }) => {
     prices,
   ]);
 
-  const tokens = useMemo(() => {
-    const nexusPositive = (unifiedBalance ?? []).filter(
-      (token) => Number.parseFloat(String(token.balance)) > 0
-    );
-
-    // Prefer Nexus multi-chain view when it has data; otherwise show live wagmi balances
-    if (nexusPositive.length > 0) return nexusPositive;
-    return wagmiAssets;
-  }, [unifiedBalance, wagmiAssets]);
+  // Live wagmi balances for the connected chain.
+  const tokens = wagmiAssets;
 
   const totalFiat = useMemo(() => {
     if (!tokens.length) return "0.00";
     const total = tokens.reduce((acc, token) => acc + (Number(token.balanceInFiat) || 0), 0);
     return total.toFixed(2);
   }, [tokens]);
-
-  useEffect(() => {
-    if (isConnected && fetchUnifiedBalance) {
-      fetchUnifiedBalance().catch(() => {
-        /* Nexus often fails; wagmi fallback still works */
-      });
-    }
-  }, [isConnected, address, chainId, fetchUnifiedBalance]);
 
   const emptyMessage = !isConnected
     ? "Connect your wallet to see balances."

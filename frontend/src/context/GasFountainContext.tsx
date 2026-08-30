@@ -10,8 +10,7 @@ import { SOURCE_CHAINS, DESTINATION_CHAINS, DEFAULT_DESTINATION_CHAINS } from ".
 import { useAccount, useSwitchChain } from "wagmi";
 import { useTokenBalances } from "../hooks/useTokenBalances";
 import { getViemChain } from "../data/chains";
-import { useNexus } from "../components/nexus/NexusProvider";
-import { tokens, getTokenAddress } from "../data/tokens";
+import { getTokenAddress } from "../data/tokens";
 import { getTreasuryBalances } from "../utils/api";
 import {
   GasFountainContextType,
@@ -57,79 +56,19 @@ export const GasFountainProvider: React.FC<GasFountainProviderProps> = ({
   const { switchChain } = useSwitchChain();
   const sourceChainId = sourceChain?.id || "botchain";
   
-  // Try to use unified balances from Nexus SDK first, fallback to wagmi balances
-  const { unifiedBalance } = useNexus();
+  // Token balances come from wagmi reads against the source chain.
   const { balances: wagmiBalances, isLoading: wagmiLoading } = useTokenBalances(sourceChainId);
   
-  // Extract balances for the selected source chain from unified balance
+  // Token balances for the selected source chain.
   const tokenBalances = useMemo(() => {
-    // If we have unified balance, try to extract balances for the selected chain
-    if (unifiedBalance && Array.isArray(unifiedBalance) && unifiedBalance.length > 0 && sourceChain) {
-      const viemChain = getViemChain(sourceChain.id);
-      if (viemChain) {
-        const chainBalances: Token[] = tokens.map((token) => {
-          try {
-            // Find this token in unified balance
-            const unifiedToken = unifiedBalance.find((ut: any) => 
-              ut.symbol?.toUpperCase() === token.symbol.toUpperCase()
-            );
-            
-            if (unifiedToken && unifiedToken.breakdown && Array.isArray(unifiedToken.breakdown)) {
-              // Find the balance for this specific chain
-              const chainBalance = unifiedToken.breakdown.find((bd: any) => {
-                const chainIdMatch = bd.chain?.id === viemChain.id;
-                const chainNameMatch = bd.chain?.name?.toLowerCase() === sourceChain.name.toLowerCase();
-                // Also check numeric chain ID as string
-                const chainIdStringMatch = String(bd.chain?.id) === String(viemChain.id);
-                return chainIdMatch || chainNameMatch || chainIdStringMatch;
-              });
-              
-              if (chainBalance && chainBalance.balance) {
-                const balanceValue = typeof chainBalance.balance === 'string' 
-                  ? parseFloat(chainBalance.balance) 
-                  : (typeof chainBalance.balance === 'number' ? chainBalance.balance : 0);
-                
-                return {
-                  ...token,
-                  balance: balanceValue || 0,
-                  address: getTokenAddress(sourceChain.id, token.symbol) || null,
-                  isLoading: false,
-                };
-              }
-            }
-          } catch (error) {
-            console.warn(`Error extracting balance for token ${token.symbol}:`, error);
-          }
-          
-          // Fallback to wagmi balance if not found in unified balance
-          const wagmiToken = wagmiBalances.find((wt) => wt.symbol === token.symbol);
-          
-          const tokenAddress = getTokenAddress(sourceChain.id, token.symbol);
-          const shouldInclude = token.isNative || tokenAddress !== null;
-          
-          if (wagmiToken) {
-            return wagmiToken;
-          }
-          
-          if (!shouldInclude) {
-            return null as any;
-          }
-          
-          return { ...token, balance: 0, address: tokenAddress || null, isLoading: false };
-        }).filter((t: Token | null): t is Token => t !== null);
-        
-        return chainBalances;
-      }
-    }
-    
-    // Fallback to wagmi balances if unified balance not available
+    // Balances come from wagmi reads against the source chain.
     const filteredWagmiBalances = (wagmiBalances || []).filter((token: Token) => {
       const tokenAddress = getTokenAddress(sourceChain?.id || '', token.symbol);
       return token.isNative || tokenAddress !== null;
     });
     
     return filteredWagmiBalances;
-  }, [unifiedBalance, sourceChain, wagmiBalances]);
+  }, [sourceChain, wagmiBalances]);
   
   const balancesLoading = wagmiLoading;
 
@@ -199,7 +138,7 @@ export const GasFountainProvider: React.FC<GasFountainProviderProps> = ({
     }
   }, [sourceChain]);
 
-  // Keep selected token balance in sync when wagmi/Nexus balances refresh
+  // Keep the selected token balance in sync when wagmi balances refresh
   useEffect(() => {
     if (!sourceToken || tokenBalances.length === 0) return;
     const updated = tokenBalances.find(

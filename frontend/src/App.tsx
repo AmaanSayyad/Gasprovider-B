@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { GasFountainProvider, useGasFountain, ThemeProvider } from "./context";
 import Layout from "./components/Layout";
 import Header from "./components/Header";
@@ -16,33 +16,13 @@ import VoiceCommands from "./components/VoiceCommands";
 import ReferralBanner from "./components/ReferralBanner";
 import GasPools from "./components/GasPools";
 import LiquidityProvider from "./components/LiquidityProvider";
-import NexusProvider, { useNexus } from "./components/nexus/NexusProvider";
-import { useAccount } from "wagmi";
-import { EthereumProvider } from "@avail-project/nexus-core";
 import { WalletProvider } from "./providers/WalletProvider";
 import { WagmiProvider } from "wagmi";
 import { appKitWagmiConfig } from "./config/wagmi";
 const MainContent: React.FC = () => {
-  const { handleInit, fetchUnifiedBalance } = useNexus();
   const { currentStep } = useGasFountain();
-  const { connector, address } = useAccount();
   const [activeTab, setActiveTab] = useState<"activity" | "schedules" | "calendar" | "referrals" | "gamification" | "voice" | "pools" | "liquidity">("activity");
 
-  useEffect(() => {
-    const init = async () => {
-      if (!connector || !address) return;
-      try {
-        const provider = (await connector.getProvider()) as EthereumProvider;
-        if (provider) {
-          await handleInit(provider);
-          await fetchUnifiedBalance();
-        }
-      } catch (error) {
-        console.error("Failed to initialize Nexus:", error);
-      }
-    };
-    init();
-  }, [connector, address]); // Only depend on connector and address, not the functions
 
   return (
     <div className="space-y-8 pb-16">
@@ -171,7 +151,6 @@ const App: React.FC = () => {
     <ThemeProvider>
       <WalletProvider>
       <WagmiProvider config={appKitWagmiConfig}>
-          <NexusProvider>
         <GasFountainProvider>
             <Header />
             <Layout>
@@ -180,7 +159,6 @@ const App: React.FC = () => {
               <MainContent />
             </Layout>
             </GasFountainProvider>
-          </NexusProvider>
       </WagmiProvider>
       </WalletProvider>
     </ThemeProvider>

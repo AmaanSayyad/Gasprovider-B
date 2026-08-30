@@ -3,7 +3,6 @@ import { createPortal } from "react-dom";
 import { X, Wallet } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import UnifiedBalance from "./unified-balance/unified-balance";
-import { useNexus } from "./nexus/NexusProvider";
 
 interface BalanceModalProps {
   isOpen: boolean;
@@ -11,18 +10,7 @@ interface BalanceModalProps {
 }
 
 const BalanceModal: React.FC<BalanceModalProps> = ({ isOpen, onClose }) => {
-  const { fetchUnifiedBalance } = useNexus();
 
-  useEffect(() => {
-    if (isOpen && fetchUnifiedBalance) {
-      const timeoutId = setTimeout(() => {
-        fetchUnifiedBalance().catch((error) => {
-          console.error("Error refreshing balances when opening modal:", error);
-        });
-      }, 100);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isOpen, fetchUnifiedBalance]);
 
   useEffect(() => {
     if (!isOpen) return;
