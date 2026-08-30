@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useGasFountain } from "../context/GasFountainContext";
 import VisualizationCanvas from "./VisualizationCanvas";
 import { ChevronLeft, Loader2, AlertCircle } from "lucide-react";
@@ -65,6 +65,29 @@ const Step3Review: React.FC = () => {
     transactionCounts,
     sourceChain,
   });
+
+  // Approving and depositing are two transactions, but one button press. The
+  // click fires the approval, which flips status to "dispersing" and disables
+  // the button; when the approval confirms nothing continued the flow, so the
+  // UI sat on "Processing..." forever with the allowance already granted.
+  const autoDepositedFor = useRef<string | undefined>(undefined);
+  useEffect(() => {
+    if (!isApprovalSuccess || !approvalTxHash) return;
+    if (needsApproval) return; // allowance has not landed yet
+    if (depositTxHash || isPending || isLoading) return;
+    if (autoDepositedFor.current === approvalTxHash) return;
+
+    autoDepositedFor.current = approvalTxHash;
+    deposit();
+  }, [
+    isApprovalSuccess,
+    approvalTxHash,
+    needsApproval,
+    depositTxHash,
+    isPending,
+    isLoading,
+    deposit,
+  ]);
 
   // Update status based on deposit hook state
   useEffect(() => {
@@ -174,6 +197,11 @@ const Step3Review: React.FC = () => {
     } else if (isError) {
       setStatus("error");
       console.error("Deposit error:", error);
+    } else if (!depositTxHash && !approvalTxHash) {
+      // Nothing in flight, and no approval was even sent — there is no run to
+      // stay busy for. Between a confirmed approval and its deposit the button
+      // deliberately stays disabled so the pair cannot be fired twice.
+      setStatus("idle");
     }
   }, [
     isLoading,
