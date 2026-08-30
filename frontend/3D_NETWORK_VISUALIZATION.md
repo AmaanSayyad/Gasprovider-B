@@ -1,6 +1,6 @@
 # 3D Network Graph Visualization - Visual Design
 
-> **Flare Summer Signal · Track 1** — Pay FXRP/C2FLR on Coston2 → native gas on destination chains (FTSO + FDC + treasuries).
+> **BOT Chain** — Pay USDT on BOT Chain → native gas on destination chains (GasStation escrow + pre-funded treasuries).
 
 
 ## Overview
@@ -21,7 +21,7 @@ A stunning 3D visualization that shows gas flow between chains in an immersive, 
 
 ### Key Visual Elements
 
-#### 1. **Source Chain (Center)**
+#### 1. **Source Chain (Center) — BOT Chain**
 - **Position**: Center of the 3D space (0, 0, 0)
 - **Appearance**: 
   - Large glowing sphere (24px radius)

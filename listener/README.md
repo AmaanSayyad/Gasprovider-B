@@ -1,36 +1,34 @@
-## GasProvider Deposited Event Listener
+# Gas Provider deposit listener
 
-> **Flare Summer Signal · Track 1** — Pay FXRP/C2FLR on Coston2 → native gas on destination chains (FTSO + FDC + treasuries).
+Indexes `Deposited` events from the **GasStation** escrow on **BOT Chain** and forwards them to the backend.
 
+Event: `Deposited(address indexed user, uint256 totalAmount, uint256[] chainIds, uint256[] chainAmounts)`
 
-Listens to `Deposited(address indexed user, uint256 totalAmount, uint256[] chainIds, uint256[] chainAmounts)` events from `0xEfE0B3eFB879891D16145B93f21369ddE8FAaA15` on Base and logs the details.
+Default escrow (mainnet 677): `0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c`  
+Explorer: https://scan.botchain.ai/address/0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c
 
 ### Setup
-
-- Copy `env.example` to `.env` and set your Base RPC URL.
-  - Example (Alchemy): `https://base-mainnet.g.alchemy.com/v2/YOUR_KEY`
-  - Example (Infura): `https://base-mainnet.infura.io/v3/YOUR_KEY`
 
 ```bash
 cd listener
 cp env.example .env
+# BOTCHAIN_RPC_URL=https://rpc.botchain.ai
+# CONTRACT_ADDRESS_677=0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c
+# BACKEND_URL=http://localhost:3000/event
+# Optional: BOTCHAIN_WS_URL=
 npm i
 ```
 
 ### Run
 
-- One-off:
-
 ```bash
 npx --yes tsx src/index.ts
-```
-
-- Or via npm script:
-
-```bash
+# or
 npm run start
 ```
 
 ### Notes
 
-- Uses an HTTP JSON-RPC provider with polling. You can tweak `POLLING_INTERVAL_MS` in `.env`. A WebSocket URL is not required.
+- HTTP JSON-RPC polling is the default (`POLLING_INTERVAL_MS`, default 4000).
+- Set `BOTCHAIN_WS_URL` when the node supports WebSockets — preferred over `eth_newFilter`.
+- After `BOTCHAIN_NETWORK=testnet node scripts/deploy-botchain.mjs` in `contracts/`, point `CONTRACT_ADDRESS_677` (or the 968 equivalent) at the new GasStation.

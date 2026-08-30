@@ -1,13 +1,13 @@
 # Bridge-Based Architecture vs  fallback Treasury Approach
 
-> **Flare Summer Signal · Track 1** — Pay FXRP/C2FLR on Coston2 → native gas on destination chains (FTSO + FDC + treasuries).
+> **BOT Chain** — Pay USDT on BOT Chain → native gas on destination chains (GasStation escrow + pre-funded treasuries).
 
 
 ## Architecture: FallBack Treasury-Based (No Bridges)
 
 ### How It Works Now:
 ```
-User deposits USDC on Base
+User deposits USDT on BOT Chain
     ↓
 Backend calculates gas amounts
     ↓
@@ -44,9 +44,9 @@ If you used bridges, here's how it would work:
 ```typescript
 // Example: How it would work with LayerZero
 
-// 1. User deposits USDC on Base
+// 1. User deposits USDT on BOT Chain
 // 2. Backend would need to:
-//    - Lock/burn USDC on Base
+//    - Lock/burn USDT on BOT Chain
 //    - Send cross-chain message via LayerZero
 //    - Wait for message to be delivered to destination chains
 //    - Mint/release native tokens on destination chains
@@ -158,7 +158,7 @@ class StargateBridgeService {
 ```
 ┌─────────────┐
 │ User Deposit│
-│  (Base)     │
+│ (BOT Chain) │
 └──────┬──────┘
        │
        ▼
@@ -168,7 +168,7 @@ class StargateBridgeService {
 └──────┬──────────┘
        │
        ├──► Treasury on Base ──► User gets ETH on Base
-       ├──► Treasury on OP ────► User gets OP on Optimism  
+       ├──► Treasury on OP ────► User gets ETH on Optimism
        ├──► Treasury on Polygon─► User gets MATIC on Polygon
        └──► Treasury on Arbitrum► User gets ETH on Arbitrum
 
@@ -181,7 +181,7 @@ class StargateBridgeService {
 ```
 ┌─────────────┐
 │ User Deposit│
-│  (Base)     │
+│ (BOT Chain) │
 └──────┬──────┘
        │
        ▼
@@ -190,7 +190,7 @@ class StargateBridgeService {
 │  (Calculates)   │
 └──────┬──────────┘
        │
-       ├──► Lock USDC on Base
+       ├──► Lock USDT on BOT Chain
        │
        ├──► LayerZero Message ──► Wait 5-30 min ──► Release on Base
        ├──► LayerZero Message ──► Wait 5-30 min ──► Release on OP

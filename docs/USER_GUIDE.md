@@ -1,10 +1,12 @@
 # Gas Provider User Guide
 
-> **Flare Summer Signal · Track 1** — Pay FXRP/C2FLR on Coston2 → native gas on destination chains (FTSO + FDC + treasuries).
+> **BOT Chain** — Pay USDT on BOT Chain → native gas on destination chains (GasStation escrow + pre-funded treasuries).
 
-**Live app:** https://gas-provider.vercel.app  
-**Demo video:** https://youtu.be/XTCR6daMmE0  
-**Pitch deck:** https://docs.google.com/presentation/d/1dcDHlryNzrDfVudiqPB-xnrNiIX9w971PFaoAP4Jztk/edit?usp=sharing
+**Live app:** https://gasprovider-botchain.vercel.app  
+**GitHub:** https://github.com/AmaanSayyad/Gasprovider-B  
+**Pitch deck:** [Google Slides](https://docs.google.com/presentation/d/1mmxMZ9Qfk29cvl5lYj2tROQIoB11mhDirAgToFWXZeg/edit?usp=sharing)  
+**Explorer:** https://scan.botchain.ai  
+**RPC:** https://rpc.botchain.ai
 
 
 ## Welcome to Gas Provider! 🚀
@@ -36,13 +38,13 @@ Gas Provider is a multi-chain gas distribution platform that allows you to depos
 
 ### Step 1: Connect Your Wallet
 
-1. Visit the Gas Fountain website
+1. Visit [gasprovider-botchain.vercel.app](https://gasprovider-botchain.vercel.app)
 2. Click **"Connect Wallet"** in the top right corner
 3. Select your wallet provider (MetaMask, WalletConnect, etc.)
 4. Approve the connection request in your wallet
-5. Your wallet address will appear in the top right
+5. Switch the wallet to **BOT Chain** (chain ID 677, RPC `https://rpc.botchain.ai`)
 
-**Tip**: Make sure you're connected to a supported testnet!
+**Tip**: Add BOT Chain in MetaMask if it is not listed: RPC `https://rpc.botchain.ai`, explorer `https://scan.botchain.ai`, native symbol `BOT`.
 
 ---
 
@@ -58,20 +60,18 @@ The deposit process has 4 simple steps:
 
 ### Step 1: Select Source Chain and Token
 
-1. **Choose Source Chain**: Click the source chain dropdown and select any supported chain
-   - Note: In the demo system, all deposits are processed through the Treasury system regardless of which chain you select
+1. **Source chain**: BOT Chain is the only source. Deposits go into the GasStation escrow.
 
-2. **Select Token**: Click the token dropdown and choose your deposit token
-   - Supported tokens: USDC, USDT, FLR, WFLR
+2. **Select token**: **USDT** on BOT Chain (6 decimals).
 
-3. **Enter Amount**: Type the amount you want to deposit
-   - Minimum: 1 USDC (or equivalent)
-   - Maximum: Based on your wallet balance
+3. **Enter amount**: Type the USDT amount to deposit
+   - Minimum: 1 USDT (or equivalent USD gas budget)
+   - Maximum: Your wallet balance and destination treasury liquidity
 
 **Example**:
 ```
-Source Chain: Ethereum Sepolia
-Token: USDC
+Source Chain: BOT Chain (677)
+Token: USDT
 Amount: 100
 ```
 
@@ -103,7 +103,7 @@ The platform will show you:
 
 **Example**:
 ```
-Deposit: 100 USDC ($100)
+Deposit: 100 USDT ($100)
 
 You will receive:
 - Ethereum Sepolia: 0.025 ETH ($50)
@@ -181,7 +181,7 @@ Each entry shows:
 
 **Example Entry**:
 ```
-Deposited 100 USDC on Ethereum Sepolia
+Deposited 100 USDT on BOT Chain
 Distributed to 3 chains
 Status: Completed ✓
 ```
@@ -199,9 +199,10 @@ Status: Completed ✓
 
 ### Supported Chains
 
-| Chain | Chain ID | Native Token | Faucet |
+| Chain | Chain ID | Native Token | Notes |
 |-------|----------|--------------|--------|
-| Flare Coston2 | 114 | C2FLR | [Get C2FLR](https://faucet.flare.network/) |
+| **BOT Chain** (source) | 677 | BOT | [scan.botchain.ai](https://scan.botchain.ai) · RPC `https://rpc.botchain.ai` |
+| BOT Chain Testnet | 968 | BOT | [scan.bohr.life](https://scan.bohr.life) · pre-deploy only |
 | Ethereum Sepolia | 11155111 | ETH | [Get ETH](https://sepoliafaucet.com/) |
 | Polygon Amoy | 80002 | MATIC | [Get MATIC](https://faucet.polygon.technology/) |
 | Arbitrum Sepolia | 421614 | ETH | [Get ETH](https://faucet.quicknode.com/arbitrum/sepolia) |
@@ -217,10 +218,8 @@ Status: Completed ✓
 
 | Token | Symbol | Decimals | Description |
 |-------|--------|----------|-------------|
-| USD Coin | USDC | 6 | Stablecoin pegged to USD |
-| Tether | USDT | 6 | Stablecoin pegged to USD |
-| Flare | FLR | 18 | Native Flare token |
-| Wrapped Flare | WFLR | 18 | Wrapped FLR token |
+| Tether (BOT Chain) | USDT | 6 | Deposit asset on the source chain |
+| Native gas | ETH, MATIC, AVAX, … | 18 | Paid out from destination treasuries |
 
 ---
 
@@ -228,21 +227,20 @@ Status: Completed ✓
 
 ### The Treasury System
 
-Gas Fountain uses a simplified Treasury-based architecture:
+Gas Provider uses a BOT Chain escrow plus destination treasuries:
 
-1. **Deposit**: You deposit tokens (appears to be on any chain)
-2. **Routing**: Backend routes your request to the Treasury system
-3. **Calculation**: System calculates gas amounts using exchange rates
-4. **Distribution**: Treasury contracts on each chain send you native gas
-5. **Confirmation**: You receive real blockchain transactions
+1. **Deposit**: You deposit USDT into GasStation on BOT Chain
+2. **Index**: The listener forwards the `Deposited` event to the backend
+3. **Calculation**: The API turns your USD budgets into native amounts
+4. **Distribution**: Treasury contracts on each destination send you native gas
+5. **Confirmation**: You receive real blockchain transactions you can open on explorers
 
 ### Exchange Rates
 
 The demo system uses hardcoded exchange rates:
 
-- **USDC/USDT**: $1.00
-- **FLR/WFLR**: $0.02
-- **ETH**: $2,000
+- **USDT**: $1.00
+- **ETH**: $2,450
 - **BNB**: $300
 - **MATIC**: $0.80
 - **AVAX**: $25
@@ -252,7 +250,7 @@ The demo system uses hardcoded exchange rates:
 ### Transaction Flow
 
 ```
-1. User deposits 100 USDC
+1. User deposits 100 USDT on BOT Chain
    ↓
 2. System calculates: $100 USD value
    ↓
@@ -315,7 +313,7 @@ The demo system uses hardcoded exchange rates:
 1. Open your wallet
 2. Click the network dropdown
 3. Select the correct testnet
-4. Refresh the Gas Fountain page
+4. Refresh the Gas Provider page and switch to BOT Chain (677)
 
 ---
 
@@ -350,7 +348,7 @@ The demo system uses hardcoded exchange rates:
 ### General Questions
 
 **Q: Is this real money?**
-A: No, this is a testnet demo using test tokens with no real value.
+A: Deposits use **USDT on BOT Chain**. Destination gas is typically testnet native tokens from pre-funded treasuries. Treat mainnet USDT as real value.
 
 **Q: How long do transactions take?**
 A: Typically 1-5 minutes depending on network congestion.
@@ -362,7 +360,7 @@ A: No, once confirmed on the blockchain, transactions cannot be cancelled.
 A: The demo system has no fees. You only pay gas for the initial deposit transaction.
 
 **Q: Is there a minimum deposit?**
-A: Yes, minimum is 1 USDC or equivalent.
+A: Yes, minimum is 1 USDT or equivalent.
 
 **Q: Is there a maximum deposit?**
 A: Limited by Treasury liquidity. Check Treasury balances before large deposits.
@@ -375,10 +373,10 @@ A: Limited by Treasury liquidity. Check Treasury balances before large deposits.
 A: MetaMask, WalletConnect, Coinbase Wallet, and most Web3 wallets.
 
 **Q: Can I use mainnet?**
-A: Not yet. This is a testnet demo. Mainnet support coming soon.
+A: Deposits settle on **BOT Chain mainnet (677)**. Destination payouts are still on testnets unless a treasury is funded on mainnet.
 
 **Q: How are exchange rates determined?**
-A: Currently using hardcoded rates. Production will use Flare FTSO oracles.
+A: Quotes use `backend/src/config/exchangeRates.json` (USDT at $1, destination native prices).
 
 **Q: Are transactions really onchain?**
 A: Yes! All distributions are real blockchain transactions you can verify.
@@ -419,9 +417,9 @@ A: Check the troubleshooting section or join our Discord community.
 
 ### Security Tips
 
-1. **Never Share Private Keys**: Gas Fountain never asks for your private key
+1. **Never Share Private Keys**: Gas Provider never asks for your private key
 2. **Verify URLs**: Always check you're on the correct website
-3. **Use Test Tokens Only**: This is a demo, don't send real assets
+3. **Review the network**: Deposits on BOT Chain mainnet spend real USDT
 4. **Keep Wallet Updated**: Use the latest version of your wallet
 5. **Review Transactions**: Always review before confirming
 
@@ -442,11 +440,10 @@ Please have ready:
 
 ### Upcoming Features
 
-- Live oracle price feeds (FTSO integration)
-- More supported chains
-- Additional tokens (FAssets)
-- Mainnet deployment
-- Mobile app
+- Live oracle price feeds
+- More funded destination chains
+- Additional deposit tokens on BOT Chain
+- Mobile-friendly wallet flow
 - Advanced allocation strategies
 
 

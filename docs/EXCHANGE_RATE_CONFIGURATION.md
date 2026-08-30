@@ -1,6 +1,6 @@
 # Exchange Rate Configuration
 
-> **Flare Summer Signal · Track 1** — Pay FXRP/C2FLR on Coston2 → native gas on destination chains (FTSO + FDC + treasuries).
+> **BOT Chain** — Pay USDT on BOT Chain → native gas on destination chains (GasStation escrow + pre-funded treasuries).
 
 
 ## Overview
@@ -23,9 +23,7 @@ Token rates define the USD value of supported deposit tokens:
 {
   "tokens": {
     "USDC": 1.0,
-    "USDT": 1.0,
-    "FLR": 0.02,
-    "WFLR": 0.02
+    "USDT": 1.0
   }
 }
 ```
@@ -41,11 +39,11 @@ Chain rates define the USD value of native tokens on each supported blockchain:
 ```json
 {
   "chains": {
-    "114": {
-      "chainId": 114,
-      "name": "Coston2",
-      "nativeSymbol": "C2FLR",
-      "usdPrice": 0.02
+    "677": {
+      "chainId": 677,
+      "name": "BOT Chain",
+      "nativeSymbol": "BOT",
+      "usdPrice": 1
     }
   }
 }
@@ -70,9 +68,7 @@ Here's the complete `exchangeRates.json` structure:
   "lastUpdated": "2024-12-06T00:00:00Z",
   "tokens": {
     "USDC": 1.0,
-    "USDT": 1.0,
-    "FLR": 0.02,
-    "WFLR": 0.02
+    "USDT": 1.0
   },
   "chains": {
     "1": {
@@ -111,17 +107,11 @@ Here's the complete `exchangeRates.json` structure:
       "nativeSymbol": "ETH",
       "usdPrice": 2000
     },
-    "14": {
-      "chainId": 14,
-      "name": "Flare",
-      "nativeSymbol": "FLR",
-      "usdPrice": 0.02
-    },
-    "114": {
-      "chainId": 114,
-      "name": "Coston2",
-      "nativeSymbol": "C2FLR",
-      "usdPrice": 0.02
+    "677": {
+      "chainId": 677,
+      "name": "BOT Chain",
+      "nativeSymbol": "BOT",
+      "usdPrice": 1
     }
   }
 }
@@ -238,7 +228,7 @@ const usdPerChain = 100 * 0.5; // 50 USD per chain
      "tokens": {
        "USDC": 1.0,
        "USDT": 1.0,
-       "FLR": 0.025  // Updated from 0.02
+       "USDT": 1.0
      }
    }
    ```
@@ -288,8 +278,6 @@ To add support for a new token:
      "tokens": {
        "USDC": 1.0,
        "USDT": 1.0,
-       "FLR": 0.02,
-       "WFLR": 0.02,
        "DAI": 1.0  // New token
      }
    }
@@ -359,7 +347,7 @@ To add support for a new blockchain:
 ### 1. Regular Updates
 
 - Update rates at least weekly for demo purposes
-- For production, integrate with live oracle feeds (FTSO, Chainlink, etc.)
+- For production, integrate with live oracle feeds (Chainlink or a BOT Chain price feed)
 
 ### 2. Version Control
 
@@ -454,11 +442,8 @@ When transitioning from hardcoded rates to live oracle feeds:
 
 1. **Implement Oracle Integration**:
    ```typescript
-   // Use FTSO on Flare
-   import { FtsoService } from './services/ftso';
-   
-   const ftso = new FtsoService();
-   const ethPrice = await ftso.getPrice('ETH/USD');
+   // Fetch ETH/USD from a live feed; fall back to exchangeRates.json
+   const ethPrice = await oracle.getPrice('ETH/USD');
    ```
 
 2. **Add Fallback Logic**:
@@ -476,7 +461,7 @@ When transitioning from hardcoded rates to live oracle feeds:
    ```json
    {
      "useOracle": true,
-     "oracleProvider": "FTSO",
+     "oracleProvider": "live",
      "fallbackRates": { /* hardcoded rates */ }
    }
    ```

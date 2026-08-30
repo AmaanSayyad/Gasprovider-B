@@ -1,155 +1,72 @@
-# Smart Contracts Audit - Gas Provider
+# Smart contracts — Gas Provider on BOT Chain
 
-> **Flare Summer Signal · Track 1** — Pay FXRP/C2FLR on Coston2 → native gas on destination chains (FTSO + FDC + treasuries).
+> **BOT Chain** — Pay USDT on BOT Chain → native gas on destination chains (GasStation escrow + pre-funded treasuries).
 
+## Contracts in this repo
 
-## ✅ Contracts Present in Codebase
+### 1. GasStation (`GasProvider.sol`)
 
-### 1. **GasProvider.sol** (Main Contract) ⭐
-**Location**: `contracts/src/GasProvider.sol`
+**Location:** `contracts/src/GasProvider.sol`  
+**Role:** Source-chain escrow on BOT Chain. Users deposit USDT with per-destination allocations. The listener indexes `Deposited`.
 
-**Purpose**: Main deposit and gas distribution contract
+**Features:**
+- USDT deposit + on-chain chain split
+- Owner `drip()` (USDT → native via a Uniswap-style router) — unused in production; BOT Chain has no DEX, so deploy uses mocks
+- Owner-controlled token management
 
-**Features**:
-- ✅ USDC/USDT deposit handling
-- ✅ FAsset deposit support (BTC, XRP, DOGE, LTC)
-- ✅ FTSO price feed integration (`dripWithFTSO`)
-- ✅ FDC attestation verification (`verifyDepositWithFDC`)
-- ✅ Uniswap V3 swap integration
-- ✅ WETH unwrapping
-- ✅ Owner-controlled drip function
-- ✅ FAsset management (add/remove supported FAssets)
-
-**Status**: ✅ Complete and functional
+**Deploys:**
+- Mainnet 677: `0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c` — [scan.botchain.ai](https://scan.botchain.ai/address/0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c)
+- Testnet 968: `0xE329210534a500Fa7AC6DA1C15Ae73132836E35d` — [scan.bohr.life](https://scan.bohr.life/address/0xE329210534a500Fa7AC6DA1C15Ae73132836E35d)
 
 ---
 
-### 2. **Treasury.sol** (Fallback Treasury) ⭐
-**Location**: `contracts/src/Treasury.sol`
+### 2. Treasury / DestinationTreasury
 
-**Purpose**: Pre-funded treasury contracts on each destination chain for instant gas distribution
+**Location:** `contracts/src/Treasury.sol`, `contracts/src/DestinationTreasury.sol`  
+**Role:** Pre-funded payouts on destination chains (OP Sepolia, Base Sepolia, …).
 
-**Features**:
-- ✅ Native token deposits
-- ✅ ERC20 token deposits
-- ✅ Single recipient distribution
-- ✅ Batch distribution (multiple recipients)
-- ✅ Token withdrawal (owner only)
-- ✅ Balance queries
+**Features:**
+- Native + ERC20 deposits
+- Single and batch `distribute`
+- Owner withdraw + balance queries
 
-**Status**: ✅ Complete and functional
+Default demo treasury: `0x5b402676535a3ba75c851c14e1e249a4257d2265`  
+Full list: [docs/TREASURY_ADDRESSES.md](docs/TREASURY_ADDRESSES.md)
 
 ---
 
-### 3. **Mock Contracts** (Testing)
-**Location**: `contracts/src/mocks/`
+### 3. SmartAccount + SmartAccountFactory
 
-- ✅ **MockERC20.sol** - ERC20 token for testing
-- ✅ **MockSwapRouter.sol** - Uniswap router mock for testing
-- ✅ **MockWETH.sol** - Wrapped ETH mock for testing
-
-**Status**: ✅ Complete for testing purposes
+**Location:** `contracts/src/SmartAccount.sol`, `contracts/src/SmartAccountFactory.sol`  
+**Role:** Optional ERC-4337-style accounts for gasless flows on BOT Chain.
 
 ---
 
-### 4. **SmartAccount.sol** (Smart Account Implementation) ⭐
-**Location**: `contracts/src/SmartAccount.sol`
+### 4. Mocks
 
-**Purpose**: ERC-4337 compatible Smart Account for gasless transactions
+**Location:** `contracts/src/mocks/`
 
-**Features**:
-- ✅ Deterministic address generation (CREATE2)
-- ✅ EIP-712 signature verification
-- ✅ Single transaction execution (`execute`)
-- ✅ Batch transaction execution (`executeBatch`)
-- ✅ Nonce management for replay protection
-- ✅ Owner-based authorization
-- ✅ Event emissions for tracking
-
-**Status**: ✅ Complete and functional
+- `MockERC20.sol`
+- `MockWETH.sol` / `MockSwapRouter.sol` — required by the GasStation constructor; BOT Chain has no live DEX
 
 ---
 
-### 5. **SmartAccountFactory.sol** (Smart Account Factory) ⭐
-**Location**: `contracts/src/SmartAccountFactory.sol`
+## External tokens (not in this repo)
 
-**Purpose**: Factory contract for deploying Smart Accounts
-
-**Features**:
-- ✅ CREATE2 deployment for deterministic addresses
-- ✅ `getSmartAccount(address)` - Get deployed Smart Account
-- ✅ `deployAccount(address)` - Deploy new Smart Account
-- ✅ `predictSmartAccountAddress(address)` - Predict address before deployment
-- ✅ Batch deployment support
-- ✅ `SmartAccountDeployed` event
-
-**Status**: ✅ Complete and functional
+| Asset | Chain | Address |
+|-------|-------|---------|
+| USDT (6 decimals) | BOT Chain 677 | `0xababc7ddc03e501d190c676bf3d92ef0e6e87a3c` |
+| USDT | BOT Chain 968 | `0x75edC9335175Fc0552D51D48439F229c10420fe3` |
 
 ---
 
-## 🔗 External Contracts (Not in Codebase)
+## Summary
 
-These are Flare Network's official contracts that are used but not included in this repository:
+| Contract | Status | Notes |
+|----------|--------|-------|
+| GasStation | Deployed on BOT Chain | Source escrow |
+| Treasury / DestinationTreasury | Deployed on dest testnets | Native gas out |
+| SmartAccount + Factory | In repo | Optional gasless path |
+| Mocks | In repo | Constructor + tests |
 
-### 1. **FTSO Contracts** (Flare Time Series Oracle)
-- **FtsoV2**: `0x3d893C53D9e8056135C26C8c638B76C8b60Df726` (Coston2)
-- **FastUpdater**: `0x58fb598EC6DB6901aA6F26a9A2087E9274128E59` (Coston2)
-- **FastUpdatesConfiguration**: `0xE7d1D5D58cAE01a82b84989A931999Cb34A86B14` (Coston2)
-
-**Status**: ✅ External contracts, no implementation needed
-
----
-
-### 2. **FDC Contracts** (Flare Data Connector)
-- **FDC Verification**: `0x0c13aDA1C7143Cf0a0795FFaB93eEBb6FAD6e4e3` (Coston2)
-- **State Connector**: `0x0c13aDA1C7143Cf0a0795FFaB93eEBb6FAD6e4e3` (Coston2)
-
-**Status**: ✅ External contracts, no implementation needed
-
----
-
-### 3. **FAsset Contracts** (Asset Manager)
-- Asset Manager contracts for BTC, XRP, DOGE, LTC
-- These are Flare's official FAsset contracts
-
-**Status**: ✅ External contracts, no implementation needed
-**Note**: Backend service (`fassets.ts`) interfaces with these contracts but doesn't implement them
-
----
-
-## 📊 Summary
-
-| Contract | Status | Priority | Notes |
-|----------|--------|----------|-------|
-| GasProvider.sol | ✅ Complete | High | Main contract, fully functional |
-| Treasury.sol | ✅ Complete | High | Fallback system, fully functional |
-| SmartAccount.sol | ✅ Complete | **CRITICAL** | Smart Account implementation |
-| SmartAccountFactory.sol | ✅ Complete | **CRITICAL** | Factory for deploying Smart Accounts |
-| Mock Contracts | ✅ Complete | Low | Testing only |
-
----
-
-## ✅ All Required Contracts Complete
-
-All critical contracts have been implemented:
-1. ✅ **GasProvider.sol** - Main deposit and distribution contract
-2. ✅ **Treasury.sol** - Fallback treasury system
-3. ✅ **SmartAccount.sol** - Smart Account implementation (ERC-4337 compatible)
-4. ✅ **SmartAccountFactory.sol** - Factory for deploying Smart Accounts
-5. ✅ **Mock Contracts** - Testing utilities
-
----
-
-## 📝 Next Steps
-
-1. **Deployment**: Deploy Smart Account Factory and Smart Account contracts to all supported chains
-2. **Configuration**: Update backend environment variables with deployed contract addresses
-3. **Testing**: Add integration tests for Smart Account functionality
-4. **Documentation**: Update deployment guides with Smart Account contract addresses
-
----
-
-**Last Updated**: Based on codebase analysis
-**Contracts Directory**: `contracts/src/`
-**Deployment Scripts**: `contracts/scripts/`
-
+See [contracts/DEPLOYED_ADDRESSES.md](contracts/DEPLOYED_ADDRESSES.md) and [contracts/README.md](contracts/README.md).

@@ -1,60 +1,43 @@
-# Sample Hardhat 3 Beta Project (`node:test` and `viem`)
+# Contracts — Gas Provider on BOT Chain
 
-> **Flare Summer Signal · Track 1** — Pay FXRP/C2FLR on Coston2 → native gas on destination chains (FTSO + FDC + treasuries).
+Hardhat project for the **GasStation** escrow on BOT Chain and **Treasury** contracts on destination chains.
 
+Users deposit **USDT** into GasStation on BOT Chain (677 / 968). The listener indexes `Deposited`; destination treasuries send native gas. Nothing on the source chain calls `drip()` in production.
 
-This project showcases a Hardhat 3 Beta project using the native Node.js test runner (`node:test`) and the `viem` library for Ethereum interactions.
+## Networks
 
-To learn more about the Hardhat 3 Beta, please visit the [Getting Started guide](https://hardhat.org/docs/getting-started#getting-started-with-hardhat-3). To share your feedback, join our [Hardhat 3 Beta](https://hardhat.org/hardhat3-beta-telegram-group) Telegram group or [open an issue](https://github.com/NomicFoundation/hardhat/issues/new) in our GitHub issue tracker.
+| Network | Chain ID | RPC | Explorer |
+|---------|----------|-----|----------|
+| BOT Chain | 677 | https://rpc.botchain.ai | https://scan.botchain.ai |
+| BOT Chain Testnet | 968 | https://rpc.bohr.life | https://scan.bohr.life |
 
-## Project Overview
+Deployed addresses: [DEPLOYED_ADDRESSES.md](./DEPLOYED_ADDRESSES.md)
 
-This example project includes:
+## Layout
 
-- A simple Hardhat configuration file.
-- Foundry-compatible Solidity unit tests.
-- TypeScript integration tests using [`node:test`](nodejs.org/api/test.html), the new Node.js native test runner, and [`viem`](https://viem.sh/).
-- Examples demonstrating how to connect to different types of networks, including locally simulating OP mainnet.
+- `src/GasProvider.sol` — `GasStation` escrow (USDT in, allocations on-chain)
+- `src/Treasury.sol` / `src/DestinationTreasury.sol` — pre-funded payouts on destinations
+- `src/SmartAccount.sol` / `src/SmartAccountFactory.sol` — optional ERC-4337 path
+- `src/mocks/` — MockWETH + MockSwapRouter (BOT Chain has no DEX; constructor still needs them)
+- `scripts/deploy-botchain.mjs` — deploy GasStation to 677 or 968
+- `scripts/e2e-botchain.mjs` — dust USDT deposit + event asserts
+- `scripts/deploy-destination-treasury.mjs` — destination treasuries
 
-## Usage
+## Tests
 
-### Running Tests
-
-To run all the tests in the project, execute the following command:
-
-```shell
+```bash
 npx hardhat test
-```
-
-You can also selectively run the Solidity or `node:test` tests:
-
-```shell
 npx hardhat test solidity
 npx hardhat test nodejs
 ```
 
-### Make a deployment to Sepolia
+## Deploy / e2e
 
-This project includes an example Ignition module to deploy the contract. You can deploy this module to a locally simulated chain or to Sepolia.
+```bash
+BOTCHAIN_NETWORK=testnet PRIVATE_KEY=0x... node scripts/deploy-botchain.mjs
+BOTCHAIN_NETWORK=testnet PRIVATE_KEY=0x... node scripts/e2e-botchain.mjs
 
-To run the deployment to a local chain:
-
-```shell
-npx hardhat ignition deploy ignition/modules/Counter.ts
+BOTCHAIN_NETWORK=mainnet PRIVATE_KEY=0x... node scripts/deploy-botchain.mjs
 ```
 
-To run the deployment to Sepolia, you need an account with funds to send the transaction. The provided Hardhat configuration includes a Configuration Variable called `SEPOLIA_PRIVATE_KEY`, which you can use to set the private key of the account you want to use.
-
-You can set the `SEPOLIA_PRIVATE_KEY` variable using the `hardhat-keystore` plugin or by setting it as an environment variable.
-
-To set the `SEPOLIA_PRIVATE_KEY` config variable using `hardhat-keystore`:
-
-```shell
-npx hardhat keystore set SEPOLIA_PRIVATE_KEY
-```
-
-After setting the variable, you can run the deployment with the Sepolia network:
-
-```shell
-npx hardhat ignition deploy --network sepolia ignition/modules/Counter.ts
-```
+Writes `deployments/botchain-<chainId>.json`.

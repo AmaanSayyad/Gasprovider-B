@@ -1,6 +1,6 @@
 # Wallet Integration Setup
 
-> **Flare Summer Signal · Track 1** — Pay FXRP/C2FLR on Coston2 → native gas on destination chains (FTSO + FDC + treasuries).
+> **BOT Chain** — Pay USDT on BOT Chain → native gas on destination chains (GasStation escrow + pre-funded treasuries).
 
 
 This project now includes full wallet connectivity using Reown (WalletConnect) and balance fetching using wagmi.
@@ -16,15 +16,17 @@ This project now includes full wallet connectivity using Reown (WalletConnect) a
 
 ### 2. Configure Environment Variables
 
-Create a `.env` file in the root directory:
+Create `.env.local` in `frontend/`:
 
 ```bash
 VITE_REOWN_PROJECT_ID=your_project_id_here
+VITE_API_URL=http://localhost:3000
+# Optional: VITE_BOTCHAIN_NETWORK=testnet
 ```
 
 Or copy from the example:
 ```bash
-cp .env.example .env
+cp .env.example .env.local
 ```
 
 Then edit `.env` and add your actual project ID.
@@ -60,23 +62,14 @@ npm install
   - Component remounts
 
 ### ✅ Supported Chains
-- Ethereum (Mainnet)
-- Base
-- Arbitrum
-- Optimism
-- Polygon
-- BNB Chain
-- Avalanche
-- Scroll
-- Zora
+- **BOT Chain** (source — chain ID 677; testnet 968)
+- Destination testnets: Ethereum Sepolia, Base Sepolia, Optimism Sepolia, Arbitrum Sepolia, Polygon Amoy, and others in `src/data/chains.ts`
 
 ### ✅ Supported Tokens
-- ETH (native)
-- USDC
-- USDT
-- WETH
+- **USDT** on BOT Chain (deposit asset, 6 decimals)
+- Native gas on destinations (ETH, MATIC, AVAX, …)
 
-Token addresses are configured per chain in `src/data/tokens.js`.
+Source-chain config: `src/data/botchain.ts`. Token lists: `src/data/tokens.ts`.
 
 ## Usage
 
@@ -101,8 +94,9 @@ Token addresses are configured per chain in `src/data/tokens.js`.
 - `src/components/Header.jsx` - Real wallet connection
 - `src/components/Step1Destinations.jsx` - Uses real balances
 - `src/components/Step2Source.jsx` - Uses real balances
-- `src/data/tokens.js` - Token addresses per chain
-- `src/data/chains.js` - Added viem chain mappings
+- `src/data/botchain.ts` - BOT Chain RPC, explorer, USDT
+- `src/data/tokens.ts` - Token addresses per chain
+- `src/data/chains.ts` - Destination + source chain mappings
 - `src/main.jsx` - Added WalletProvider wrapper
 
 ## Troubleshooting
@@ -115,7 +109,7 @@ Token addresses are configured per chain in `src/data/tokens.js`.
 ### Balances not showing
 - Make sure wallet is connected
 - Check that you're on the correct chain
-- Some tokens may not exist on all chains (check `src/data/tokens.js`)
+- Some tokens may not exist on all chains (check `src/data/tokens.ts`)
 
 ### Chain switch not working
 - Make sure the chain is supported in your wallet

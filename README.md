@@ -4,7 +4,9 @@
 
 > Pay once in **USDT** on BOT Chain and receive **native gas** on the destination chains you choose — no bridging, no DEX hop, no faucet hunt.
 
-**Live demo:** [https://gas-provider.vercel.app](https://gas-provider.vercel.app)  
+**Live demo:** [https://gasprovider-botchain.vercel.app](https://gasprovider-botchain.vercel.app)  
+**GitHub:** [github.com/AmaanSayyad/Gasprovider-B](https://github.com/AmaanSayyad/Gasprovider-B)  
+**Pitch deck:** [Google Slides](https://docs.google.com/presentation/d/1mmxMZ9Qfk29cvl5lYj2tROQIoB11mhDirAgToFWXZeg/edit?usp=sharing)  
 **Live API:** [https://backend-production-6f62.up.railway.app](https://backend-production-6f62.up.railway.app) (`/health`)  
 **Explorer:** [scan.botchain.ai](https://scan.botchain.ai) · **RPC:** `https://rpc.botchain.ai`
 
@@ -232,7 +234,9 @@ BOTCHAIN_NETWORK=testnet PRIVATE_KEY=0x... node scripts/e2e-botchain.mjs
 
 | Service | URL / notes |
 |---------|-------------|
-| Frontend | [gas-provider.vercel.app](https://gas-provider.vercel.app) |
+| Frontend | [gasprovider-botchain.vercel.app](https://gasprovider-botchain.vercel.app) |
+| GitHub | [AmaanSayyad/Gasprovider-B](https://github.com/AmaanSayyad/Gasprovider-B) |
+| Pitch deck | [Google Slides](https://docs.google.com/presentation/d/1mmxMZ9Qfk29cvl5lYj2tROQIoB11mhDirAgToFWXZeg/edit?usp=sharing) |
 | Backend API | [backend-production-6f62.up.railway.app](https://backend-production-6f62.up.railway.app) |
 | Source chain | **BOT Chain** mainnet (677) |
 | Explorer | [scan.botchain.ai](https://scan.botchain.ai) |
@@ -260,6 +264,7 @@ BOTCHAIN_NETWORK=testnet PRIVATE_KEY=0x... node scripts/e2e-botchain.mjs
 - [docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md) — deploy
 - [docs/ENVIRONMENT_VARIABLES.md](docs/ENVIRONMENT_VARIABLES.md) — env reference
 - [docs/TREASURY_ADDRESSES.md](docs/TREASURY_ADDRESSES.md) — destination treasuries
+- [docs/BOTCHAIN_INTEGRATION_FILES.md](docs/BOTCHAIN_INTEGRATION_FILES.md) — GasStation / listener / treasury map
 - [contracts/DEPLOYED_ADDRESSES.md](contracts/DEPLOYED_ADDRESSES.md) — BOT Chain GasStation + USDT
 
 ---

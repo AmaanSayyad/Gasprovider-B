@@ -1,6 +1,6 @@
 # Docker Setup Guide
 
-> **Flare Summer Signal · Track 1** — Pay FXRP/C2FLR on Coston2 → native gas on destination chains (FTSO + FDC + treasuries).
+> **BOT Chain** — Pay USDT on BOT Chain → native gas on destination chains (GasStation escrow + pre-funded treasuries).
 
 
 This guide explains how to run the Gas Provider backend with Docker Compose.

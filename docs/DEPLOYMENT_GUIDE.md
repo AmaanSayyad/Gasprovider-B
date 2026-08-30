@@ -1,6 +1,6 @@
 # Treasury Demo System Deployment Guide
 
-> **Flare Summer Signal · Track 1** — Pay FXRP/C2FLR on Coston2 → native gas on destination chains (FTSO + FDC + treasuries).
+> **BOT Chain** — Pay USDT on BOT Chain → native gas on destination chains (GasStation escrow + pre-funded treasuries).
 
 
 ## Overview
@@ -53,7 +53,7 @@ You'll need native tokens on all supported testnets:
 
 | Chain | Faucet URL |
 |-------|------------|
-| Flare Coston2 | https://faucet.flare.network/ |
+| BOT Chain | USDT on 677 — [scan.botchain.ai](https://scan.botchain.ai) · RPC `https://rpc.botchain.ai` |
 | Ethereum Sepolia | https://sepoliafaucet.com/ |
 | Polygon Amoy | https://faucet.polygon.technology/ |
 | Arbitrum Sepolia | https://faucet.quicknode.com/arbitrum/sepolia |
@@ -96,8 +96,8 @@ You'll need native tokens on all supported testnets:
 ### 1.1 Clone the Repository
 
 ```bash
-git clone https://github.com/your-org/gas-fountain.git
-cd gas-fountain
+git clone https://github.com/AmaanSayyad/Gasprovider-B.git
+cd Gasprovider-B
 ```
 
 ### 1.2 Install Dependencies
@@ -247,8 +247,8 @@ cd contracts
 # Deploy Treasury contracts to all testnets
 npm run deploy:all
 
-# This will deploy to:
-# - Flare Coston2
+# Source escrow: BOTCHAIN_NETWORK=testnet|mainnet node scripts/deploy-botchain.mjs
+# Destination treasuries deploy to:
 # - Ethereum Sepolia
 # - Polygon Amoy
 # - Arbitrum Sepolia
@@ -263,8 +263,8 @@ npm run deploy:all
 
 **Expected Output**:
 ```
-Deploying Treasury to Coston2...
-✓ Treasury deployed to: 0xc031c437d6b915dbdc946dbd8613a1ac9dd75d63
+Deploying GasStation to BOT Chain...
+✓ GasStation deployed to: 0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c
 
 Deploying Treasury to Sepolia...
 ✓ Treasury deployed to: 0x5b402676535a3ba75c851c14e1e249a4257d2265
@@ -282,8 +282,7 @@ Addresses saved to: deployments/treasury-addresses.json
 ### 3.4 Verify Contracts (Optional)
 
 ```bash
-# Verify on Coston2
-npm run verify:coston2
+# Source escrow lives on BOT Chain — see contracts/DEPLOYED_ADDRESSES.md
 
 # Verify on Sepolia
 npm run verify:sepolia
@@ -308,7 +307,7 @@ node scripts/extract-treasury-addresses.js
 Or manually add to `backend/.env`:
 
 ```bash
-TREASURY_ADDRESS_114=0xc031c437d6b915dbdc946dbd8613a1ac9dd75d63
+CONTRACT_ADDRESS_677=0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c
 TREASURY_ADDRESS_11155111=0x5b402676535a3ba75c851c14e1e249a4257d2265
 # ... (add all 11 addresses)
 ```
@@ -326,12 +325,11 @@ cd contracts
 npm run fund:all
 
 # Or fund specific chains
-npm run fund:coston2
 npm run fund:sepolia
 ```
 
 **Recommended Amounts**:
-- Coston2: 1000 C2FLR
+- BOT Chain: USDT in the depositor wallet (escrow does not need native treasury funding)
 - Sepolia: 0.5 ETH
 - Polygon Amoy: 100 MATIC
 - Arbitrum Sepolia: 0.5 ETH
@@ -349,7 +347,7 @@ cd contracts
 npm run verify:balances
 
 # Expected output:
-# Coston2: 1000 C2FLR
+# BOT Chain: depositor holds USDT
 # Sepolia: 0.5 ETH
 # ...
 ```
@@ -387,12 +385,12 @@ DATABASE_URL=postgresql://gasfountain:password@localhost:5432/gasfountain
 DISTRIBUTOR_PRIVATE_KEY=0x1234567890abcdef...
 
 # Treasury Addresses (from Step 3.5)
-TREASURY_ADDRESS_114=0xc031c437d6b915dbdc946dbd8613a1ac9dd75d63
+CONTRACT_ADDRESS_677=0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c
 TREASURY_ADDRESS_11155111=0x5b402676535a3ba75c851c14e1e249a4257d2265
 # ... (all 11 addresses)
 
 # Optional: Custom RPC endpoints
-COSTON2_RPC_URL=https://coston2-api.flare.network/ext/C/rpc
+BOTCHAIN_RPC_URL=https://rpc.botchain.ai
 ```
 
 ### 5.2 Build Backend
@@ -435,8 +433,8 @@ railway up
 ssh -i your-key.pem ubuntu@your-ec2-ip
 
 # Clone repository
-git clone https://github.com/your-org/gas-fountain.git
-cd gas-fountain/backend
+git clone https://github.com/AmaanSayyad/Gasprovider-B.git
+cd Gasprovider-B/backend
 
 # Install dependencies
 npm install
@@ -640,7 +638,7 @@ docker logs -f gas-fountain-api
 # Test RPC endpoint
 curl -X POST -H "Content-Type: application/json" \
   --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' \
-  https://coston2-api.flare.network/ext/C/rpc
+  https://rpc.botchain.ai
 ```
 
 ---

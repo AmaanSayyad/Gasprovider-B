@@ -1,11 +1,13 @@
 # Treasury Contract Addresses
 
-> **Flare Summer Signal · Track 1** — Pay FXRP/C2FLR on Coston2 → native gas on destination chains (FTSO + FDC + treasuries).
+> **BOT Chain** — Pay USDT on BOT Chain → native gas on destination chains (GasStation escrow + pre-funded treasuries).
 
 
 ## Overview
 
-This document lists all deployed Treasury contract addresses across supported chains for the Gas Provider Treasury Demo System. Each Treasury contract holds liquidity and executes real onchain distributions to users.
+This document lists destination **Treasury** addresses. Users deposit **USDT** into GasStation on **BOT Chain**; these contracts send native gas out.
+
+Source-chain escrow: [../contracts/DEPLOYED_ADDRESSES.md](../contracts/DEPLOYED_ADDRESSES.md)
 
 **Last Updated**: August 14, 2026
 
@@ -13,19 +15,14 @@ This document lists all deployed Treasury contract addresses across supported ch
 
 ## Deployed Treasury Contracts
 
-### Flare Coston2 Testnet (Chain ID: 114)
+### BOT Chain (source, not a destination treasury)
 
-- **Treasury Address**: `0xc031c437d6b915dbdc946dbd8613a1ac9dd75d63`
-- **Chain Name**: Flare Coston2
-- **Native Token**: C2FLR
-- **Block Number**: 24755473
-- **Deployment Date**: December 6, 2024
-- **Deployer Address**: `0x56b9768f769b88c861955ca2ea3ec1f91870d61c`
-- **Block Explorer**: [View on Coston2 Explorer](https://coston2-explorer.flare.network/address/0xc031c437d6b915dbdc946dbd8613a1ac9dd75d63)
+Deposits land in **GasStation**, not a destination Treasury.
 
-**Supported Tokens**:
-- Native: C2FLR
-- Stablecoins: USDC, USDT (when available)
+| Network | Chain ID | GasStation | USDT |
+|---------|----------|------------|------|
+| Mainnet | 677 | [`0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c`](https://scan.botchain.ai/address/0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c) | `0xababc7ddc03e501d190c676bf3d92ef0e6e87a3c` |
+| Testnet | 968 | [`0xE329210534a500Fa7AC6DA1C15Ae73132836E35d`](https://scan.bohr.life/address/0xE329210534a500Fa7AC6DA1C15Ae73132836E35d) | `0x75edC9335175Fc0552D51D48439F229c10420fe3` |
 
 ---
 
@@ -193,7 +190,7 @@ This document lists all deployed Treasury contract addresses across supported ch
 
 | Chain | Chain ID | Treasury Address | Native Token | Explorer |
 |-------|----------|------------------|--------------|----------|
-| Flare Coston2 | 114 | `0xc031c437d6b915dbdc946dbd8613a1ac9dd75d63` | C2FLR | [Link](https://coston2-explorer.flare.network/address/0xc031c437d6b915dbdc946dbd8613a1ac9dd75d63) |
+| BOT Chain (source GasStation) | 677 | `0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c` | BOT / USDT in | [Link](https://scan.botchain.ai/address/0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c) |
 | Ethereum Sepolia | 11155111 | `0x5b402676535a3ba75c851c14e1e249a4257d2265` | ETH | [Link](https://sepolia.etherscan.io/address/0x5b402676535a3ba75c851c14e1e249a4257d2265) |
 | Polygon Amoy | 80002 | `0x5b402676535a3ba75c851c14e1e249a4257d2265` | MATIC | [Link](https://amoy.polygonscan.com/address/0x5b402676535a3ba75c851c14e1e249a4257d2265) |
 | Arbitrum Sepolia | 421614 | `0x5b402676535a3ba75c851c14e1e249a4257d2265` | ETH | [Link](https://sepolia.arbiscan.io/address/0x5b402676535a3ba75c851c14e1e249a4257d2265) |
@@ -214,8 +211,11 @@ This document lists all deployed Treasury contract addresses across supported ch
 Add these addresses to your `backend/.env`:
 
 ```bash
-# Treasury Contract Addresses
-TREASURY_ADDRESS_114=0xc031c437d6b915dbdc946dbd8613a1ac9dd75d63    # Flare Coston2
+# BOT Chain source escrow
+CONTRACT_ADDRESS_677=0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c
+BOTCHAIN_RPC_URL=https://rpc.botchain.ai
+
+# Destination Treasury Contract Addresses
 TREASURY_ADDRESS_11155111=0x5b402676535a3ba75c851c14e1e249a4257d2265  # Ethereum Sepolia
 TREASURY_ADDRESS_80002=0x5b402676535a3ba75c851c14e1e249a4257d2265     # Polygon Amoy
 TREASURY_ADDRESS_421614=0x5b402676535a3ba75c851c14e1e249a4257d2265   # Arbitrum Sepolia
@@ -234,7 +234,6 @@ Update `frontend/src/data/chains.ts` with Treasury addresses:
 
 ```typescript
 export const TREASURY_ADDRESSES: Record<number, string> = {
-  114: '0xc031c437d6b915dbdc946dbd8613a1ac9dd75d63',    // Flare Coston2
   11155111: '0x5b402676535a3ba75c851c14e1e249a4257d2265', // Ethereum Sepolia
   80002: '0x5b402676535a3ba75c851c14e1e249a4257d2265',    // Polygon Amoy
   421614: '0x5b402676535a3ba75c851c14e1e249a4257d2265',  // Arbitrum Sepolia
@@ -259,8 +258,7 @@ To verify the Treasury contract source code on block explorers:
 ```bash
 cd contracts
 
-# Verify on Coston2
-npx hardhat verify --network coston2 0xc031c437d6b915dbdc946dbd8613a1ac9dd75d63
+# Source escrow is on BOT Chain — see contracts/DEPLOYED_ADDRESSES.md
 
 # Verify on Sepolia
 npx hardhat verify --network sepolia 0x5b402676535a3ba75c851c14e1e249a4257d2265

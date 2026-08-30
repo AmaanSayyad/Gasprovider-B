@@ -1,6 +1,6 @@
 # Project Index
 
-> **Flare Summer Signal · Track 1** — Pay FXRP/C2FLR on Coston2 → native gas on destination chains (FTSO + FDC + treasuries).
+> **BOT Chain** — Pay USDT on BOT Chain → native gas on destination chains (GasStation escrow + pre-funded treasuries).
 
 
 This document provides an overview of the project structure and available exports.
@@ -40,7 +40,8 @@ All directories now have `index.ts` files that provide barrel exports for cleane
 - `useTokenBalances`
 
 ### Data (`data/index.ts`)
-- `chains` - Chain configuration data
+- `botchain` / `botChain` — BOT Chain viem config (source, chain ID 677 / 968)
+- `chains` - Chain configuration data (`SOURCE_CHAINS = ["botchain"]`)
 - `getViemChain` - Helper to get viem chain object
 - `chainIdMap` - Chain ID mapping
 - `tokens` - Token configuration data

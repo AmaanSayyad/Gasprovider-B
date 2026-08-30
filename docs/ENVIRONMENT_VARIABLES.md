@@ -1,6 +1,6 @@
 # Environment Variables Documentation
 
-> **Flare Summer Signal · Track 1** — Pay FXRP/C2FLR on Coston2 → native gas on destination chains (FTSO + FDC + treasuries).
+> **BOT Chain** — Pay USDT on BOT Chain → native gas on destination chains (GasStation escrow + pre-funded treasuries).
 
 
 ## Overview
@@ -91,7 +91,7 @@ Each supported chain requires its Treasury contract address:
 
 | Variable | Chain | Chain ID | Required |
 |----------|-------|----------|----------|
-| `TREASURY_ADDRESS_114` | Flare Coston2 | 114 | Yes |
+| `CONTRACT_ADDRESS_677` | BOT Chain GasStation | 677 | Yes (source escrow) |
 | `TREASURY_ADDRESS_11155111` | Ethereum Sepolia | 11155111 | Yes |
 | `TREASURY_ADDRESS_80002` | Polygon Amoy | 80002 | Yes |
 | `TREASURY_ADDRESS_421614` | Arbitrum Sepolia | 421614 | Yes |
@@ -105,7 +105,7 @@ Each supported chain requires its Treasury contract address:
 
 **Example**:
 ```bash
-TREASURY_ADDRESS_114=0xc031c437d6b915dbdc946dbd8613a1ac9dd75d63
+CONTRACT_ADDRESS_677=0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c
 TREASURY_ADDRESS_11155111=0x5b402676535a3ba75c851c14e1e249a4257d2265
 TREASURY_ADDRESS_80002=0x5b402676535a3ba75c851c14e1e249a4257d2265
 TREASURY_ADDRESS_421614=0x5b402676535a3ba75c851c14e1e249a4257d2265
@@ -126,8 +126,8 @@ Custom RPC URLs for each chain. If not provided, public RPC endpoints are used a
 
 | Variable | Chain | Default |
 |----------|-------|---------|
-| `COSTON2_RPC_URL` | Flare Coston2 | `https://coston2-api.flare.network/ext/C/rpc` |
-| `FLARE_RPC_URL` | Flare Mainnet | `https://flare-api.flare.network/ext/C/rpc` |
+| `BOTCHAIN_RPC_URL` | BOT Chain (677) | `https://rpc.botchain.ai` |
+| `BOTCHAIN_TESTNET_RPC_URL` | BOT Chain Testnet (968) | `https://rpc.bohr.life` |
 | `SEPOLIA_RPC_URL` | Ethereum Sepolia | `https://ethereum-sepolia-rpc.publicnode.com` |
 | `POLYGON_AMOY_RPC_URL` | Polygon Amoy | `https://rpc-amoy.polygon.technology` |
 | `ARBITRUM_SEPOLIA_RPC_URL` | Arbitrum Sepolia | `https://sepolia-rollup.arbitrum.io/rpc` |
@@ -142,7 +142,7 @@ Custom RPC URLs for each chain. If not provided, public RPC endpoints are used a
 **Example**:
 ```bash
 # Optional: Use custom RPC endpoints
-COSTON2_RPC_URL=https://coston2-api.flare.network/ext/C/rpc
+BOTCHAIN_RPC_URL=https://rpc.botchain.ai
 SEPOLIA_RPC_URL=https://eth-sepolia.g.alchemy.com/v2/YOUR_API_KEY
 POLYGON_AMOY_RPC_URL=https://polygon-amoy.g.alchemy.com/v2/YOUR_API_KEY
 ```
@@ -204,11 +204,29 @@ VITE_WS_URL=ws://localhost:3000
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `VITE_WALLETCONNECT_PROJECT_ID` | No | - | WalletConnect project ID for wallet integration |
+| `VITE_REOWN_PROJECT_ID` | Yes | - | Reown / AppKit project ID |
+| `VITE_WALLETCONNECT_PROJECT_ID` | No | - | Legacy WalletConnect project ID |
 
 **Example**:
 ```bash
-VITE_WALLETCONNECT_PROJECT_ID=your_project_id_here
+VITE_REOWN_PROJECT_ID=your_project_id_here
+```
+
+---
+
+### BOT Chain (source)
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `VITE_BOTCHAIN_NETWORK` | No | `mainnet` | `mainnet` (677) or `testnet` (968) |
+| `VITE_BOTCHAIN_RPC_URL` | No | `https://rpc.botchain.ai` | Override RPC |
+| `VITE_BOTCHAIN_EXPLORER` | No | `https://scan.botchain.ai` | Override explorer |
+| `VITE_BOTCHAIN_CONTRACT_ADDRESS` | No | GasStation on 677 | Escrow address |
+
+**Example**:
+```bash
+VITE_BOTCHAIN_NETWORK=mainnet
+VITE_BOTCHAIN_CONTRACT_ADDRESS=0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c
 ```
 
 ---
@@ -268,7 +286,7 @@ DATABASE_URL=postgresql://gasfountain:password123@localhost:5432/gasfountain?sch
 DISTRIBUTOR_PRIVATE_KEY=0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
 
 # Treasury Contract Addresses
-TREASURY_ADDRESS_114=0xc031c437d6b915dbdc946dbd8613a1ac9dd75d63
+CONTRACT_ADDRESS_677=0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c
 TREASURY_ADDRESS_11155111=0x5b402676535a3ba75c851c14e1e249a4257d2265
 TREASURY_ADDRESS_80002=0x5b402676535a3ba75c851c14e1e249a4257d2265
 TREASURY_ADDRESS_421614=0x5b402676535a3ba75c851c14e1e249a4257d2265
@@ -281,7 +299,7 @@ TREASURY_ADDRESS_43113=0x5b402676535a3ba75c851c14e1e249a4257d2265
 TREASURY_ADDRESS_97=0x5b402676535a3ba75c851c14e1e249a4257d2265
 
 # Optional: Custom RPC Endpoints
-COSTON2_RPC_URL=https://coston2-api.flare.network/ext/C/rpc
+BOTCHAIN_RPC_URL=https://rpc.botchain.ai
 SEPOLIA_RPC_URL=https://ethereum-sepolia-rpc.publicnode.com
 
 # Logging
@@ -298,11 +316,11 @@ VITE_API_URL=http://localhost:3000
 VITE_WS_URL=ws://localhost:3000
 
 # Wallet Configuration
-VITE_WALLETCONNECT_PROJECT_ID=your_project_id_here
+VITE_REOWN_PROJECT_ID=your_project_id_here
 
-# Feature Flags
-VITE_ENABLE_TESTNET=true
-VITE_ENABLE_MAINNET=false
+# BOT Chain (source)
+VITE_BOTCHAIN_NETWORK=mainnet
+VITE_BOTCHAIN_CONTRACT_ADDRESS=0x418ccA81E0c19d2F49Eee4D34274b29cfF59C85c
 ```
 
 ---
@@ -322,7 +340,7 @@ SNOWTRACE_API_KEY=YOUR_SNOWTRACE_API_KEY
 BSCSCAN_API_KEY=YOUR_BSCSCAN_API_KEY
 
 # RPC URLs (optional, for deployment)
-COSTON2_RPC_URL=https://coston2-api.flare.network/ext/C/rpc
+BOTCHAIN_RPC_URL=https://rpc.botchain.ai
 SEPOLIA_RPC_URL=https://ethereum-sepolia-rpc.publicnode.com
 ```
 
@@ -490,7 +508,7 @@ echo $DATABASE_URL
 # Test RPC endpoint
 curl -X POST -H "Content-Type: application/json" \
   --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' \
-  $COSTON2_RPC_URL
+  $BOTCHAIN_RPC_URL
 ```
 
 ---
