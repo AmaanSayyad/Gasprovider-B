@@ -75,7 +75,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, onDeposit 
           {/* Header */}
           <div className="p-6 border-b border-theme flex items-center justify-between sticky top-0 bg-theme-muted z-10">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-[rgba(230,32,88,0.15)] rounded-2xl">
+              <div className="p-2.5 bg-[rgba(12,156,120,0.15)] rounded-2xl">
                 <TrendingUp className="w-5 h-5 text-[#0C9C78]" />
               </div>
               <h2 className="text-xl font-bold text-theme">Deposit Tokens</h2>
@@ -90,7 +90,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, onDeposit 
 
           {/* Content */}
           <div className="p-6 overflow-y-auto custom-scrollbar space-y-6">
-            <div className="bg-[rgba(230,32,88,0.08)] rounded-xl p-4 border border-[rgba(230,32,88,0.2)]">
+            <div className="bg-[rgba(12,156,120,0.08)] rounded-xl p-4 border border-[rgba(12,156,120,0.2)]">
               <div className="flex items-start gap-3">
                 <TrendingUp className="w-5 h-5 text-[#0C9C78] flex-shrink-0 mt-0.5" />
                 <div>
@@ -195,7 +195,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, onDeposit 
             </button>
             <button
               onClick={handleSubmit}
-              className="flex-1 px-6 py-3 rounded-xl bg-gradient-to-r from-[#0C9C78] to-[#12B88D] text-white hover:shadow-lg hover:shadow-[rgba(230,32,88,0.35)] transition-all font-semibold"
+              className="flex-1 px-6 py-3 rounded-xl bg-gradient-to-r from-[#0C9C78] to-[#12B88D] text-white hover:shadow-lg hover:shadow-[rgba(12,156,120,0.35)] transition-all font-semibold"
             >
               Deposit & Start Earning
             </button>

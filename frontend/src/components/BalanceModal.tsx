@@ -67,7 +67,7 @@ const BalanceModal: React.FC<BalanceModalProps> = ({ isOpen, onClose }) => {
           >
             <div className="flex shrink-0 items-center justify-between border-b border-[rgba(36,41,46,0.08)] px-5 py-4 dark:border-white/10">
               <div className="flex items-center gap-3">
-                <div className="rounded-2xl border border-[rgba(230,32,88,0.2)] bg-[rgba(230,32,88,0.08)] p-2.5">
+                <div className="rounded-2xl border border-[rgba(12,156,120,0.2)] bg-[rgba(12,156,120,0.08)] p-2.5">
                   <Wallet className="h-5 w-5 text-[#0C9C78]" />
                 </div>
                 <h2 id="balances-title" className="font-display text-xl font-bold text-[#24292E] dark:text-white">

@@ -81,7 +81,7 @@ const DepositDetailsModal: React.FC<DepositDetailsModalProps> = ({
           {/* Header */}
           <div className="p-6 border-b border-theme flex items-center justify-between sticky top-0 bg-theme-muted z-10">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-[rgba(230,32,88,0.15)] rounded-2xl">
+              <div className="p-2.5 bg-[rgba(12,156,120,0.15)] rounded-2xl">
                 <TrendingUp className="w-5 h-5 text-[#0C9C78]" />
               </div>
               <div>

@@ -65,7 +65,7 @@ const ProductStory: React.FC = () => {
               transition={{ duration: 0.45, delay: i * 0.1 }}
               className="gp-step relative"
             >
-              <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[rgba(230,32,88,0.1)] text-[#0C9C78]">
+              <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[rgba(12,156,120,0.1)] text-[#0C9C78]">
                 <Icon className="h-5 w-5" strokeWidth={2.25} />
               </div>
               <p className="mb-1 font-display text-xs font-semibold uppercase tracking-[0.2em] text-[#12B88D]">

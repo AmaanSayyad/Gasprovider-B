@@ -1,5 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" fill="none">
-  <rect width="800" height="480" fill="#FFFFFF"/>
   <defs>
     <radialGradient id="p1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(180 140) rotate(90) scale(220)">
       <stop stop-color="#0C9C78" stop-opacity=".35"/>

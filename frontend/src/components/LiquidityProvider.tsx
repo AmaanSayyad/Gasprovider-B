@@ -87,15 +87,15 @@ const LiquidityProvider: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         className="glass-card rounded-3xl p-8 relative overflow-hidden"
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-[rgba(230,32,88,0.14)] via-transparent to-[rgba(228,99,137,0.08)]" />
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[rgba(230,32,88,0.06)] rounded-full blur-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[rgba(12,156,120,0.14)] via-transparent to-[rgba(18,184,141,0.08)]" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[rgba(12,156,120,0.06)] rounded-full blur-3xl" />
 
         <div className="relative z-10">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
               <motion.div
                 whileHover={{ scale: 1.1, rotate: 5 }}
-                className="p-4 bg-gradient-to-br from-[rgba(230,32,88,0.28)] to-[rgba(228,99,137,0.22)] rounded-2xl backdrop-blur-sm border border-[rgba(230,32,88,0.25)] shadow-lg shadow-[rgba(230,32,88,0.18)]"
+                className="p-4 bg-gradient-to-br from-[rgba(12,156,120,0.28)] to-[rgba(18,184,141,0.22)] rounded-2xl backdrop-blur-sm border border-[rgba(12,156,120,0.25)] shadow-lg shadow-[rgba(12,156,120,0.18)]"
               >
                 <TrendingUp className="w-6 h-6 text-[#0C9C78]" />
               </motion.div>
@@ -108,7 +108,7 @@ const LiquidityProvider: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowDepositModal(true)}
-              className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#0C9C78] to-[#12B88D] text-white font-bold hover:shadow-lg hover:shadow-[rgba(230,32,88,0.35)] transition-all flex items-center gap-2"
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#0C9C78] to-[#12B88D] text-white font-bold hover:shadow-lg hover:shadow-[rgba(12,156,120,0.35)] transition-all flex items-center gap-2"
             >
               <Plus className="w-5 h-5" />
               Deposit Tokens
@@ -294,7 +294,7 @@ const LiquidityProvider: React.FC = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setShowDepositModal(true)}
-                    className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#0C9C78] to-[#12B88D] text-white font-semibold hover:shadow-lg hover:shadow-[rgba(230,32,88,0.3)] transition-all"
+                    className="px-6 py-3 rounded-xl bg-gradient-to-r from-[#0C9C78] to-[#12B88D] text-white font-semibold hover:shadow-lg hover:shadow-[rgba(12,156,120,0.3)] transition-all"
                   >
                     Deposit Tokens
                   </motion.button>
@@ -320,7 +320,7 @@ const LiquidityProvider: React.FC = () => {
                       </div>
                       <div className={`px-3 py-1 rounded-full text-xs font-semibold ${
                         deposit.status === "active"
-                          ? "bg-[rgba(230,32,88,0.15)] text-[#0C9C78]"
+                          ? "bg-[rgba(12,156,120,0.15)] text-[#0C9C78]"
                           : deposit.status === "depleted"
                           ? "bg-orange-500/20 text-orange-400"
                           : "bg-gray-500/20 text-gray-400"
