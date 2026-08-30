@@ -40,7 +40,7 @@ interface UseDepositReturn {
 
 /**
  * Hook to interact with the Gas Foundation deposit contract.
- * Converts USD amounts to USDC token amounts and calls the deposit function.
+ * Converts USD amounts to the escrow token (6 decimals) and deposits them.
  */
 export function useDeposit({
   totalAmountUsd,
@@ -69,11 +69,11 @@ export function useDeposit({
 
   const chainAmounts = selectedChains.map((chain) => {
     const amountUsd = (transactionCounts[chain.id] || 10) * chain.avgTxCost;
-    // Convert USD to USDC (6 decimals)
+    // Convert USD to the escrow token (6 decimals)
     return parseUnits(amountUsd.toFixed(6), USDC_DECIMALS);
   });
 
-  // Convert total amount to USDC
+  // Convert total amount to the escrow token
   const totalAmount = parseUnits(totalAmountUsd.toFixed(6), USDC_DECIMALS);
 
   // Check current allowance
@@ -166,7 +166,7 @@ export function useDeposit({
     setError(null);
 
     if (!usdcAddress) {
-      const err = new Error("USDC address not found");
+      const err = new Error("No deposit token configured for this chain");
       setError(err);
       console.error("Approval error:", err);
       return;
@@ -179,8 +179,8 @@ export function useDeposit({
       return;
     }
 
-    console.log("=== APPROVING USDC ===");
-    console.log("USDC Address:", usdcAddress);
+    console.log("=== APPROVING DEPOSIT TOKEN ===");
+    console.log("Token address:", usdcAddress);
     console.log("Contract Address:", contractAddress);
     console.log("Amount to approve: MAX (maxUint256)");
     console.log("Current allowance:", allowance?.toString() || "unknown");
@@ -223,7 +223,7 @@ export function useDeposit({
     if (needsApproval) {
       if (!isApprovalSuccess) {
         const err = new Error(
-          "USDC approval required. Please approve USDC spending first."
+          "Token approval required. Please approve spending first."
         );
         setError(err);
         console.error("Deposit error:", err);

@@ -392,7 +392,7 @@ const Step3Review: React.FC = () => {
                     chainId !== sourceChain.viemChain.id
                   ? `Please switch to ${sourceChain.name} network`
                   : needsApproval
-                  ? "Click to approve USDC spending"
+                  ? `Click to approve ${tokenSymbol} spending`
                   : "Click to disperse gas"
               }
               className="flex-[2] py-3 bg-primary text-white rounded-xl font-bold hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20"
@@ -401,7 +401,7 @@ const Step3Review: React.FC = () => {
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
                   {isApproving
-                    ? "Approving USDC..."
+                    ? `Approving ${tokenSymbol}...`
                     : isPending
                     ? "Confirming Deposit..."
                     : "Processing..."}
@@ -409,10 +409,10 @@ const Step3Review: React.FC = () => {
               ) : isApproving ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Approving USDC...
+                  {`Approving ${tokenSymbol}...`}
                 </>
               ) : needsApproval ? (
-                "Approve USDC"
+                `Approve ${tokenSymbol}`
               ) : (
                 "Disperse Gas"
               )}

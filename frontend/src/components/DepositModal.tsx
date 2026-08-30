@@ -11,7 +11,7 @@ interface DepositModalProps {
 
 const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, onDeposit }) => {
   const [chainId, setChainId] = useState<number>(8453); // Base default
-  const [tokenSymbol, setTokenSymbol] = useState("USDC");
+  const [tokenSymbol, setTokenSymbol] = useState("USDT");
   const [tokenAddress, setTokenAddress] = useState("");
   const [amount, setAmount] = useState("");
   const [amountUsd, setAmountUsd] = useState("");
@@ -22,7 +22,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, onDeposit 
     const chain = findChainByNumericId(newChainId);
     if (chain) {
       // Set default token for chain
-      setTokenSymbol("USDC");
+      setTokenSymbol("USDT");
       setTokenAddress(""); // Will need to be set based on chain
     }
   };
@@ -128,7 +128,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, onDeposit 
                 type="text"
                 value={tokenSymbol}
                 onChange={(e) => setTokenSymbol(e.target.value.toUpperCase())}
-                placeholder="USDC"
+                placeholder="USDT"
                 className="w-full px-4 py-3 rounded-xl bg-theme-muted border border-theme text-theme placeholder:text-secondary focus:outline-none focus:border-primary transition-colors"
               />
             </div>

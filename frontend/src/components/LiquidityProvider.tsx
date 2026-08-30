@@ -206,7 +206,7 @@ const LiquidityProvider: React.FC = () => {
                     <div>
                       <div className="font-semibold text-theme mb-1">Deposit Tokens</div>
                       <div className="text-sm text-secondary">
-                        Deposit your tokens (USDC, OP, etc.) to the liquidity pool
+                        Deposit your tokens (USDT, ETH, etc.) to the liquidity pool
                       </div>
                     </div>
                   </div>

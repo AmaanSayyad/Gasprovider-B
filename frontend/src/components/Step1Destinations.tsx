@@ -73,9 +73,11 @@ const Step1Destinations: React.FC = () => {
       setSourceChain(baseChain || SOURCE_CHAINS[0]);
     }
     if (!sourceToken && availableTokens.length > 0) {
-      // Default to first token with balance, or USDC if available
-      const usdc = availableTokens.find((t) => t.symbol === "USDC");
-      setSourceToken(usdc || availableTokens[0]);
+      // Prefer a stablecoin the escrow accepts; BOT Chain only lists USDT.
+      const stable = availableTokens.find(
+        (t) => t.symbol === "USDT" || t.symbol === "USDC"
+      );
+      setSourceToken(stable || availableTokens[0]);
     }
   }, [availableTokens, sourceChain, sourceToken, setSourceChain, setSourceToken]);
 
